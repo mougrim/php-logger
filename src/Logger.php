@@ -19,7 +19,7 @@ class Logger
     /** @var \Logger */
     private $parent;
     /** @var LoggerAppenderAbstract[] */
-    private $appenders=array();
+    private $appenders = array();
     /** @var bool */
     private $additive = true;
 
@@ -31,7 +31,7 @@ class Logger
 
     public function addAppender(LoggerAppenderAbstract $appender)
     {
-        if(!in_array($appender, $this->appenders)){
+        if (!in_array($appender, $this->appenders)) {
             $this->appenders[] = $appender;
         }
     }
@@ -39,7 +39,7 @@ class Logger
     public function removeAppender(LoggerAppenderAbstract $appender)
     {
         $key = array_search($appender, $this->appenders);
-        if($key){
+        if ($key) {
             unset($this->appenders[$key]);
         }
     }
@@ -66,35 +66,35 @@ class Logger
 
     public function debug($message, Exception $throwable = null)
     {
-        $this->log(self::TRACE, $message, $throwable);
+        $this->log(self::DEBUG, $message, $throwable);
     }
 
     public function info($message, Exception $throwable = null)
     {
-        $this->log(self::TRACE, $message, $throwable);
+        $this->log(self::INFO, $message, $throwable);
     }
 
     public function warn($message, Exception $throwable = null)
     {
-        $this->log(self::TRACE, $message, $throwable);
+        $this->log(self::WARN, $message, $throwable);
     }
 
     public function error($message, Exception $throwable = null)
     {
-        $this->log(self::TRACE, $message, $throwable);
+        $this->log(self::ERROR, $message, $throwable);
     }
 
     public function fatal($message, Exception $throwable = null)
     {
-        $this->log(self::TRACE, $message, $throwable);
+        $this->log(self::FATAL, $message, $throwable);
     }
 
     public function log($level, $message, Exception $throwable = null)
     {
-        foreach($this->appenders as $appender){
+        foreach ($this->appenders as $appender) {
             $appender->append($this, $level, $message, $throwable);
         }
-        if($this->parent && $this->additive){
+        if ($this->parent && $this->additive) {
             $this->parent->log($level, $message, $throwable);
         }
     }
@@ -120,7 +120,7 @@ class Logger
             case $level >= Logger::ALL:
                 return 'ALL';
             default:
-                throw new LoggerException('О.o wtf?!');
+                throw new LoggerException('O.o wtf?!');
         }
     }
 }

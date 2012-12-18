@@ -5,9 +5,9 @@ class Log
     /** @var Logger */
     private static $rootLogger;
     /** @var Logger[] */
-    private static $loggers=array();
+    private static $loggers = array();
     /** @var bool */
-    private static $isConfigured=false;
+    private static $isConfigured = false;
 
     /**
      * Returns a Logger by name. If it does not exist, it will be created.
@@ -17,11 +17,11 @@ class Log
      */
     public static function getLogger($name)
     {
-        if(self::$isConfigured){
+        if (self::$isConfigured) {
             self::configure();
         }
-        if(!isset(self::$loggers[$name])){
-            self::$loggers[$name]=self::createLogger($name);
+        if (!isset(self::$loggers[$name])) {
+            self::$loggers[$name] = self::createLogger($name);
         }
     }
 
@@ -31,7 +31,7 @@ class Log
      */
     public static function getRootLogger()
     {
-        if(!self::$isConfigured){
+        if (!self::$isConfigured) {
             self::configure();
         }
         return self::$rootLogger;
@@ -42,10 +42,17 @@ class Log
      */
     public static function configure($configuration = null)
     {
-        self::$rootLogger=new Logger('root');
-        self::$loggers=array();
-        self::$isConfigured=false;
-        self::$isConfigured=true;
+        self::reset();
+        self::$isConfigured = true;
+    }
+
+    public static function reset()
+    {
+        self::$rootLogger = new Logger('root');
+        self::$loggers = array();
+        self::$isConfigured = false;
+        LoggerNDC::clear();
+        LoggerMDC::clear();
     }
 
     private static function createLogger($name)
