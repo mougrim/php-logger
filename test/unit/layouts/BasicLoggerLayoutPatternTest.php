@@ -2,7 +2,7 @@
 
 spl_autoload_call('LoggerLayoutPattern');
 
-class TestLoggerLayoutPattern extends PHPUnit_Framework_TestCase
+class BasicLoggerLayoutPatternTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @param $format
@@ -31,9 +31,9 @@ class TestLoggerLayoutPattern extends PHPUnit_Framework_TestCase
             array('{logger}', 'root' . PHP_EOL),
             array('{ex}', 'test' . PHP_EOL),
             array('{exception}', 'test' . PHP_EOL),
-            array('{location}', __FILE__ . ':14' . PHP_EOL),
+            array('{location}', __FILE__ . ':15' . PHP_EOL),
             array('{location:file}', __FILE__ . PHP_EOL),
-            array('{location:file-line}', __FILE__ . '-14' . PHP_EOL),
+            array('{location:file-line}', __FILE__ . '-15' . PHP_EOL),
             array('{location:class}', __CLASS__ . PHP_EOL),
             array('{location:class-function}', __CLASS__ . '-testFormat' . PHP_EOL),
             array('{global:somevar}', ($GLOBALS['somevar'] = uniqid()) . PHP_EOL),

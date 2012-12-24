@@ -21,6 +21,7 @@
     verbose="false"> -->
     <testsuite>
         <directory>unit</directory>
+        <directory>unit/layouts</directory>
         <directory>integration</directory>
         <!--<directory>functional</directory>-->
     </testsuite>
