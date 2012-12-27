@@ -14,8 +14,7 @@ class LoggerAppenderStd extends LoggerAppenderAbstract
 
     /**
      * @param string $streamName
-     * @throws InvalidArgumentException
-     * @return void
+     * @throws LoggerIOException
      */
     public function setStream($streamName)
     {

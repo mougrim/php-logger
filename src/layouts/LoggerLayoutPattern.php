@@ -186,7 +186,7 @@ class LoggerPatternLocation implements LoggerPatternInterface
     {
         $trace = debug_backtrace();
         $prevHop = null;
-        // make a downsearch to identify the caller
+        // make a down search to identify the caller
         $hop = array_pop($trace);
         while ($hop !== null) {
             if (isset($hop['class'])) {

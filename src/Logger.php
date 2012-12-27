@@ -78,7 +78,7 @@ class Logger
 
     /**
      * Returns the Root Logger.
-     * @return LoggerRoot
+     * @return Logger
      */
     public static function getRootLogger()
     {
