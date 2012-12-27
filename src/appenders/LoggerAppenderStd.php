@@ -27,7 +27,7 @@ class LoggerAppenderStd extends LoggerAppenderAbstract
                 $this->stream = self::STDERR;
                 break;
             default:
-                throw new InvalidArgumentException("Stream must be STDOUT or STDERR, got '{$streamName}'");
+                throw new LoggerIOException("Stream must be STDOUT or STDERR, got '{$streamName}'");
                 break;
         }
     }

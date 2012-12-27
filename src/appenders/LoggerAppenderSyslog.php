@@ -41,27 +41,23 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
             case $level >= Logger::INFO:
                 return LOG_INFO;
                 break;
-            case $level >= Logger::DEBUG:
-            case $level >= Logger::TRACE:
-            case $level >= Logger::ALL:
-                return LOG_DEBUG;
-                break;
             default:
-                throw new LoggerException('О.o wtf?!');
+                return LOG_DEBUG;
         }
     }
 
     public static function parseOptions($options)
     {
         if (is_string($options)) {
-            $options = preg_split('/|/', $options, -1, PREG_SPLIT_NO_EMPTY);
+            $options = preg_split('/\|/', $options, -1, PREG_SPLIT_NO_EMPTY);
         }
         if (is_array($options)) {
             $optionInteger = 0;
             foreach ($options as $opt) {
                 if (is_string($opt) && defined($opt)) {
-                    $optionInteger |= constant($opt);
-                } else if (is_int($opt)) {
+                    $opt = constant($opt);
+                }
+                if (is_int($opt)) {
                     $optionInteger |= $opt;
                 } else {
                     throw new LoggerException("Error parse syslog options");

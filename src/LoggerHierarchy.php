@@ -3,9 +3,9 @@
 class LoggerHierarchy
 {
     private $rootLogger;
-    private $loggerMap;
-    private $appenderMap;
-    private $layoutMap;
+    private $loggerMap=array();
+    private $appenderMap=array();
+    private $layoutMap=array();
 
     public function setRootLogger(Logger $rootLogger)
     {
@@ -14,7 +14,7 @@ class LoggerHierarchy
 
     public function getRootLogger()
     {
-        if ($this->rootLogger)
+        if (isset($this->rootLogger))
             return $this->rootLogger;
         else
             return $this->rootLogger = new Logger('root');
@@ -22,7 +22,7 @@ class LoggerHierarchy
 
     public function getLogger($name)
     {
-        if ($this->loggerMap[$name])
+        if (isset($this->loggerMap[$name]))
             return $this->loggerMap;
         else
             return $this->loggerMap[$name] = $this->createLogger($name);
@@ -40,7 +40,7 @@ class LoggerHierarchy
 
     public function getAppender($name)
     {
-        if ($this->appenderMap[$name])
+        if (isset($this->appenderMap[$name]))
             return $this->appenderMap[$name];
         else
             throw new LoggerException("Appender {$name} not found");
@@ -54,7 +54,7 @@ class LoggerHierarchy
 
     public function getLayout($name)
     {
-        if ($this->layoutMap[$name])
+        if (isset($this->layoutMap[$name]))
             return $this->layoutMap[$name];
         else
             throw new LoggerException("Layout {$name} not found");

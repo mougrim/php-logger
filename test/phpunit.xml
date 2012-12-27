@@ -22,6 +22,7 @@
     <testsuite>
         <directory>unit</directory>
         <directory>unit/layouts</directory>
+        <directory>unit/appenders</directory>
         <directory>integration</directory>
         <!--<directory>functional</directory>-->
     </testsuite>

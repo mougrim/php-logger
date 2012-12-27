@@ -154,13 +154,7 @@ class LoggerPatternMessage extends LoggerPatternPrintFormat
 {
     public function render(Logger $logger, $level, $message, Exception $throwable = null)
     {
-        if (is_scalar($message)) {
-            $rendered = (string)$message;
-        } else if (is_object($message) && method_exists($message, '__toString')) {
-            $rendered = $message;
-        } else {
-            $rendered = print_r($message, 1);
-        }
+        $rendered = LoggerRender::render($message);
         return $this->format($rendered);
     }
 }
@@ -247,14 +241,7 @@ class LoggerPatternGlobal implements LoggerPatternInterface
                 break;
             }
         }
-        if (is_null($current)) {
-            return '';
-        }
-        if (is_scalar($current)) {
-            return $current;
-        } else {
-            return print_r($current, 1);
-        }
+        return LoggerRender::render($current);
     }
 }
 

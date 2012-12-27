@@ -18,23 +18,10 @@ class LoggerLayoutSimple implements LoggerLayoutInterface
                 $formatted .= $key . '=' . $context . ' ';
             }
         }
-        $formatted .= '- ' . $this->render($message);
+        $formatted .= '- ' . LoggerRender::render($message);
         if ($throwable) {
-            $formatted .= ' ' . $this->render($throwable);
+            $formatted .= ' ' . LoggerRender::render($throwable);
         }
         return $formatted . PHP_EOL;
-    }
-
-    private function render($message)
-    {
-        if(is_bool($message)){
-            return $message ? 'true' : 'false';
-        } else if (is_scalar($message)) {
-            return (string)$message;
-        } else if (is_object($message) && method_exists($message, '__toString')) {
-            return $message;
-        } else {
-            return print_r($message, 1);
-        }
     }
 }

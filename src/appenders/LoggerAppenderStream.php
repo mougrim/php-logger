@@ -13,9 +13,10 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
 
     public function __construct($stream)
     {
-        $this->stream = fopen($stream, 'a');
+        // use @ for ignore invalid stream errors
+        $this->stream = @fopen($stream, 'a');
         if (!$this->stream) {
-            throw new LoggerIOException("Error fopen $stream");
+            throw new LoggerIOException("Error open $stream");
         }
     }
 

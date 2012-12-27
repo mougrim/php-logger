@@ -59,13 +59,13 @@ class LoggerConfigurator
     private function createAppender(LoggerHierarchy $hierarchy, $config)
     {
         if (isset($config['layout'])) {
-            if (is_string($config['layout'])) {
+            if (is_string($config['layout']))
                 $config['layout'] = $hierarchy->getLayout($config['layout']);
-            } elseif (is_array($config['layout'])) {
+            elseif (is_array($config['layout']))
                 $config['layout'] = $this->createLayout($config['layout']);
-            } else {
+            else
                 throw new LoggerException('Invalid logger layout description');
-            }
+
         }
         return $this->createObject($config);
     }
