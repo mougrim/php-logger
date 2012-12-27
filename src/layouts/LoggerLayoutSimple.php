@@ -27,7 +27,9 @@ class LoggerLayoutSimple implements LoggerLayoutInterface
 
     private function render($message)
     {
-        if (is_scalar($message)) {
+        if(is_bool($message)){
+            return $message ? 'true' : 'false';
+        } else if (is_scalar($message)) {
             return (string)$message;
         } else if (is_object($message) && method_exists($message, '__toString')) {
             return $message;

@@ -2,7 +2,7 @@
 
 class LoggerNDC
 {
-    private static $stack;
+    private static $stack=array();
 
     public static function push($context)
     {
