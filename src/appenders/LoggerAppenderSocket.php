@@ -6,7 +6,7 @@ class LoggerAppenderSocket extends LoggerAppenderAbstract
     private $port;
     private $timeout;
 
-    public function __construct($port, $host, $timeout = null)
+    public function __construct($host, $port, $timeout = null)
     {
         $this->host = (string)$host;
         $this->port = (int)$port;
@@ -21,7 +21,7 @@ class LoggerAppenderSocket extends LoggerAppenderAbstract
     {
         $socket = fsockopen($this->host, $this->port, $errorCode, $errorMessage, $this->timeout);
         if ($socket === false) {
-            throw new LoggerIOException("Could not open socket to {$this->host}:{$this->port}. Closing appender.");
+            throw new LoggerIOException("Could not open socket to {$this->host}:{$this->port} – {$errorCode} {$errorMessage}. Closing appender.");
         }
         if (false === fwrite($socket, $message)) {
             throw new LoggerIOException("Error writing to socket to {$this->host}:{$this->port}");

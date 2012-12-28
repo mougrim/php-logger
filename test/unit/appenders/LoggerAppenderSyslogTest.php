@@ -1,34 +1,33 @@
 <?php
 
-class LoggerAppenderSyslogTest extends PHPUnit_Framework_TestCase
+class LoggerAppenderSyslogTest extends BaseLoggerTestCase
 {
+    protected $backupGlobals=true;
+
     public function testWriteSyslog()
     {
+        $GLOBALS['syslog']=array();
         $appender = new LoggerAppenderSyslog('id', LOG_PID, 0);
+        $this->mockFunction('openlog', '', '$GLOBALS["syslog"][]="openlog";return true;');
+        $this->mockFunction('syslog', '$priority, $message', '$GLOBALS["syslog"][]="syslog";$GLOBALS["syslog"][]=$priority;$GLOBALS["syslog"][]=$message;');
+        $this->mockFunction('closelog', '', '$GLOBALS["syslog"][]="closelog";');
         $appender->write(Logger::INFO, 'test syslog');
+        $this->assertEquals(array(
+            'openlog',
+            'syslog',
+            LOG_INFO,
+            'test syslog',
+            'closelog'
+        ), $GLOBALS['syslog']);
     }
 
     public function testErrorOpenSyslog()
     {
         $this->setExpectedException('LoggerException');
-        $error=null;
-        if(extension_loaded('runkit.so')){
-            $this->markTestIncomplete('no runkit');
-        }
-        ini_set('runkit.internal_override', '1');
-        runkit_function_copy('openlog', 'openlog_copy');
-        runkit_function_redefine('openlog', '', 'return false;');
-        try{
-            $appender = new LoggerAppenderSyslog('id', LOG_PID, 0);
-            $appender->write(Logger::INFO, 'test syslog');
-        }catch (Exception $e){
-            $error=$e;
-        }
-        runkit_function_remove('openlog');
-        runkit_function_rename('openlog_copy', 'openlog');
-        if($error){
-            throw $error;
-        }
+        $this->mockFunction('openlog', '', 'return false;');
+
+        $appender = new LoggerAppenderSyslog('id', LOG_PID, 0);
+        $appender->write(Logger::INFO, 'test syslog');
     }
 
     public function optionsProvider()

@@ -2,7 +2,7 @@
 
 spl_autoload_call('LoggerLayoutPattern');
 
-class BasicLoggerLayoutPatternTest extends PHPUnit_Framework_TestCase
+class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
 {
     /**
      * @param $format
@@ -117,16 +117,9 @@ class BasicLoggerLayoutPatternTest extends PHPUnit_Framework_TestCase
 
     public function testBacktraceMain()
     {
-        if(extension_loaded('runkit.so')){
-            $this->markTestIncomplete('no runkit');
-        }
-        ini_set('runkit.internal_override', '1');
-        runkit_function_copy('debug_backtrace', 'debug_backtrace_copy');
-        runkit_function_redefine('debug_backtrace', '', 'return array();');
+        $this->mockFunction('debug_backtrace', '', 'return array();');
         $layout = new LoggerLayoutPattern('{location:function}');
         $this->assertEquals('main'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, ''));
-        runkit_function_remove('debug_backtrace');
-        runkit_function_rename('debug_backtrace_copy', 'debug_backtrace');
     }
 }
 

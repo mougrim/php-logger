@@ -132,10 +132,8 @@ class Logger
                 return 'DEBUG';
             case $level >= Logger::TRACE:
                 return 'TRACE';
-            case $level >= Logger::ALL:
-                return 'ALL';
             default:
-                throw new LoggerException('O.o wtf?!');
+                return 'ALL';
         }
     }
 
@@ -167,7 +165,7 @@ class Logger
     public function removeAppender(LoggerAppenderAbstract $appender)
     {
         $key = array_search($appender, $this->appenders);
-        if ($key) {
+        if ($key!==false) {
             unset($this->appenders[$key]);
         }
     }
@@ -180,6 +178,11 @@ class Logger
     public function setAdditive($additive)
     {
         $this->additive = (bool)$additive;
+    }
+
+    public function getAdditive()
+    {
+        return $this->additive;
     }
 
     public function getName()

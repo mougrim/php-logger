@@ -5,6 +5,7 @@ class LoggerLayoutSimpleTest extends PHPUnit_Framework_TestCase
     public function setUp(){
         LoggerNDC::clear();
         LoggerMDC::clear();
+        parent::setUp();
     }
 
     public function testLoggerName()
