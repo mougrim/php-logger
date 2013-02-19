@@ -4,7 +4,7 @@ class BaseLoggerTestCase extends PHPUnit_Framework_TestCase
 {
     private $mockFunctions=array();
 
-    public function tearDown(){
+    protected function tearDown(){
         foreach($this->mockFunctions as $func){
             $this->originalFunction($func);
         }
