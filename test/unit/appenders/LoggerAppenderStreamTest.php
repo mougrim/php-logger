@@ -69,6 +69,8 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
             $writer->write(1, $firstChild);
             die();
         }
+        pcntl_waitpid($pid, $status);
+        sleep(1);
         // second fork
         $pid = pcntl_fork();
         if ($pid == -1) {
