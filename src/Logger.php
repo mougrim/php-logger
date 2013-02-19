@@ -70,7 +70,7 @@ class Logger
      */
     public static function getLogger($name)
     {
-        if (self::$isConfigured) {
+        if (!self::$isConfigured) {
             self::configure();
         }
         return self::$hierarchy->getLogger($name);
