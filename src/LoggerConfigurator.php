@@ -2,6 +2,7 @@
 
 class LoggerConfigurator
 {
+    const LOGGER_RENDERER = 'renderer';
     const LOGGER_LAYOUTS = 'layouts';
     const LOGGER_APPENDERS = 'appenders';
     const LOGGER_LOGGERS = 'loggers';
@@ -9,6 +10,17 @@ class LoggerConfigurator
 
     public function configure(LoggerHierarchy $hierarchy, array $config)
     {
+        if (isset($config[self::LOGGER_RENDERER])) {
+            if (isset($config[self::LOGGER_RENDERER]['nullMessage'])) {
+                LoggerRender::$nullMessage = (string)$config[self::LOGGER_RENDERER]['nullMessage'];
+            }
+            if (isset($config[self::LOGGER_RENDERER]['trueMessage'])) {
+                LoggerRender::$trueMessage = (string)$config[self::LOGGER_RENDERER]['trueMessage'];
+            }
+            if (isset($config[self::LOGGER_RENDERER]['falseMessage'])) {
+                LoggerRender::$falseMessage = (string)$config[self::LOGGER_RENDERER]['falseMessage'];
+            }
+        }
         if (isset($config[self::LOGGER_LAYOUTS])) {
             foreach ($config[self::LOGGER_LAYOUTS] as $layoutName => $layoutConfig) {
                 $hierarchy->setLayout($layoutName, $this->createLayout($layoutConfig));
@@ -62,8 +74,7 @@ class LoggerConfigurator
             if (is_string($config['layout']))
                 $config['layout'] = $hierarchy->getLayout($config['layout']);
             elseif (is_array($config['layout']))
-                $config['layout'] = $this->createLayout($config['layout']);
-            else
+                $config['layout'] = $this->createLayout($config['layout']); else
                 throw new LoggerException('Invalid logger layout description');
 
         }

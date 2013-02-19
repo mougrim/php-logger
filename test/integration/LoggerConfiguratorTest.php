@@ -7,6 +7,11 @@ class LoggerConfiguratorTest extends PHPUnit_Framework_TestCase
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
         $configurator->configure($hierarchy, array(
+            'renderer' => array(
+                'nullMessage' => '-',
+                'trueMessage' => '1',
+                'falseMessage' => '-1',
+            ),
             'layouts' => array(
                 'simple' => array(
                     'class' => 'LoggerLayoutSimple',
@@ -49,6 +54,10 @@ class LoggerConfiguratorTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('pattern', $hierarchy->getLayoutMap());
         $this->assertArrayHasKey('stream', $hierarchy->getAppenderMap());
         $this->assertArrayHasKey('logger', $hierarchy->getLoggerMap());
+
+        $this->assertEquals('-', LoggerRender::$nullMessage);
+        $this->assertEquals('1', LoggerRender::$trueMessage);
+        $this->assertEquals('-1', LoggerRender::$falseMessage);
     }
 
     public function testInvalidLayout()

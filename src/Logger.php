@@ -10,6 +10,11 @@ if (!defined('PHP_INT_MIN')) {
  *
  * <pre>
  *  Logger::configure(array(
+ *      'renderer' => array(
+ *          'nullMessage' => 'null',
+ *          'trueMessage' => 'true',
+ *          'falseMessage' => 'false',
+ *      )
  *      'layouts' => array(
  *          'simple' => array(
  *              'class' => 'LoggerLayoutSimple',
@@ -112,6 +117,7 @@ class Logger
         self::$isConfigured = false;
         LoggerNDC::clear();
         LoggerMDC::clear();
+        LoggerRender::reset();
     }
 
     public static function getLevelName($level)
@@ -165,7 +171,7 @@ class Logger
     public function removeAppender(LoggerAppenderAbstract $appender)
     {
         $key = array_search($appender, $this->appenders);
-        if ($key!==false) {
+        if ($key !== false) {
             unset($this->appenders[$key]);
         }
     }
