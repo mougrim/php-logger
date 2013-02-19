@@ -33,7 +33,7 @@ class LoggerConfigurator
 
     private function createLogger(Logger $logger, LoggerHierarchy $hierarchy, array $config)
     {
-        if ($config['appenders']) {
+        if (isset($config['appenders'])) {
             foreach ($config['appenders'] as $appenderConfig) {
                 if (is_string($appenderConfig)) {
                     $appender = $hierarchy->getAppender($appenderConfig);

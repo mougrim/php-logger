@@ -23,7 +23,7 @@ class LoggerHierarchy
     public function getLogger($name)
     {
         if (isset($this->loggerMap[$name]))
-            return $this->loggerMap;
+            return $this->loggerMap[$name];
         else
             return $this->loggerMap[$name] = $this->createLogger($name);
     }
