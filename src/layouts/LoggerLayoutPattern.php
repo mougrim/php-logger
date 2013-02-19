@@ -15,6 +15,7 @@
  * - {global:keypath} $GLOBAL variable. Example {global:page.num} returns $GLOBAL['page']['num']
  * - {mdc} or {mdc:key}
  * - {ndc}
+ * - {argv}
  */
 class LoggerLayoutPattern implements LoggerLayoutInterface
 {
@@ -22,7 +23,6 @@ class LoggerLayoutPattern implements LoggerLayoutInterface
     const PATTERN_EXPRESSION = '/\{([a-z]+)(:([^}]+))?\}/i';
 
     private $pattern = self::PATTERN_FULL;
-    private $template;
     private $patternMap = array(
         'date' => 'LoggerPatternDate',
         'pid' => 'LoggerPatternPid',
@@ -35,6 +35,7 @@ class LoggerLayoutPattern implements LoggerLayoutInterface
         'global' => 'LoggerPatternGlobal',
         'ndc' => 'LoggerPatternNDC',
         'mdc' => 'LoggerPatternMDC',
+        'argv' => 'LoggerPatternArgv',
     );
     /** @var LoggerPatternInterface[] */
     private $patternMappers = array();
@@ -44,29 +45,26 @@ class LoggerLayoutPattern implements LoggerLayoutInterface
         if ($pattern) {
             $this->pattern = $pattern;
         }
-        $template = $pattern;
         if (preg_match_all(self::PATTERN_EXPRESSION, $this->pattern, $matches)) {
             foreach ($matches[1] as $key => $patternName) {
                 $fullMatch = $matches[0][$key];
                 $rule = $matches[3][$key];
                 if (isset($this->patternMap[$patternName])) {
                     $className = $this->patternMap[$patternName];
-                    $template = strtr($template, array($fullMatch => '{' . $patternName . '}'));
-                    $this->patternMappers[$patternName] = new $className($rule);
+                    $this->patternMappers[$fullMatch] = new $className($rule);
                 }
             }
         }
-        $this->template = $template;
     }
 
     public function formatMessage(Logger $logger, $level, $message, Exception $throwable = null)
     {
-        $formatted = $this->template;
-        foreach ($this->patternMappers as $name => $mapper) {
+        $formatted = $this->pattern;
+        foreach ($this->patternMappers as $pattern => $mapper) {
             $formatted = strtr(
                 $formatted,
                 array(
-                    '{' . $name . '}' => $mapper->render($logger, $level, $message, $throwable)
+                    $pattern => $mapper->render($logger, $level, $message, $throwable)
                 )
             );
         }
@@ -279,5 +277,14 @@ class LoggerPatternMDC implements LoggerPatternInterface
         }
         // @todo optimize this sheet
         return rtrim($formatted);
+    }
+}
+
+class LoggerPatternArgv extends LoggerPatternPrintFormat
+{
+    public function render(Logger $logger, $level, $message, Exception $throwable = null)
+    {
+        global $argv;
+        return $this->format(join(' ', $argv));
     }
 }

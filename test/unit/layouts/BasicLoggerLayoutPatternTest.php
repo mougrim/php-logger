@@ -22,6 +22,9 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
         LoggerMDC::clear();
         LoggerNDC::push("ndc_context");
         LoggerMDC::put('key', 'value');
+        global $argv;
+        $argv=array(uniqid(), uniqid(),uniqid());
+        $command = join(' ', $argv);
         return array(
             array(' ', ' ' . PHP_EOL),
             array('{date}', date('Y:m:d') . PHP_EOL),
@@ -40,6 +43,7 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
             array('{global:some.var}', ($GLOBALS['some']['var'] = uniqid()) . PHP_EOL),
             array('{ndc}', 'ndc_context' . PHP_EOL),
             array('{mdc}', 'key=value' . PHP_EOL),
+            array('{argv}', $command . PHP_EOL),
         );
     }
 
