@@ -18,7 +18,7 @@
  */
 class LoggerLayoutPattern implements LoggerLayoutInterface
 {
-    const PATTERN_FULL = '{date:Y/m/d} [{level}] {logger} {file}:{line} {class}:{function} {mdc:key} {mdc} {ndc}: {message} {ex}';
+    const PATTERN_FULL = '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}';
     const PATTERN_EXPRESSION = '/\{([a-z]+)(:([^}]+))?\}/i';
 
     private $pattern = self::PATTERN_FULL;
