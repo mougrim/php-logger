@@ -267,7 +267,7 @@ class LoggerPatternMDC implements LoggerPatternInterface
     public function render(Logger $logger, $level, $message, Exception $throwable = null)
     {
         if ($this->key) {
-            return (string)LoggerMDC::get($this->key);
+            return LoggerRender::render(LoggerMDC::get($this->key));
         }
         $formatted = '';
         if ($mdc = LoggerMDC::getMap()) {
