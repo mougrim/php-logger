@@ -2,8 +2,8 @@
 
 abstract class LoggerAppenderAbstract
 {
-    private $minLevel;
-    private $maxLevel;
+    protected $minLevel;
+    protected $maxLevel;
     /** @var LoggerLayoutInterface|null */
     protected $layout = null;
 
