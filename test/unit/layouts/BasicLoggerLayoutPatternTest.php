@@ -74,7 +74,7 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
         LoggerMDC::clear();
         $layout = new LoggerLayoutPattern('{mdc:foo}');
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');
-        $this->assertEquals(''.PHP_EOL, $message);
+        $this->assertEquals('null'.PHP_EOL, $message);
 
         LoggerMDC::put('foo','bar');
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');

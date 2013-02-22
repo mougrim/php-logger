@@ -1,5 +1,8 @@
 <?php
 
+defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
+defined('STDERR') or define('STDERR', fopen('php://stderr', 'w'));
+
 class LoggerAppenderStd extends LoggerAppenderAbstract
 {
     const STDOUT = STDOUT;
