@@ -16,6 +16,8 @@
  * - {mdc} or {mdc:key}
  * - {ndc}
  * - {argv}
+ * - {callable:get_username} log return value of function <code>string function get_username(){}<code>
+ * - {callable:Foo::bar} log return value of method <code>string Foo::bar(){}<code>
  */
 class LoggerLayoutPattern implements LoggerLayoutInterface
 {
@@ -36,6 +38,7 @@ class LoggerLayoutPattern implements LoggerLayoutInterface
         'ndc' => 'LoggerPatternNDC',
         'mdc' => 'LoggerPatternMDC',
         'argv' => 'LoggerPatternArgv',
+        'call' => 'LoggerPatternCallable',
     );
     /** @var LoggerPatternInterface[] */
     private $patternMappers = array();
@@ -285,6 +288,37 @@ class LoggerPatternArgv extends LoggerPatternPrintFormat
     public function render(Logger $logger, $level, $message, Exception $throwable = null)
     {
         global $argv;
-        return $this->format(join(' ', $argv));
+        return $this->format(join(' ', is_array($argv) ? $argv : array()));
+    }
+}
+
+class LoggerPatternCallable implements LoggerPatternInterface
+{
+    private $callable;
+
+    public function __construct($callableString)
+    {
+        if (strpos('::', $callableString) !== false) {
+            $callable = explode('::', $callableString, 1);
+        } else {
+            $callable = $callableString;
+        }
+        if (is_callable($callable)) {
+            $this->callable = $callable;
+        } else {
+            throw new InvalidArgumentException("'$callableString' is not callable");
+        }
+    }
+
+    /**
+     * @param Logger $logger
+     * @param $level
+     * @param $message
+     * @param Exception $throwable
+     * @return string
+     */
+    public function render(Logger $logger, $level, $message, Exception $throwable = null)
+    {
+        return LoggerRender::render(call_user_func($this->callable));
     }
 }

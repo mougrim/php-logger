@@ -23,7 +23,7 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
         LoggerNDC::push("ndc_context");
         LoggerMDC::put('key', 'value');
         global $argv;
-        $argv=array(uniqid(), uniqid(),uniqid());
+        $argv = array(uniqid(), uniqid(), uniqid());
         $command = join(' ', $argv);
         return array(
             array(' ', ' ' . PHP_EOL),
@@ -44,6 +44,8 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
             array('{ndc}', 'ndc_context' . PHP_EOL),
             array('{mdc}', 'key=value' . PHP_EOL),
             array('{argv}', $command . PHP_EOL),
+            array('{call:testCallableFunction}', 'testCallableFunction' . PHP_EOL),
+            array('{call:TestCallableClass::testMethod}', 'TestCallableClass::testMethod' . PHP_EOL),
         );
     }
 
@@ -53,11 +55,11 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
 
         $layout = new LoggerLayoutPattern('{ndc}');
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');
-        $this->assertEquals(''.PHP_EOL, $message);
+        $this->assertEquals('' . PHP_EOL, $message);
 
         LoggerNDC::push("ndc");
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');
-        $this->assertEquals('ndc'.PHP_EOL, $message);
+        $this->assertEquals('ndc' . PHP_EOL, $message);
     }
 
     public function testLoggerMDC()
@@ -65,46 +67,46 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
         LoggerMDC::clear();
         $layout = new LoggerLayoutPattern('{mdc}');
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');
-        $this->assertEquals(''.PHP_EOL, $message);
+        $this->assertEquals('' . PHP_EOL, $message);
 
-        LoggerMDC::put('foo','bar');
+        LoggerMDC::put('foo', 'bar');
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');
-        $this->assertEquals('foo=bar'.PHP_EOL, $message);
+        $this->assertEquals('foo=bar' . PHP_EOL, $message);
 
         LoggerMDC::clear();
         $layout = new LoggerLayoutPattern('{mdc:foo}');
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');
-        $this->assertEquals('null'.PHP_EOL, $message);
+        $this->assertEquals('null' . PHP_EOL, $message);
 
-        LoggerMDC::put('foo','bar');
+        LoggerMDC::put('foo', 'bar');
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, '');
-        $this->assertEquals('bar'.PHP_EOL, $message);
+        $this->assertEquals('bar' . PHP_EOL, $message);
     }
 
     public function testRenderMessage()
     {
         $layout = new LoggerLayoutPattern('{message}');
-        $this->assertEquals('string'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, 'string'));
-        $this->assertEquals('123123'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, 123123));
-        $this->assertEquals('123.123123123'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, 123.123123123));
-        $this->assertEquals('false'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, false));
-        $this->assertEquals('true'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, true));
-        $this->assertEquals('null'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, null));
-        $this->assertEquals('test'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, new TestLoggerLayoutPatternException("test")));
-        $this->assertEquals(print_r(new stdClass(),1).PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, new stdClass()));
+        $this->assertEquals('string' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, 'string'));
+        $this->assertEquals('123123' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, 123123));
+        $this->assertEquals('123.123123123' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, 123.123123123));
+        $this->assertEquals('false' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, false));
+        $this->assertEquals('true' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, true));
+        $this->assertEquals('null' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, null));
+        $this->assertEquals('test' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, new TestLoggerLayoutPatternException("test")));
+        $this->assertEquals(print_r(new stdClass(), 1) . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, new stdClass()));
     }
 
     public function testRenderException()
     {
         $layout = new LoggerLayoutPattern('{ex}');
-        $this->assertEquals(''.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, '',null));
-        $this->assertEquals('test'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, '',new TestLoggerLayoutPatternException('test')));
+        $this->assertEquals('' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, '', null));
+        $this->assertEquals('test' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, '', new TestLoggerLayoutPatternException('test')));
     }
 
     public function testRenderFormat()
     {
         $layout = new LoggerLayoutPattern('{pid:%10s}');
-        $this->assertEquals(sprintf('%10s', posix_getpid()).PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, ''));
+        $this->assertEquals(sprintf('%10s', posix_getpid()) . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testErrorPatternGlobal()
@@ -116,14 +118,27 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
     public function testPatternGlobal()
     {
         $layout = new LoggerLayoutPattern('{global:foo}');
-        $this->assertEquals('null'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, ''));
+        $this->assertEquals('null' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testBacktraceMain()
     {
         $this->mockFunction('debug_backtrace', '', 'return array();');
         $layout = new LoggerLayoutPattern('{location:function}');
-        $this->assertEquals('main'.PHP_EOL,$layout->formatMessage(new Logger("root"), Logger::INFO, ''));
+        $this->assertEquals('main' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
+    }
+}
+
+function testCallableFunction()
+{
+    return __FUNCTION__;
+}
+
+class TestCallableClass
+{
+    public static function testMethod()
+    {
+        return __METHOD__;
     }
 }
 
