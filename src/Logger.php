@@ -153,7 +153,7 @@ class Logger
     /** @var LoggerAppenderAbstract[] */
     private $appenders = array();
     /** @var bool */
-    private $additive = true;
+    private $addictive = true;
 
     public function __construct($name, Logger $parent = null)
     {
@@ -181,14 +181,14 @@ class Logger
         return $this->appenders;
     }
 
-    public function setAdditive($additive)
+    public function setAddictive($addictive)
     {
-        $this->additive = (bool)$additive;
+        $this->addictive = (bool)$addictive;
     }
 
-    public function getAdditive()
+    public function getAddictive()
     {
-        return $this->additive;
+        return $this->addictive;
     }
 
     public function getName()
@@ -236,7 +236,7 @@ class Logger
         foreach ($this->appenders as $appender) {
             $appender->append($this, $level, $message, $throwable);
         }
-        if ($this->parent && $this->additive) {
+        if ($this->parent && $this->addictive) {
             $this->parent->log($level, $message, $throwable);
         }
     }

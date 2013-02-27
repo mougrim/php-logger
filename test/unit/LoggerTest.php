@@ -9,7 +9,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('logger', $logger->getName());
         $this->assertTrue($root === $logger->getParent());
         $this->assertEquals(array(), $logger->getAppenders());
-        $this->assertTrue($logger->getAdditive());
+        $this->assertTrue($logger->getAddictive());
     }
 
     public function testAppender()
@@ -38,17 +38,17 @@ class LoggerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $logger->getAppenders());
     }
 
-    public function testAdditive()
+    public function testAddictive()
     {
         $root = new LoggerTestMock('root');
         $logger = new Logger('logger', $root);
-        $this->assertTrue($logger->getAdditive());
+        $this->assertTrue($logger->getAddictive());
         $this->assertEquals($root, $logger->getParent());
         $logger->log(1, 'test1', $exFirst = new Exception());
         $this->assertEquals(array(array(1, 'test1', $exFirst)), $root->logs);
 
-        $logger->setAdditive(false);
-        $this->assertFalse($logger->getAdditive());
+        $logger->setAddictive(false);
+        $this->assertFalse($logger->getAddictive());
         $logger->log(2, 'test2', $exSecond = new Exception());
         $this->assertEquals(array(array(1, 'test1', $exFirst)), $root->logs);
     }

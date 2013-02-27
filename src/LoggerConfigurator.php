@@ -57,7 +57,7 @@ class LoggerConfigurator
                 $logger->addAppender($appender);
             }
             if (isset($config['addictive'])) {
-                $logger->setAdditive($config['addictive']);
+                $logger->setAddictive($config['addictive']);
             }
         }
     }
