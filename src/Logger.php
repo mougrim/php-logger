@@ -231,13 +231,14 @@ class Logger
         $this->log(self::FATAL, $message, $throwable);
     }
 
-    public function log($level, $message, Exception $throwable = null)
+    public function log($level, $message, Exception $throwable = null, Logger $logger=null)
     {
+        $logger = $logger ? $logger : $this;
         foreach ($this->appenders as $appender) {
-            $appender->append($this, $level, $message, $throwable);
+            $appender->append($logger, $level, $message, $throwable);
         }
         if ($this->parent && $this->addictive) {
-            $this->parent->log($level, $message, $throwable);
+            $this->parent->log($level, $message, $throwable, $logger);
         }
     }
 }
