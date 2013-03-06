@@ -45,12 +45,12 @@ class LoggerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($logger->getAddictive());
         $this->assertEquals($root, $logger->getParent());
         $logger->log(1, 'test1', $exFirst = new Exception());
-        $this->assertEquals(array(array(1, 'test1', $exFirst)), $root->logs);
+        $this->assertEquals(array(array(1, 'test1', $exFirst, $logger)), $root->logs);
 
         $logger->setAddictive(false);
         $this->assertFalse($logger->getAddictive());
         $logger->log(2, 'test2', $exSecond = new Exception());
-        $this->assertEquals(array(array(1, 'test1', $exFirst)), $root->logs);
+        $this->assertEquals(array(array(1, 'test1', $exSecond, $logger)), $root->logs);
     }
 
     public function testLogLevel()
@@ -65,26 +65,26 @@ class LoggerTest extends PHPUnit_Framework_TestCase
         $logger->fatal('fatal');
 
         $this->assertEquals(array(
-            array(Logger::TRACE, 'trace', null),
-            array(Logger::DEBUG, 'debug', null),
-            array(Logger::INFO, 'info', null),
-            array(Logger::WARN, 'warn', null),
-            array(Logger::ERROR, 'error', null),
-            array(Logger::FATAL, 'fatal', null),
+            array(Logger::TRACE, 'trace', null, $logger),
+            array(Logger::DEBUG, 'debug', null, $logger),
+            array(Logger::INFO, 'info', null, $logger),
+            array(Logger::WARN, 'warn', null, $logger),
+            array(Logger::ERROR, 'error', null, $logger),
+            array(Logger::FATAL, 'fatal', null, $logger),
         ), $root->logs);
     }
 
     public function levelProvider()
     {
         return array(
-            array(Logger::OFF,  'OFF'),
-            array(Logger::FATAL,'FATAL'),
-            array(Logger::ERROR,'ERROR'),
+            array(Logger::OFF, 'OFF'),
+            array(Logger::FATAL, 'FATAL'),
+            array(Logger::ERROR, 'ERROR'),
             array(Logger::WARN, 'WARN'),
             array(Logger::INFO, 'INFO'),
-            array(Logger::DEBUG,'DEBUG'),
-            array(Logger::TRACE,'TRACE'),
-            array(Logger::ALL,  'ALL'),
+            array(Logger::DEBUG, 'DEBUG'),
+            array(Logger::TRACE, 'TRACE'),
+            array(Logger::ALL, 'ALL'),
         );
     }
 
@@ -107,7 +107,7 @@ class LoggerTestMock extends Logger
 {
     public $logs = array();
 
-    public function log($level, $message, Exception $throwable = null)
+    public function log($level, $message, Exception $throwable = null, Logger $logger = null)
     {
         $this->logs[] = func_get_args();
     }

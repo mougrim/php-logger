@@ -4,6 +4,8 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
 {
     const MESSAGE_THRESHOLD = 4096;
 
+    /** @var string */
+    private $streamUrl;
     /** @var resource */
     private $stream;
     /** @var bool */
@@ -13,11 +15,8 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
 
     public function __construct($stream)
     {
-        // use @ for ignore invalid stream errors
-        $this->stream = @fopen($stream, 'a');
-        if (!$this->stream) {
-            throw new LoggerIOException("Error open $stream");
-        }
+        $this->streamUrl = $stream;
+        $this->getStream();
     }
 
     public function __destruct()
@@ -29,15 +28,16 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
 
     public function write($priority, $message)
     {
+        $steam = $this->getStream();
         if ($this->useLock) {
             if (!$this->useLockShortMessage && strlen($message) <= self::MESSAGE_THRESHOLD) {
-                fwrite($this->stream, $message);
-            } else if (flock($this->stream, LOCK_EX)) {
-                fwrite($this->stream, $message);
-                flock($this->stream, LOCK_UN);
+                fwrite($steam, $message);
+            } else if (flock($steam, LOCK_EX)) {
+                fwrite($steam, $message);
+                flock($steam, LOCK_UN);
             } else throw new LoggerIOException('Error get lock');
         } else {
-            fwrite($this->stream, $message);
+            fwrite($steam, $message);
         }
     }
 
@@ -55,5 +55,24 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
     public function setUseLockShortMessage($useLockShortMessage)
     {
         $this->useLockShortMessage = (bool)$useLockShortMessage;
+    }
+
+    /**
+     * @return resource
+     * @throws LoggerIOException
+     */
+    private function getStream()
+    {
+        if ($this->stream === null || !is_resource($this->stream)) {
+            $this->stream = @fopen($this->streamUrl, 'a');
+            if (!$this->stream) {
+                throw new LoggerIOException("Error open $this->streamUrl");
+            }
+        }
+        if (get_resource_type($this->stream) == 'Unknown') {
+            fclose($this->stream);
+            $this->stream = null;
+        }
+        return $this->stream;
     }
 }
