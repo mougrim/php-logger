@@ -3,15 +3,17 @@
 class LoggerAppenderStreamTest extends BaseLoggerTestCase
 {
     protected $backupGlobals = true;
-    private $logFile='/tmp/log.txt';
+    private $logFile = '/tmp/log.txt';
 
-    protected function setUp(){
-        if(is_file($this->logFile)) unlink($this->logFile);
+    protected function setUp()
+    {
+        if (is_file($this->logFile)) unlink($this->logFile);
         parent::setUp();
     }
 
-    protected function tearDown(){
-        if(is_file($this->logFile)) unlink($this->logFile);
+    protected function tearDown()
+    {
+        if (is_file($this->logFile)) unlink($this->logFile);
         parent::tearDown();
     }
 
@@ -41,21 +43,22 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
 
     public function testUseLockShortMessage()
     {
-        $GLOBALS['called']=false;
+        $GLOBALS['called'] = false;
         $this->mockFunction('flock', '', '$GLOBALS["called"]=true; return true;');
-        $appender = new LoggerAppenderStream('/tmp/log.txt');
+        $appender = new LoggerAppenderStream($this->logFile);
         $appender->setUseLock(true);
         $appender->setUseLockShortMessage(false);
         $appender->write(Logger::INFO, str_pad('', 4097, '1'));
         $this->assertEquals(true, $GLOBALS['called']);
     }
 
-    public function testFork(){
+    public function testFork()
+    {
 
-        $before=uniqid('before');
-        $firstChild=uniqid('firstChild');
-        $secondChild=uniqid('secondChild');
-        $after=uniqid('after');
+        $before = uniqid('before');
+        $firstChild = uniqid('firstChild');
+        $secondChild = uniqid('secondChild');
+        $after = uniqid('after');
 
         $writer = new LoggerAppenderStream($this->logFile);
         $writer->write(1, $before);
@@ -85,7 +88,18 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
         sleep(1);
         $writer->write(1, $after);
 
-        $expected=$before.$firstChild.$secondChild.$after;
+        $expected = $before . $firstChild . $secondChild . $after;
         $this->assertEquals($expected, file_get_contents($this->logFile));
+    }
+
+    public function testSigHub()
+    {
+        $appender = new LoggerAppenderStream($this->logFile);
+        $appender->write(Logger::INFO, $first = uniqid('', true));
+        $this->assertEquals($first, file_get_contents($this->logFile));
+        unlink($this->logFile);
+        posix_kill(posix_getpid(), SIGHUP);
+        $appender->write(Logger::INFO, $second = uniqid('', true));
+        $this->assertEquals($second, file_get_contents($this->logFile));
     }
 }

@@ -17,9 +17,24 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
     {
         $this->streamUrl = $stream;
         $this->getStream();
+        if (function_exists('pcntl_signal')) {
+            declare(ticks = 2) ;
+            pcntl_signal(SIGHUP, array($this, 'reopen'));
+        }
     }
 
     public function __destruct()
+    {
+        $this->close();
+    }
+
+    public function reopen()
+    {
+        $this->close();
+        $this->getStream();
+    }
+
+    public function close()
     {
         if ($this->stream) {
             fclose($this->stream);
