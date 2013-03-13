@@ -110,8 +110,10 @@ class LoggerConfigurator
                     unset($config[$param->getName()]);
                 }
             }
+            $object = $reflection->newInstanceArgs($params);
+        } else {
+            $object = $reflection->newInstance();
         }
-        $object = $reflection->newInstanceArgs($params);
         foreach ($config as $name => $value) {
             $method = 'set' . $name;
             if (method_exists($object, $method)) {
