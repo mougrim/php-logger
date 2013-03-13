@@ -100,6 +100,19 @@ class LoggerTest extends PHPUnit_Framework_TestCase
             Logger::getLevelName($level)
         );
     }
+
+    /**
+     * @param $expected
+     * @param $levelName
+     * @dataProvider levelProvider
+     */
+    public function testGetLevelByName($expected, $levelName)
+    {
+        $this->assertEquals(
+            $expected,
+            Logger::getLevelByName($levelName)
+        );
+    }
 }
 
 

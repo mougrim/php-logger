@@ -50,10 +50,6 @@ if (!defined('PHP_INT_MIN')) {
  */
 class Logger
 {
-    /*
-     * Logger factory description
-     */
-
     const OFF = PHP_INT_MAX;
     const FATAL = 50000;
     const ERROR = 40000;
@@ -111,6 +107,9 @@ class Logger
         self::$isConfigured = true;
     }
 
+    /**
+     * Reset all loggers, appenders, etc
+     */
     public static function reset()
     {
         self::$hierarchy = new LoggerHierarchy();
@@ -120,26 +119,57 @@ class Logger
         LoggerRender::reset();
     }
 
+    /**
+     * @param int $level
+     * @return string
+     */
     public static function getLevelName($level)
     {
         $level = (int)$level;
         switch (true) {
-            case $level >= Logger::OFF:
+            case $level >= self::OFF:
                 return 'OFF';
-            case $level >= Logger::FATAL:
+            case $level >= self::FATAL:
                 return 'FATAL';
-            case $level >= Logger::ERROR:
+            case $level >= self::ERROR:
                 return 'ERROR';
-            case $level >= Logger::WARN:
+            case $level >= self::WARN:
                 return 'WARN';
-            case $level >= Logger::INFO:
+            case $level >= self::INFO:
                 return 'INFO';
-            case $level >= Logger::DEBUG:
+            case $level >= self::DEBUG:
                 return 'DEBUG';
-            case $level >= Logger::TRACE:
+            case $level >= self::TRACE:
                 return 'TRACE';
             default:
                 return 'ALL';
+        }
+    }
+
+    /**
+     * @param string $level
+     * @return int
+     */
+    public static function getLevelByName($level)
+    {
+        $level = strtoupper($level);
+        switch (true) {
+            case $level === 'OFF':
+                return self::OFF;
+            case $level === 'FATAL':
+                return self::FATAL;
+            case $level === 'ERROR':
+                return self::ERROR;
+            case $level === 'WARN':
+                return self::WARN;
+            case $level === 'INFO':
+                return self::INFO;
+            case $level === 'DEBUG':
+                return self::DEBUG;
+            case $level === 'TRACE':
+                return self::TRACE;
+            default:
+                return self::ALL;
         }
     }
 
@@ -231,7 +261,7 @@ class Logger
         $this->log(self::FATAL, $message, $throwable);
     }
 
-    public function log($level, $message, Exception $throwable = null, Logger $logger=null)
+    public function log($level, $message, Exception $throwable = null, Logger $logger = null)
     {
         $logger = $logger ? $logger : $this;
         foreach ($this->appenders as $appender) {
