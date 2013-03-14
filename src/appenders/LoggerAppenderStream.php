@@ -18,7 +18,7 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
         $this->streamUrl = $stream;
         $this->getStream();
         if (function_exists('pcntl_signal')) {
-            declare(ticks = 2) ;
+            declare(ticks = 1) ;
             pcntl_signal(SIGHUP, array($this, 'reopen'));
         }
     }
@@ -30,6 +30,7 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
 
     public function reopen()
     {
+        error_log("log {$this->stream} reopened");
         $this->close();
         $this->getStream();
     }
@@ -78,15 +79,15 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
      */
     private function getStream()
     {
+        if (is_resource($this->stream) && get_resource_type($this->stream) == 'Unknown') {
+            fclose($this->stream);
+            $this->stream = null;
+        }
         if ($this->stream === null || !is_resource($this->stream)) {
             $this->stream = @fopen($this->streamUrl, 'a');
             if (!$this->stream) {
                 throw new LoggerIOException("Error open $this->streamUrl");
             }
-        }
-        if (get_resource_type($this->stream) == 'Unknown') {
-            fclose($this->stream);
-            $this->stream = null;
         }
         return $this->stream;
     }
