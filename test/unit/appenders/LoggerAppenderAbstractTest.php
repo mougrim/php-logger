@@ -4,7 +4,7 @@ class LoggerAppenderAbstractTest extends PHPUnit_Framework_TestCase
 {
     public function testMinLevel()
     {
-        $logger=new Logger('root');
+        $logger = new Logger('root');
 
         $appender = new LoggerAppenderAbstractTestAppender();
 
@@ -19,7 +19,7 @@ class LoggerAppenderAbstractTest extends PHPUnit_Framework_TestCase
 
     public function testMaxLevel()
     {
-        $logger=new Logger('root');
+        $logger = new Logger('root');
 
         $appender = new LoggerAppenderAbstractTestAppender();
 
@@ -37,10 +37,10 @@ class LoggerAppenderAbstractTest extends PHPUnit_Framework_TestCase
 
 class LoggerAppenderAbstractTestAppender extends LoggerAppenderAbstract
 {
-    public $data='';
+    public $data = '';
 
     public function write($level, $message)
     {
-        $this->data.=$message;
+        $this->data .= $message;
     }
 }

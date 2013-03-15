@@ -27,7 +27,7 @@ class LoggerHierarchyTest extends PHPUnit_Framework_TestCase
         $logger = $hierarchy->getLogger('newLogger');
         $this->assertEquals('newLogger', $logger->getName());
         $this->assertEquals($rootLogger, $logger->getParent());
-        $this->assertEquals(array('newLogger'=>$logger), $hierarchy->getLoggerMap());
+        $this->assertEquals(array('newLogger' => $logger), $hierarchy->getLoggerMap());
     }
 
     public function testGetAppenderNotExists()
@@ -43,7 +43,7 @@ class LoggerHierarchyTest extends PHPUnit_Framework_TestCase
         $appender = new LoggerAppenderStd();
         $hierarchy->setAppender('appender', $appender);
         $this->assertEquals($appender, $hierarchy->getAppender('appender'));
-        $this->assertEquals(array('appender'=>$appender), $hierarchy->getAppenderMap());
+        $this->assertEquals(array('appender' => $appender), $hierarchy->getAppenderMap());
     }
 
     public function testGetLayoutNotExists()
@@ -59,6 +59,6 @@ class LoggerHierarchyTest extends PHPUnit_Framework_TestCase
         $layout = new LoggerLayoutSimple();
         $hierarchy->setLayout('simple', $layout);
         $this->assertEquals($layout, $hierarchy->getLayout('simple'));
-        $this->assertEquals(array('simple'=>$layout), $hierarchy->getLayoutMap());
+        $this->assertEquals(array('simple' => $layout), $hierarchy->getLayoutMap());
     }
 }

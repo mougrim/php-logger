@@ -1,5 +1,16 @@
 <?php
 
+namespace integration;
+
+use Logger;
+use LoggerAppenderStream;
+use LoggerConfigurator;
+use LoggerHierarchy;
+use LoggerLayoutSimple;
+use LoggerRender;
+use PHPUnit_Framework_TestCase;
+use stdClass;
+
 class LoggerConfiguratorTest extends PHPUnit_Framework_TestCase
 {
     public function testConfigure()

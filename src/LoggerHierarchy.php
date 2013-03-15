@@ -3,9 +3,21 @@
 class LoggerHierarchy
 {
     private $rootLogger;
-    private $loggerMap=array();
-    private $appenderMap=array();
-    private $layoutMap=array();
+    private $loggerMap = array();
+    private $appenderMap = array();
+    private $layoutMap = array();
+
+    /**
+     * Reopen appenders, what has support reopen log stream
+     */
+    public function reopen()
+    {
+        foreach ($this->appenderMap as $appender) {
+            if ($appender instanceof LoggerAppenderReopen) {
+                $appender->reopen();
+            }
+        }
+    }
 
     public function setRootLogger(Logger $rootLogger)
     {

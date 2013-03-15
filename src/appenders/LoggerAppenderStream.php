@@ -1,6 +1,6 @@
 <?php
 
-class LoggerAppenderStream extends LoggerAppenderAbstract
+class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppenderReopen
 {
     const MESSAGE_THRESHOLD = 4096;
 
@@ -17,10 +17,6 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
     {
         $this->streamUrl = $stream;
         $this->getStream();
-        if (function_exists('pcntl_signal')) {
-            declare(ticks = 1) ;
-            pcntl_signal(SIGHUP, array($this, 'reopen'));
-        }
     }
 
     public function __destruct()
@@ -30,7 +26,6 @@ class LoggerAppenderStream extends LoggerAppenderAbstract
 
     public function reopen()
     {
-        error_log("log {$this->stream} reopened");
         $this->close();
         $this->getStream();
     }

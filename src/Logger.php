@@ -120,6 +120,18 @@ class Logger
     }
 
     /**
+     * Reopen log appender stream, what have support
+     * Usable in forks, SIGHUP handlers etc.
+     */
+    public static function reopen()
+    {
+        if (!self::$isConfigured) {
+            self::configure();
+        }
+        self::$hierarchy->reopen();
+    }
+
+    /**
      * @param int $level
      * @return string
      */

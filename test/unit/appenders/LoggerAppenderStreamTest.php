@@ -92,13 +92,13 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
         $this->assertEquals($expected, file_get_contents($this->logFile));
     }
 
-    public function testSigHub()
+    public function testReopen()
     {
         $appender = new LoggerAppenderStream($this->logFile);
         $appender->write(Logger::INFO, $first = uniqid('', true));
         $this->assertEquals($first, file_get_contents($this->logFile));
         unlink($this->logFile);
-        posix_kill(posix_getpid(), SIGHUP);
+        $appender->reopen();
         $appender->write(Logger::INFO, $second = uniqid('', true));
         $this->assertEquals($second, file_get_contents($this->logFile));
     }

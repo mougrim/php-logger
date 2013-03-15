@@ -2,7 +2,7 @@
 
 class LoggerAppenderSocketTest extends BaseLoggerTestCase
 {
-    protected $backupGlobals=true;
+    protected $backupGlobals = true;
 
     public function testCouldNotOpenSocket()
     {
@@ -23,7 +23,7 @@ class LoggerAppenderSocketTest extends BaseLoggerTestCase
 
     public function testWrite()
     {
-        $GLOBALS["socket"]=array();
+        $GLOBALS["socket"] = array();
         $this->mockFunction('fsockopen', '$host, $port, &$errorCode, &$errorMessage, $delay', '$GLOBALS["socket"][]=func_get_args();return "SocketMock";');
         $this->mockFunction('fwrite', '', '$GLOBALS["socket"][]=func_get_args();return true;');
         $this->mockFunction('fclose', '', '$GLOBALS["socket"][]=func_get_args();return true;');

@@ -2,11 +2,11 @@
 
 class LoggerAppenderSyslogTest extends BaseLoggerTestCase
 {
-    protected $backupGlobals=true;
+    protected $backupGlobals = true;
 
     public function testWriteSyslog()
     {
-        $GLOBALS['syslog']=array();
+        $GLOBALS['syslog'] = array();
         $appender = new LoggerAppenderSyslog('id', LOG_PID, 0);
         $this->mockFunction('openlog', '', '$GLOBALS["syslog"][]="openlog";return true;');
         $this->mockFunction('syslog', '$priority, $message', '$GLOBALS["syslog"][]="syslog";$GLOBALS["syslog"][]=$priority;$GLOBALS["syslog"][]=$message;');
@@ -36,9 +36,9 @@ class LoggerAppenderSyslogTest extends BaseLoggerTestCase
             array(LOG_PID, 'LOG_PID'),
             array(LOG_PID, LOG_PID),
             array(LOG_PID, array(LOG_PID)),
-            array(LOG_PID|LOG_CONS, 'LOG_PID|LOG_CONS'),
-            array(LOG_PID|LOG_CONS, LOG_PID|LOG_CONS),
-            array(LOG_PID|LOG_CONS, array(LOG_PID,LOG_CONS)),
+            array(LOG_PID | LOG_CONS, 'LOG_PID|LOG_CONS'),
+            array(LOG_PID | LOG_CONS, LOG_PID | LOG_CONS),
+            array(LOG_PID | LOG_CONS, array(LOG_PID, LOG_CONS)),
         );
     }
 
