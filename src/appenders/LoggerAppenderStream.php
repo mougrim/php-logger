@@ -34,6 +34,7 @@ class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppen
     {
         if ($this->stream) {
             fclose($this->stream);
+            $this->stream = null;
         }
     }
 
@@ -74,11 +75,11 @@ class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppen
      */
     private function getStream()
     {
-        if (is_resource($this->stream) && get_resource_type($this->stream) == 'Unknown') {
+        if ($this->stream && get_resource_type($this->stream) == 'Unknown') {
             fclose($this->stream);
             $this->stream = null;
         }
-        if ($this->stream === null || !is_resource($this->stream)) {
+        if (!$this->stream) {
             $this->stream = @fopen($this->streamUrl, 'a');
             if (!$this->stream) {
                 throw new LoggerIOException("Error open $this->streamUrl");

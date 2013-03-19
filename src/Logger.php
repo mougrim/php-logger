@@ -48,7 +48,7 @@ if (!defined('PHP_INT_MIN')) {
  * Logger::getLogger('logger')->info("hello world");
  * </pre>
  */
-class Logger
+final class Logger
 {
     const OFF = PHP_INT_MAX;
     const FATAL = 50000;
@@ -279,8 +279,11 @@ class Logger
         foreach ($this->appenders as $appender) {
             $appender->append($logger, $level, $message, $throwable);
         }
-        if ($this->parent && $this->addictive) {
-            $this->parent->log($level, $message, $throwable, $logger);
+        if ($this->addictive && $this->parent) {
+            // do not call parent->log, too slow
+            foreach ($this->parent->appenders as $appender) {
+                $appender->append($logger, $level, $message, $throwable);
+            }
         }
     }
 }

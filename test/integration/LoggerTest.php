@@ -45,4 +45,44 @@ class LoggerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, file_get_contents($f1));
         $this->assertEquals($expected, file_get_contents($f2));
     }
+
+    public function testTest()
+    {
+        Logger::configure(array(
+            'appenders' => array(
+                'stream' => array(
+                    'class' => 'LoggerAppenderStream',
+                    'stream' => '/dev/null'
+                ),
+            ),
+            'root' => array(
+                'appenders' => array('stream'),
+            )
+        ));
+
+        $logger = Logger::getLogger('test');
+        $start = microtime(1);
+        for ($i = 10000; $i--;) {
+            $logger->info('test');
+        }
+        $end = microtime(1);
+        var_dump('logger > root > stream', $end - $start);
+
+        $logger = Logger::getRootLogger();
+        $start = microtime(1);
+        for ($i = 10000; $i--;) {
+            $logger->info('test');
+        }
+        $end = microtime(1);
+        var_dump('root > stream', $end - $start);
+
+        $appenders = Logger::getRootLogger()->getAppenders();
+        $appender = $appenders[0];
+        $start = microtime(1);
+        for ($i = 10000; $i--;) {
+            $appender->append($logger, Logger::INFO, 'test', null);
+        }
+        $end = microtime(1);
+        var_dump('stream', $end - $start);
+    }
 }

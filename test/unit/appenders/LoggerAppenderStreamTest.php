@@ -102,4 +102,24 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
         $appender->write(Logger::INFO, $second = uniqid('', true));
         $this->assertEquals($second, file_get_contents($this->logFile));
     }
+
+    public function testReopenForkClose()
+    {
+        $appender = new LoggerAppenderStream($this->logFile);
+
+        $pid = pcntl_fork();
+        if ($pid == -1) {
+            $this->markTestIncomplete('could not fork');
+        } else if ($pid) {
+        } else {
+            $appender->close();
+            die();
+        }
+        pcntl_waitpid($pid, $status);
+        sleep(1);
+
+        $appender->write(Logger::INFO, $second = uniqid('', true));
+        $appender->close();
+        $this->assertEquals($second, file_get_contents($this->logFile));
+    }
 }

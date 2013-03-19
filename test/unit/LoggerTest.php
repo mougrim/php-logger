@@ -40,22 +40,26 @@ class LoggerTest extends PHPUnit_Framework_TestCase
 
     public function testAddictive()
     {
-        $root = new LoggerTestMock('root');
+        $rootAppender = new LoggerAppenderTest();
+        $root = new Logger('root');
+        $root->addAppender($rootAppender);
         $logger = new Logger('logger', $root);
         $this->assertTrue($logger->getAddictive());
         $this->assertEquals($root, $logger->getParent());
         $logger->log(1, 'test1', $exFirst = new Exception());
-        $this->assertEquals(array(array(1, 'test1', $exFirst, $logger)), $root->logs);
+        $this->assertEquals(array(array(1, 'test1')), $rootAppender->logs);
 
         $logger->setAddictive(false);
         $this->assertFalse($logger->getAddictive());
         $logger->log(2, 'test2', $exSecond = new Exception());
-        $this->assertEquals(array(array(1, 'test1', $exSecond, $logger)), $root->logs);
+        $this->assertEquals(array(array(1, 'test1')), $rootAppender->logs);
     }
 
     public function testLogLevel()
     {
-        $root = new LoggerTestMock('root');
+        $rootAppender = new LoggerAppenderTest();
+        $root = new Logger('root');
+        $root->addAppender($rootAppender);
         $logger = new Logger('logger', $root);
         $logger->trace('trace');
         $logger->debug('debug');
@@ -65,13 +69,13 @@ class LoggerTest extends PHPUnit_Framework_TestCase
         $logger->fatal('fatal');
 
         $this->assertEquals(array(
-            array(Logger::TRACE, 'trace', null, $logger),
-            array(Logger::DEBUG, 'debug', null, $logger),
-            array(Logger::INFO, 'info', null, $logger),
-            array(Logger::WARN, 'warn', null, $logger),
-            array(Logger::ERROR, 'error', null, $logger),
-            array(Logger::FATAL, 'fatal', null, $logger),
-        ), $root->logs);
+            array(Logger::TRACE, 'trace'),
+            array(Logger::DEBUG, 'debug'),
+            array(Logger::INFO, 'info'),
+            array(Logger::WARN, 'warn'),
+            array(Logger::ERROR, 'error'),
+            array(Logger::FATAL, 'fatal'),
+        ), $rootAppender->logs);
     }
 
     public function levelProvider()
@@ -115,12 +119,11 @@ class LoggerTest extends PHPUnit_Framework_TestCase
     }
 }
 
-
-class LoggerTestMock extends Logger
+class LoggerAppenderTest extends \LoggerAppenderAbstract
 {
     public $logs = array();
 
-    public function log($level, $message, Exception $throwable = null, Logger $logger = null)
+    public function write($level, $message)
     {
         $this->logs[] = func_get_args();
     }

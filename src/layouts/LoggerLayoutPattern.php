@@ -298,13 +298,8 @@ class LoggerPatternCallable implements LoggerPatternInterface
 
     public function __construct($callableString)
     {
-        if (strpos('::', $callableString) !== false) {
-            $callable = explode('::', $callableString, 1);
-        } else {
-            $callable = $callableString;
-        }
-        if (is_callable($callable)) {
-            $this->callable = $callable;
+        if (is_callable($callableString)) {
+            $this->callable = $callableString;
         } else {
             throw new InvalidArgumentException("'$callableString' is not callable");
         }
