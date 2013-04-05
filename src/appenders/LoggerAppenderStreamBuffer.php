@@ -31,6 +31,12 @@ if (class_exists('SplDoublyLinkedList', false)) { // like php 5.3 +
 
         public function append(Logger $logger, $level, $message, Exception $throwable = null)
         {
+            if ($this->minLevel !== null && $level < $this->minLevel) {
+                return;
+            }
+            if ($this->maxLevel !== null && $level > $this->maxLevel) {
+                return;
+            }
             if ($this->layout) {
                 $message = $this->layout->formatMessage($logger, $level, $message, $throwable);
             }
@@ -57,6 +63,12 @@ if (class_exists('SplDoublyLinkedList', false)) { // like php 5.3 +
 
         public function append(Logger $logger, $level, $message, Exception $throwable = null)
         {
+            if ($this->minLevel !== null && $level < $this->minLevel) {
+                return;
+            }
+            if ($this->maxLevel !== null && $level > $this->maxLevel) {
+                return;
+            }
             if ($this->layout) {
                 $message = $this->layout->formatMessage($logger, $level, $message, $throwable);
             }

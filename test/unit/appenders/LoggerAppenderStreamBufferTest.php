@@ -51,4 +51,76 @@ class LoggerAppenderStreamBufferTest extends BaseLoggerTestCase
         $appender->append($logger, Logger::OFF, 'OFF');
         $this->assertEquals('ALLTRACEDEBUGINFOWARNERRORFATALOFF', $GLOBALS['message']);
     }
+
+    public function testThresholdMin()
+    {
+        $GLOBALS['message'] = '';
+        $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
+
+        $appender = new LoggerAppenderStreamBuffer('php://stdout');
+        $appender->setThreshold(Logger::ERROR);
+        $appender->setMinLevel(Logger::DEBUG);
+
+        $logger = new Logger('');
+
+        $appender->append($logger, Logger::ALL, 'ALL');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::TRACE, 'TRACE');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::DEBUG, 'DEBUG');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::INFO, 'INFO');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::WARN, 'WARN');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::ERROR, 'ERROR');
+        $this->assertEquals('DEBUGINFOWARNERROR', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::FATAL, 'FATAL');
+        $this->assertEquals('DEBUGINFOWARNERRORFATAL', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::OFF, 'OFF');
+        $this->assertEquals('DEBUGINFOWARNERRORFATALOFF', $GLOBALS['message']);
+    }
+
+    public function testThresholdMax()
+    {
+        $GLOBALS['message'] = '';
+        $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
+
+        $appender = new LoggerAppenderStreamBuffer('php://stdout');
+        $appender->setThreshold(Logger::ERROR);
+        $appender->setMaxLevel(Logger::FATAL);
+
+        $logger = new Logger('');
+
+        $appender->append($logger, Logger::ALL, 'ALL');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::TRACE, 'TRACE');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::DEBUG, 'DEBUG');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::INFO, 'INFO');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::WARN, 'WARN');
+        $this->assertEquals('', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::ERROR, 'ERROR');
+        $this->assertEquals('ALLTRACEDEBUGINFOWARNERROR', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::FATAL, 'FATAL');
+        $this->assertEquals('ALLTRACEDEBUGINFOWARNERRORFATAL', $GLOBALS['message']);
+
+        $appender->append($logger, Logger::OFF, 'OFF');
+        $this->assertEquals('ALLTRACEDEBUGINFOWARNERRORFATAL', $GLOBALS['message']);
+    }
 }
