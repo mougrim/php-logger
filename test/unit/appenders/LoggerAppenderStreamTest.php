@@ -25,20 +25,26 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
 
     public function testNotUseLock()
     {
-        $this->mockFunction('flock', '', 'throw new BadFunctionCallException();');
-        $appender = new LoggerAppenderStream('php://stdout');
+        $GLOBALS['called']=false;
+        $this->mockFunction('flock', '', '$GLOBALS["called"]=true; return true;');
+        $appender = new LoggerAppenderStream($this->logFile);
         $appender->setUseLock(false);
-        $appender->write(Logger::INFO, '');
+        $appender->write(Logger::INFO, 'ok');
+        $appender->write(Logger::INFO, str_pad('', 4096, '1'));
+        $appender->write(Logger::INFO, str_pad('', 4097, '1'));
+        $this->assertEquals(false, $GLOBALS['called']);
     }
 
     public function testNotUseLockShortMessage()
     {
-        $this->mockFunction('flock', '', 'throw new BadFunctionCallException();');
-        $appender = new LoggerAppenderStream('php://stdout');
+        $GLOBALS['called']=false;
+        $this->mockFunction('flock', '', '$GLOBALS["called"]=true; return true;');
+        $appender = new LoggerAppenderStream($this->logFile);
         $appender->setUseLock(true);
         $appender->setUseLockShortMessage(false);
         $appender->write(Logger::INFO, '');
         $appender->write(Logger::INFO, str_pad('', 4096, '1'));
+        $this->assertEquals(false, $GLOBALS['called']);
     }
 
     public function testUseLockShortMessage()

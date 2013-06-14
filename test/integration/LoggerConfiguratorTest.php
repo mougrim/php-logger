@@ -158,8 +158,10 @@ class LoggerConfiguratorTest extends PHPUnit_Framework_TestCase
 
     public function testLogSimple()
     {
+        ob_start();
         Logger::configure();
         Logger::getRootLogger()->info('hello world');
+        $this->assertEmpty(ob_get_clean());
     }
 
     public function testLogStream()

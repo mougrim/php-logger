@@ -1,29 +1,24 @@
-<phpunit backupGlobals="false"
+<phpunit bootstrap="bootstrap.php"
+         backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="bootstrap.php"
+         cacheTokens="false"
+         verbose="true"
+         strict="true"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         processIsolation="false"
+         stopOnSkipped="false"
         >
-    <!--
-    cacheTokens="false"
-    colors="false"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    forceCoversAnnotation="false"
-    mapTestClassNameToCoveredClassName="false"
-    printerClass="PHPUnit_TextUI_ResultPrinter"
-    processIsolation="false"
-    stopOnError="false"
-    stopOnFailure="false"
-    stopOnIncomplete="false"
-    stopOnSkipped="false"
-    testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
-    strict="true"
-    verbose="false"> -->
-    <testsuite>
-        <directory>unit</directory>
-        <directory>unit/layouts</directory>
-        <directory>unit/appenders</directory>
-        <directory>integration</directory>
-        <!--<directory>functional</directory>-->
-    </testsuite>
+    <testsuites>
+        <testsuite>
+            <directory>unit</directory>
+            <directory>functional</directory>
+            <directory>integration</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>
