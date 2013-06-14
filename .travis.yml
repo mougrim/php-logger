@@ -4,7 +4,7 @@ php:
   - 5.4
 
 before_script:
-  - pecl install runkit
+  - pecl install channel://pecl.php.net/runkit-0.9
   - pecl install pcntl
   - composer install
 
