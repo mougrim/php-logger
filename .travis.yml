@@ -4,8 +4,9 @@ php:
   - 5.4
 
 before_script:
-  - pecl install runkit
-  - pecl install pcntl
+  - sh .travis.install.sh
+  - echo "extension=runkit.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "runkit.internal_override=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer install
 
 script: phpunit --configuration tests/phpunit.xml
