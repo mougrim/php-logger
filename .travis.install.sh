@@ -1,12 +1,9 @@
-rm -r runkit
-mkdir runkit
+rm -rf runkit*
+git clone https://github.com/zenovich/runkit.git
 cd runkit
-curl -O http://cloud.github.com/downloads/zenovich/runkit/runkit-1.0.3.tgz
-tar -xzf runkit-1.0.3.tgz
-cd runkit-1.0.3
-ls -lah
 phpize
 ./configure
 make
 make install
-
+echo "extension=runkit.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+echo "runkit.internal_override=1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
