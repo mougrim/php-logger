@@ -30,8 +30,8 @@ if (!defined('PHP_INT_MIN')) {
  *              'stream' => 'php://stdout',
  *              'useLock' => true,
  *              'useLockShortMessage' => false,
- *              'minLevel' => 0,
- *              'maxLevel' => PHP_INT_MAX,
+ *              'minLevel' => Logger::TRACE,
+ *              'maxLevel' => Logger::FATAL,
  *              'layout' => 'simple',
  *          ),
  *      ),
@@ -39,6 +39,8 @@ if (!defined('PHP_INT_MIN')) {
  *          'logger' => array(
  *              'appenders' => array('stream'),
  *              'addictive' => false,
+ *              'minLevel' => Logger::DEBUG,
+ *              'maxLevel' => Logger::FATAL,
  *          ),
  *      ),
  *      'root' => array(
@@ -196,11 +198,29 @@ final class Logger
     private $appenders = array();
     /** @var bool */
     private $addictive = true;
+    private $minLevel;
+    private $maxLevel;
 
     public function __construct($name, Logger $parent = null)
     {
         $this->name = (string)$name;
         $this->parent = $parent;
+    }
+
+    /**
+     * @param mixed $minLevel
+     */
+    public function setMinLevel($minLevel)
+    {
+        $this->minLevel = (int)$minLevel;
+    }
+
+    /**
+     * @param mixed $maxLevel
+     */
+    public function setMaxLevel($maxLevel)
+    {
+        $this->maxLevel = (int)$maxLevel;
     }
 
     public function addAppender(LoggerAppenderAbstract $appender)
@@ -273,16 +293,23 @@ final class Logger
         $this->log(self::FATAL, $message, $throwable);
     }
 
-    public function log($level, $message, Exception $throwable = null, Logger $logger = null)
+    public function log($level, $message, Exception $throwable = null)
     {
-        $logger = $logger ? $logger : $this;
-        foreach ($this->appenders as $appender) {
-            $appender->append($logger, $level, $message, $throwable);
+        if (!($this->minLevel !== null && $level < $this->minLevel) &&
+            !($this->maxLevel !== null && $level > $this->maxLevel)
+        ) {
+            foreach ($this->appenders as $appender) {
+                $appender->append($this, $level, $message, $throwable);
+            }
         }
         if ($this->addictive && $this->parent) {
-            // do not call parent->log, too slow
-            foreach ($this->parent->appenders as $appender) {
-                $appender->append($logger, $level, $message, $throwable);
+            if (!($this->parent->minLevel !== null && $level < $this->parent->minLevel) &&
+                !($this->parent->maxLevel !== null && $level > $this->parent->maxLevel)
+            ) {
+                // do not call parent->log, too slow
+                foreach ($this->parent->appenders as $appender) {
+                    $appender->append($this, $level, $message, $throwable);
+                }
             }
         }
     }

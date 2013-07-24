@@ -59,6 +59,12 @@ class LoggerConfigurator
             if (isset($config['addictive'])) {
                 $logger->setAddictive($config['addictive']);
             }
+            if (isset($config['maxLevel'])) {
+                $logger->setMaxLevel($config['maxLevel']);
+            }
+            if (isset($config['minLevel'])) {
+                $logger->setMinLevel($config['minLevel']);
+            }
         }
     }
 

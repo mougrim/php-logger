@@ -55,6 +55,8 @@ class LoggerConfiguratorTest extends PHPUnit_Framework_TestCase
                         'layout' => 'simple'
                     )),
                     'addictive' => false,
+                    'minLevel' => Logger::DEBUG,
+                    'maxLevel' => Logger::FATAL,
                 ),
             ),
             'root' => array(

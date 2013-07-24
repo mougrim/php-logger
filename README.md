@@ -19,8 +19,8 @@ Example of usage, simple hello world
                 'stream' => 'php://stdout',
                 'useLock' => true,
                 'useLockShortMessage' => false,
-                'minLevel' => 0,
-                'maxLevel' => PHP_INT_MAX,
+                'minLevel' => Logger::DEBUG,
+                'maxLevel' => Logger::FATAL,
                 'layout' => 'simple',
             ),
         ),
@@ -28,6 +28,8 @@ Example of usage, simple hello world
             'logger' => array(
                 'appenders' => array('stream'),
                 'addictive' => false,
+                'minLevel' => Logger::TRACE,
+                'maxLevel' => Logger::FATAL,
             ),
         ),
         'root' => array(

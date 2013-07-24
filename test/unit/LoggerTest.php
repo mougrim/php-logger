@@ -117,6 +117,49 @@ class LoggerTest extends PHPUnit_Framework_TestCase
             Logger::getLevelByName($levelName)
         );
     }
+
+    public function testMinLevel()
+    {
+        $logger = new Logger('root');
+        $appender = new LoggerAppenderTest();
+        $logger->addAppender($appender);
+
+        $logger->log(Logger::INFO, 1);
+        $this->assertEquals(array(
+            array(Logger::INFO, 1)
+        ), $appender->logs);
+
+        $logger->setMinLevel(Logger::INFO);
+        $logger->log(Logger::INFO, 2);
+        $logger->log(Logger::DEBUG, 3);
+        $this->assertEquals(array(
+            array(Logger::INFO, 1),
+            array(Logger::INFO, 2)
+        ), $appender->logs);
+    }
+
+    public function testMaxLevel()
+    {
+        $logger = new Logger('root');
+        $appender = new LoggerAppenderTest();
+        $logger->addAppender($appender);
+
+        $logger->log(Logger::INFO, 1);
+        $this->assertEquals(array(
+            array(Logger::INFO, 1)
+        ), $appender->logs);
+
+        $logger->setMaxLevel(Logger::INFO);
+        $logger->log(Logger::INFO, 2);
+        $logger->log(Logger::FATAL, 3);
+        $logger->log(Logger::DEBUG, 4);
+        $this->assertEquals(array(
+            array(Logger::INFO, 1),
+            array(Logger::INFO, 2),
+            array(Logger::DEBUG, 4)
+        ), $appender->logs);
+        return;
+    }
 }
 
 class LoggerAppenderTest extends \LoggerAppenderAbstract
