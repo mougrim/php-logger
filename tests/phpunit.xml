@@ -1,0 +1,24 @@
+<phpunit bootstrap="bootstrap.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         cacheTokens="false"
+         verbose="true"
+         strict="true"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         processIsolation="false"
+         stopOnSkipped="false"
+        >
+    <testsuites>
+        <testsuite>
+            <directory>unit</directory>
+            <directory>functional</directory>
+            <directory>integration</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

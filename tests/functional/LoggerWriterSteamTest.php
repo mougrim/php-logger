@@ -14,10 +14,7 @@ class LoggerWriterSteamTest extends PHPUnit_Framework_TestCase
         for ($i = 0; $i < 1000; $i++) $message .= uniqid();
         $message .= PHP_EOL;
 
-
         $pids = array();
-
-
         $start = microtime(1);
         for ($w = 0; $w < $workers; $w++) {
             $pid = pcntl_fork();
@@ -34,9 +31,8 @@ class LoggerWriterSteamTest extends PHPUnit_Framework_TestCase
         foreach ($pids as $p) {
             pcntl_waitpid($p, $status);
         }
-        var_dump(microtime(1) - $start);
-        var_dump($pids);
-        var_dump(strlen($message));
+        $this->lessThan(0.2, microtime(1) - $start);
+        $this->assertTrue(strlen($message) === 13001);
         $c = str_pad("", $count * $workers * strlen($message), $message);
         sleep(1);
         file_put_contents($path . '.ex', $c);

@@ -1,0 +1,25 @@
+{
+    "name": "mitallast/php-logger",
+    "description": "Simple and fast php logging library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mitallast",
+            "email": "mitallast@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.7"
+    },
+    "require-dev": {
+        "ext-pcntl": "*",
+        "ext-runkit": "*",
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Logger": ["src/", "src/appenders", "src/layouts"]
+        }
+    }
+}
