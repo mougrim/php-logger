@@ -66,7 +66,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase
             $logger->info('test');
         }
         $end = microtime(1);
-        $this->assertLessThan(0.3, $end-$start, 'logger > root > stream');
+        $this->assertLessThan(1.0, $end-$start, 'logger > root > stream');
 
         $logger = Logger::getRootLogger();
         $start = microtime(1);
