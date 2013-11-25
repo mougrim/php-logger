@@ -1,6 +1,7 @@
 {
     "name": "mitallast/php-logger",
     "description": "Simple and fast php logging library",
+    "version": "1.0.0",
     "type": "library",
     "license": "MIT",
     "authors": [
