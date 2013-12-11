@@ -10,6 +10,10 @@ if (!defined('PHP_INT_MIN')) {
  *
  * <pre>
  *  Logger::configure(array(
+ *      'policy' => array(
+ *          'ioError' => 'trigger_error', // ignore, trigger_error, exception or exit
+ *          'configurationError' => 'exception'
+ *      ),
  *      'renderer' => array(
  *          'nullMessage' => 'null',
  *          'trueMessage' => 'true',

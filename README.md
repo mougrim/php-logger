@@ -6,6 +6,10 @@ Main theme - light and fast library, with simple configuring
 Example of usage, simple hello world
 
     Logger::configure(array(
+        'policy' => array(
+            'ioError' => 'trigger_error', // ignore, trigger_error, exception or exit
+            'configurationError' => 'exception'
+        ),
         'layouts' => array(
             'simple' => array(
                 'class' => 'LoggerLayoutSimple',
