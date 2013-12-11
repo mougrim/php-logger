@@ -52,7 +52,7 @@ class LoggerConfigurator
                 } else if (is_array($appenderConfig)) {
                     $appender = $this->createAppender($hierarchy, $appenderConfig);
                 } else {
-                    throw new LoggerException('Appender invalid config');
+                    throw new LoggerConfigurationException('Appender invalid config');
                 }
                 $logger->addAppender($appender);
             }
@@ -81,7 +81,7 @@ class LoggerConfigurator
                 $config['layout'] = $hierarchy->getLayout($config['layout']);
             elseif (is_array($config['layout']))
                 $config['layout'] = $this->createLayout($config['layout']); else
-                throw new LoggerException('Invalid logger layout description');
+                throw new LoggerConfigurationException('Invalid logger layout description');
 
         }
         return $this->createObject($config);
@@ -99,7 +99,7 @@ class LoggerConfigurator
     private function createObject(array $config)
     {
         if (!isset($config['class']))
-            throw new LoggerException('Key "class" is required');
+            throw new LoggerConfigurationException('Key "class" is required');
         $reflection = new ReflectionClass($config['class']);
         unset($config['class']);
 

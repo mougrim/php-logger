@@ -55,7 +55,7 @@ class LoggerHierarchy
         if (isset($this->appenderMap[$name]))
             return $this->appenderMap[$name];
         else
-            throw new LoggerException("Appender {$name} not found");
+            throw new LoggerConfigurationException("Appender {$name} not found");
 
     }
 
@@ -69,7 +69,7 @@ class LoggerHierarchy
         if (isset($this->layoutMap[$name]))
             return $this->layoutMap[$name];
         else
-            throw new LoggerException("Layout {$name} not found");
+            throw new LoggerConfigurationException("Layout {$name} not found");
     }
 
     public function getAppenderMap()

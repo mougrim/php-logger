@@ -20,7 +20,7 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
             syslog(self::getSyslogPriority($priority), $message);
             closelog();
         } else {
-            throw new LoggerException('Error open syslog');
+            throw new LoggerIOException('Error open syslog');
         }
     }
 
@@ -60,7 +60,7 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
                 if (is_int($opt)) {
                     $optionInteger |= $opt;
                 } else {
-                    throw new LoggerException("Error parse syslog options");
+                    throw new LoggerConfigurationException("Error parse syslog options");
                 }
             }
             $options = $optionInteger;
@@ -68,7 +68,7 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
         if (is_int($options)) {
             return $options;
         } else {
-            throw new LoggerException("Invalid syslog options");
+            throw new LoggerConfigurationException("Invalid syslog options");
         }
     }
 }

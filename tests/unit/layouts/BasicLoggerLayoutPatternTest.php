@@ -11,6 +11,10 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
      */
     public function testFormat($format, $expected)
     {
+        LoggerNDC::clear();
+        LoggerMDC::clear();
+        LoggerNDC::push("ndc_context");
+        LoggerMDC::put('key', 'value');
         $layout = new LoggerLayoutPattern($format);
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, 'hello world', new TestLoggerLayoutPatternException("test"));
         $this->assertEquals($expected, $message);
@@ -18,10 +22,6 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
 
     public function formatProvider()
     {
-        LoggerNDC::clear();
-        LoggerMDC::clear();
-        LoggerNDC::push("ndc_context");
-        LoggerMDC::put('key', 'value');
         global $argv;
         $argv = array(uniqid(), uniqid(), uniqid());
         $command = join(' ', $argv);
@@ -34,9 +34,9 @@ class BasicLoggerLayoutPatternTest extends BaseLoggerTestCase
             array('{logger}', 'root' . PHP_EOL),
             array('{ex}', 'test' . PHP_EOL),
             array('{exception}', 'test' . PHP_EOL),
-            array('{location}', __FILE__ . ':15' . PHP_EOL),
+            array('{location}', __FILE__ . ':19' . PHP_EOL),
             array('{location:file}', __FILE__ . PHP_EOL),
-            array('{location:file-line}', __FILE__ . '-15' . PHP_EOL),
+            array('{location:file-line}', __FILE__ . '-19' . PHP_EOL),
             array('{location:class}', __CLASS__ . PHP_EOL),
             array('{location:class-function}', __CLASS__ . '-testFormat' . PHP_EOL),
             array('{global:somevar}', ($GLOBALS['somevar'] = uniqid()) . PHP_EOL),

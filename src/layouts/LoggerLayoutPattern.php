@@ -205,9 +205,9 @@ class LoggerPatternLocation implements LoggerPatternInterface
         $locationInfo['class'] = isset($prevHop['class']) ? $prevHop['class'] : 'main';
         if (isset($prevHop['function']) and
             $prevHop['function'] !== 'include' and
-                $prevHop['function'] !== 'include_once' and
-                    $prevHop['function'] !== 'require' and
-                        $prevHop['function'] !== 'require_once'
+            $prevHop['function'] !== 'include_once' and
+            $prevHop['function'] !== 'require' and
+            $prevHop['function'] !== 'require_once'
         ) {
             $locationInfo['function'] = $prevHop['function'];
         } else {
@@ -227,7 +227,7 @@ class LoggerPatternGlobal implements LoggerPatternInterface
             $this->path = preg_split('/\./', $path, -1, PREG_SPLIT_NO_EMPTY);
         }
         if (!$this->path) {
-            throw new LoggerException('path is required');
+            throw new LoggerConfigurationException('path is required');
         }
     }
 
@@ -301,7 +301,7 @@ class LoggerPatternCallable implements LoggerPatternInterface
         if (is_callable($callableString)) {
             $this->callable = $callableString;
         } else {
-            throw new InvalidArgumentException("'$callableString' is not callable");
+            throw new LoggerConfigurationException("'$callableString' is not callable");
         }
     }
 
