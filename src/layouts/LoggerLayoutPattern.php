@@ -231,6 +231,9 @@ class LoggerPatternGlobal implements LoggerPatternInterface
             switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                 case LoggerPolicy::POLICY_IGNORE:
                     break;
+                case LoggerPolicy::POLICY_TRIGGER_WARN:
+                    trigger_error($message, E_USER_WARNING);
+                    break;
                 case LoggerPolicy::POLICY_TRIGGER_ERROR:
                     trigger_error($message, E_USER_ERROR);
                     break;
@@ -317,6 +320,9 @@ class LoggerPatternCallable implements LoggerPatternInterface
             $message = "'$callableString' is not callable";
             switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                 case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_WARN:
+                    trigger_error($message, E_USER_WARNING);
                     break;
                 case LoggerPolicy::POLICY_TRIGGER_ERROR:
                     trigger_error($message, E_USER_ERROR);

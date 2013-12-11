@@ -64,6 +64,9 @@ class LoggerHierarchy
             switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                 case LoggerPolicy::POLICY_IGNORE:
                     break;
+                case LoggerPolicy::POLICY_TRIGGER_WARN:
+                    trigger_error($message, E_USER_WARNING);
+                    break;
                 case LoggerPolicy::POLICY_TRIGGER_ERROR:
                     trigger_error($message, E_USER_ERROR);
                     break;
@@ -90,6 +93,9 @@ class LoggerHierarchy
             $message = "Layout {$name} not found";
             switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                 case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_WARN:
+                    trigger_error($message, E_USER_WARNING);
                     break;
                 case LoggerPolicy::POLICY_TRIGGER_ERROR:
                     trigger_error($message, E_USER_ERROR);

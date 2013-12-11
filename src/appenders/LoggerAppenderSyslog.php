@@ -24,6 +24,9 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
             switch (LoggerPolicy::getIOErrorPolicy()) {
                 case LoggerPolicy::POLICY_IGNORE:
                     break;
+                case LoggerPolicy::POLICY_TRIGGER_WARN:
+                    trigger_error($message, E_USER_WARNING);
+                    break;
                 case LoggerPolicy::POLICY_TRIGGER_ERROR:
                     trigger_error($message, E_USER_ERROR);
                     break;
@@ -76,6 +79,9 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
                     switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                         case LoggerPolicy::POLICY_IGNORE:
                             break;
+                        case LoggerPolicy::POLICY_TRIGGER_WARN:
+                            trigger_error($message, E_USER_WARNING);
+                            break;
                         case LoggerPolicy::POLICY_TRIGGER_ERROR:
                             trigger_error($message, E_USER_ERROR);
                             break;
@@ -95,6 +101,9 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
             $message = "Invalid syslog options";
             switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                 case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_WARN:
+                    trigger_error($message, E_USER_WARNING);
                     break;
                 case LoggerPolicy::POLICY_TRIGGER_ERROR:
                     trigger_error($message, E_USER_ERROR);

@@ -63,6 +63,9 @@ class LoggerConfigurator
                     switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                         case LoggerPolicy::POLICY_IGNORE:
                             break;
+                        case LoggerPolicy::POLICY_TRIGGER_WARN:
+                            trigger_error($message, E_USER_WARNING);
+                            break;
                         case LoggerPolicy::POLICY_TRIGGER_ERROR:
                             trigger_error($message, E_USER_ERROR);
                             break;
@@ -105,6 +108,9 @@ class LoggerConfigurator
                 $message = 'Invalid logger layout description';
                 switch (LoggerPolicy::getConfigurationErrorPolicy()) {
                     case LoggerPolicy::POLICY_IGNORE:
+                        break;
+                    case LoggerPolicy::POLICY_TRIGGER_WARN:
+                        trigger_error($message, E_USER_WARNING);
                         break;
                     case LoggerPolicy::POLICY_TRIGGER_ERROR:
                         trigger_error($message, E_USER_ERROR);

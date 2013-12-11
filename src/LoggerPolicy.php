@@ -4,12 +4,14 @@ class LoggerPolicy
 {
     const POLICY_IGNORE = 'ignore';
     const POLICY_EXCEPTION = 'exception';
+    const POLICY_TRIGGER_WARN = 'trigger_warn';
     const POLICY_TRIGGER_ERROR = 'trigger_error';
     const POLICY_EXIT = 'exit';
 
     private static $policyMap = array(
         self::POLICY_IGNORE => self::POLICY_IGNORE,
         self::POLICY_EXCEPTION => self::POLICY_EXCEPTION,
+        self::POLICY_TRIGGER_WARN => self::POLICY_TRIGGER_WARN,
         self::POLICY_TRIGGER_ERROR => self::POLICY_TRIGGER_ERROR,
         self::POLICY_EXIT => self::POLICY_EXIT,
     );

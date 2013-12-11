@@ -55,6 +55,9 @@ class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppen
                 switch (LoggerPolicy::getIOErrorPolicy()) {
                     case LoggerPolicy::POLICY_IGNORE:
                         break;
+                    case LoggerPolicy::POLICY_TRIGGER_WARN:
+                        trigger_error($message, E_USER_WARNING);
+                        break;
                     case LoggerPolicy::POLICY_TRIGGER_ERROR:
                         trigger_error($message, E_USER_ERROR);
                         break;
@@ -103,6 +106,9 @@ class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppen
                 $message = "Error open $this->streamUrl";
                 switch (LoggerPolicy::getIOErrorPolicy()) {
                     case LoggerPolicy::POLICY_IGNORE:
+                        break;
+                    case LoggerPolicy::POLICY_TRIGGER_WARN:
+                        trigger_error($message, E_USER_WARNING);
                         break;
                     case LoggerPolicy::POLICY_TRIGGER_ERROR:
                         trigger_error($message, E_USER_ERROR);
