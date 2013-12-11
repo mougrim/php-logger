@@ -12,7 +12,7 @@ Example of usage, simple hello world
             ),
             'pattern' => array(
                 'class' => 'LoggerLayoutPattern',
-                'pattern' => '{date:Y/m/d} [{level}] {logger} {file}:{line} {class}:{function} {mdc:key} {mdc} {ndc}: {message} {ex}',
+                'pattern' => '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}',
             ),
         ),
         'appenders' => array(
