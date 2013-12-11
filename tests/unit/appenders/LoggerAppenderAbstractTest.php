@@ -1,6 +1,6 @@
 <?php
 
-class LoggerAppenderAbstractTest extends PHPUnit_Framework_TestCase
+class LoggerAppenderAbstractTest extends BaseLoggerTestCase
 {
     public function testMinLevel()
     {

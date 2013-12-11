@@ -1,6 +1,6 @@
 <?php
 
-class LoggerTest extends PHPUnit_Framework_TestCase
+class LoggerTest extends BaseLoggerTestCase
 {
     public function testConstruct()
     {

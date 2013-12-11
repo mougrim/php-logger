@@ -2,10 +2,10 @@
 
 namespace integration;
 
+use BaseLoggerTestCase;
 use Logger;
-use PHPUnit_Framework_TestCase;
 
-class LoggerTest extends PHPUnit_Framework_TestCase
+class LoggerTest extends BaseLoggerTestCase
 {
     public function testReopen()
     {
@@ -66,7 +66,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase
             $logger->info('test');
         }
         $end = microtime(1);
-        $this->assertLessThan(1.0, $end-$start, 'logger > root > stream');
+        $this->assertLessThan(1.0, $end - $start, 'logger > root > stream');
 
         $logger = Logger::getRootLogger();
         $start = microtime(1);
@@ -74,7 +74,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase
             $logger->info('test');
         }
         $end = microtime(1);
-        $this->assertLessThan(1.0, $end-$start, 'root > stream');
+        $this->assertLessThan(1.0, $end - $start, 'root > stream');
 
         $appenders = Logger::getRootLogger()->getAppenders();
         $appender = $appenders[0];
@@ -83,6 +83,6 @@ class LoggerTest extends PHPUnit_Framework_TestCase
             $appender->append($logger, Logger::INFO, 'test', null);
         }
         $end = microtime(1);
-        $this->assertLessThan(1.0, $end-$start, 'stream');
+        $this->assertLessThan(1.0, $end - $start, 'stream');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class LoggerWriterSyslogTest extends PHPUnit_Framework_TestCase
+class LoggerWriterSyslogTest extends BaseLoggerTestCase
 {
     public function syslogProvider()
     {

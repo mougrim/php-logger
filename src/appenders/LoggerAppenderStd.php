@@ -17,7 +17,7 @@ class LoggerAppenderStd extends LoggerAppenderAbstract
 
     /**
      * @param string $streamName
-     * @throws LoggerIOException
+     * @throws LoggerConfigurationException
      */
     public function setStream($streamName)
     {
@@ -29,7 +29,19 @@ class LoggerAppenderStd extends LoggerAppenderAbstract
                 $this->stream = self::STDERR;
                 break;
             default:
-                throw new LoggerIOException("Stream must be STDOUT or STDERR, got '{$streamName}'");
+                $message = "Stream must be STDOUT or STDERR, got '{$streamName}'";
+                switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                    case LoggerPolicy::POLICY_IGNORE:
+                        break;
+                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                        trigger_error($message, E_USER_ERROR);
+                        break;
+                    case LoggerPolicy::POLICY_EXIT:
+                        exit($message);
+                    case LoggerPolicy::POLICY_EXCEPTION:
+                    default:
+                        throw new LoggerConfigurationException($message);
+                }
                 break;
         }
     }

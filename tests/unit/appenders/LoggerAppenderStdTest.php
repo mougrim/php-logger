@@ -40,7 +40,7 @@ class LoggerAppenderStdTest extends BaseLoggerTestCase
 
     public function testInvalidStream()
     {
-        $this->setExpectedException('LoggerIOException');
+        $this->setExpectedException('LoggerConfigurationException');
         $appender = new LoggerAppenderStd();
         $appender->setStream('ERROR');
     }

@@ -2,12 +2,11 @@
 
 namespace integration;
 
+use BaseLoggerTestCase;
 use LoggerAppenderStream;
-use LoggerConfigurator;
 use LoggerHierarchy;
-use PHPUnit_Framework_TestCase;
 
-class LoggerHierarchyTest extends PHPUnit_Framework_TestCase
+class LoggerHierarchyTest extends BaseLoggerTestCase
 {
     public function testSimpleWrite()
     {

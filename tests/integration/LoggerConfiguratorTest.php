@@ -2,22 +2,26 @@
 
 namespace integration;
 
+use BaseLoggerTestCase;
 use Logger;
 use LoggerAppenderStream;
 use LoggerConfigurator;
 use LoggerHierarchy;
 use LoggerLayoutSimple;
 use LoggerRender;
-use PHPUnit_Framework_TestCase;
 use stdClass;
 
-class LoggerConfiguratorTest extends PHPUnit_Framework_TestCase
+class LoggerConfiguratorTest extends BaseLoggerTestCase
 {
     public function testConfigure()
     {
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
         $configurator->configure($hierarchy, array(
+            'policy' => array(
+                'ioError' => 'trigger_error',
+                'configurationError' => 'exit'
+            ),
             'renderer' => array(
                 'nullMessage' => '-',
                 'trueMessage' => '1',

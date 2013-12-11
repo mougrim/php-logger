@@ -1,6 +1,6 @@
 <?php
 
-class LoggerLayoutSimpleTest extends PHPUnit_Framework_TestCase
+class LoggerLayoutSimpleTest extends BaseLoggerTestCase
 {
     public function setUp()
     {

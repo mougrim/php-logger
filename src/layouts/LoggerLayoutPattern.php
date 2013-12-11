@@ -227,7 +227,20 @@ class LoggerPatternGlobal implements LoggerPatternInterface
             $this->path = preg_split('/\./', $path, -1, PREG_SPLIT_NO_EMPTY);
         }
         if (!$this->path) {
-            throw new LoggerConfigurationException('path is required');
+            $message = 'path is required';
+            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerConfigurationException($message);
+            }
+            $this->path = array();
         }
     }
 
@@ -301,7 +314,19 @@ class LoggerPatternCallable implements LoggerPatternInterface
         if (is_callable($callableString)) {
             $this->callable = $callableString;
         } else {
-            throw new LoggerConfigurationException("'$callableString' is not callable");
+            $message = "'$callableString' is not callable";
+            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerConfigurationException($message);
+            }
         }
     }
 
@@ -314,6 +339,10 @@ class LoggerPatternCallable implements LoggerPatternInterface
      */
     public function render(Logger $logger, $level, $message, Exception $throwable = null)
     {
-        return LoggerRender::render(call_user_func($this->callable));
+        if (is_callable($this->callable)) {
+            return LoggerRender::render(call_user_func($this->callable));
+        } else {
+            return LoggerRender::render(null);
+        }
     }
 }

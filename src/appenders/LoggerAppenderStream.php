@@ -41,13 +41,31 @@ class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppen
     public function write($priority, $message)
     {
         $steam = $this->getStream();
+        if (!$steam) {
+            return;
+        }
         if ($this->useLock) {
             if (!$this->useLockShortMessage && strlen($message) <= self::MESSAGE_THRESHOLD) {
                 fwrite($steam, $message);
             } else if (flock($steam, LOCK_EX)) {
                 fwrite($steam, $message);
                 flock($steam, LOCK_UN);
-            } else throw new LoggerIOException('Error get lock');
+            } else {
+                $message = 'Error get lock';
+                switch (LoggerPolicy::getIOErrorPolicy()) {
+                    case LoggerPolicy::POLICY_IGNORE:
+                        break;
+                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                        trigger_error($message, E_USER_ERROR);
+                        break;
+                    case LoggerPolicy::POLICY_EXIT:
+                        exit($message);
+                    case LoggerPolicy::POLICY_EXCEPTION:
+                    default:
+                        throw new LoggerIOException($message);
+                }
+                fwrite($steam, $message);
+            }
         } else {
             fwrite($steam, $message);
         }
@@ -82,7 +100,20 @@ class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppen
         if (!$this->stream) {
             $this->stream = @fopen($this->streamUrl, 'a');
             if (!$this->stream) {
-                throw new LoggerIOException("Error open $this->streamUrl");
+                $message = "Error open $this->streamUrl";
+                switch (LoggerPolicy::getIOErrorPolicy()) {
+                    case LoggerPolicy::POLICY_IGNORE:
+                        break;
+                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                        trigger_error($message, E_USER_ERROR);
+                        break;
+                    case LoggerPolicy::POLICY_EXIT:
+                        exit($message);
+                    case LoggerPolicy::POLICY_EXCEPTION:
+                    default:
+                        throw new LoggerIOException($message);
+                }
+                $this->stream = null;
             }
         }
         return $this->stream;

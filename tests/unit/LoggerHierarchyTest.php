@@ -1,6 +1,6 @@
 <?php
 
-class LoggerHierarchyTest extends PHPUnit_Framework_TestCase
+class LoggerHierarchyTest extends BaseLoggerTestCase
 {
     public function testGetRootLoggerEmpty()
     {

@@ -20,7 +20,19 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
             syslog(self::getSyslogPriority($priority), $message);
             closelog();
         } else {
-            throw new LoggerIOException('Error open syslog');
+            $message = 'Error open syslog';
+            switch (LoggerPolicy::getIOErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerIOException($message);
+            }
         }
     }
 
@@ -60,7 +72,19 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
                 if (is_int($opt)) {
                     $optionInteger |= $opt;
                 } else {
-                    throw new LoggerConfigurationException("Error parse syslog options");
+                    $message = "Error parse syslog options";
+                    switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                        case LoggerPolicy::POLICY_IGNORE:
+                            break;
+                        case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                            trigger_error($message, E_USER_ERROR);
+                            break;
+                        case LoggerPolicy::POLICY_EXIT:
+                            exit($message);
+                        case LoggerPolicy::POLICY_EXCEPTION:
+                        default:
+                            throw new LoggerConfigurationException($message);
+                    }
                 }
             }
             $options = $optionInteger;
@@ -68,7 +92,20 @@ class LoggerAppenderSyslog extends LoggerAppenderAbstract
         if (is_int($options)) {
             return $options;
         } else {
-            throw new LoggerConfigurationException("Invalid syslog options");
+            $message = "Invalid syslog options";
+            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerConfigurationException($message);
+            }
+            return 0;
         }
     }
 }

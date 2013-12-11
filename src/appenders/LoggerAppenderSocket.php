@@ -21,11 +21,38 @@ class LoggerAppenderSocket extends LoggerAppenderAbstract
     {
         $socket = fsockopen($this->host, $this->port, $errorCode, $errorMessage, $this->timeout);
         if ($socket === false) {
-            throw new LoggerIOException("Could not open socket to {$this->host}:{$this->port} – {$errorCode} {$errorMessage}. Closing appender.");
+            $message = "Could not open socket to {$this->host}:{$this->port} – {$errorCode} {$errorMessage}. Closing appender.";
+            switch (LoggerPolicy::getIOErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerIOException($message);
+            }
+            return;
         }
-        if (false === fwrite($socket, $message)) {
-            throw new LoggerIOException("Error writing to socket to {$this->host}:{$this->port}");
-        }
+        $write = fwrite($socket, $message);
         fclose($socket);
+        if (false === $write) {
+            $message = "Error writing to socket to {$this->host}:{$this->port}";
+            switch (LoggerPolicy::getIOErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerIOException($message);
+            }
+            return;
+        }
     }
 }

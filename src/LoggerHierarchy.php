@@ -50,13 +50,31 @@ class LoggerHierarchy
         $this->appenderMap[$name] = $appender;
     }
 
+    /**
+     * @param $name
+     * @return LoggerAppenderAbstract
+     * @throws LoggerConfigurationException
+     */
     public function getAppender($name)
     {
-        if (isset($this->appenderMap[$name]))
+        if (isset($this->appenderMap[$name])) {
             return $this->appenderMap[$name];
-        else
-            throw new LoggerConfigurationException("Appender {$name} not found");
-
+        } else {
+            $message = "Appender {$name} not found";
+            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerConfigurationException($message);
+            }
+            return new LoggerAppenderNull();
+        }
     }
 
     public function setLayout($name, LoggerLayoutInterface $layout)
@@ -66,10 +84,24 @@ class LoggerHierarchy
 
     public function getLayout($name)
     {
-        if (isset($this->layoutMap[$name]))
+        if (isset($this->layoutMap[$name])) {
             return $this->layoutMap[$name];
-        else
-            throw new LoggerConfigurationException("Layout {$name} not found");
+        } else {
+            $message = "Layout {$name} not found";
+            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                case LoggerPolicy::POLICY_IGNORE:
+                    break;
+                case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                    trigger_error($message, E_USER_ERROR);
+                    break;
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerConfigurationException($message);
+            }
+            return new LoggerLayoutSimple();
+        }
     }
 
     public function getAppenderMap()

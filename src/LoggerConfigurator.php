@@ -2,6 +2,7 @@
 
 class LoggerConfigurator
 {
+    const LOGGER_POLICY = 'policy';
     const LOGGER_RENDERER = 'renderer';
     const LOGGER_LAYOUTS = 'layouts';
     const LOGGER_APPENDERS = 'appenders';
@@ -10,6 +11,12 @@ class LoggerConfigurator
 
     public function configure(LoggerHierarchy $hierarchy, array $config)
     {
+        if (isset($config[self::LOGGER_POLICY]['ioError'])) {
+            LoggerPolicy::setIoErrorPolicy($config[self::LOGGER_POLICY]['ioError']);
+        }
+        if (isset($config[self::LOGGER_POLICY]['configurationError'])) {
+            LoggerPolicy::setConfigurationErrorPolicy($config[self::LOGGER_POLICY]['configurationError']);
+        }
         if (isset($config[self::LOGGER_RENDERER])) {
             if (isset($config[self::LOGGER_RENDERER]['nullMessage'])) {
                 LoggerRender::$nullMessage = (string)$config[self::LOGGER_RENDERER]['nullMessage'];
@@ -52,7 +59,20 @@ class LoggerConfigurator
                 } else if (is_array($appenderConfig)) {
                     $appender = $this->createAppender($hierarchy, $appenderConfig);
                 } else {
-                    throw new LoggerConfigurationException('Appender invalid config');
+                    $message = 'Appender invalid config';
+                    switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                        case LoggerPolicy::POLICY_IGNORE:
+                            break;
+                        case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                            trigger_error($message, E_USER_ERROR);
+                            break;
+                        case LoggerPolicy::POLICY_EXIT:
+                            exit($message);
+                        case LoggerPolicy::POLICY_EXCEPTION:
+                        default:
+                            throw new LoggerConfigurationException($message);
+                    }
+                    continue;
                 }
                 $logger->addAppender($appender);
             }
@@ -77,12 +97,26 @@ class LoggerConfigurator
     private function createAppender(LoggerHierarchy $hierarchy, $config)
     {
         if (isset($config['layout'])) {
-            if (is_string($config['layout']))
+            if (is_string($config['layout'])) {
                 $config['layout'] = $hierarchy->getLayout($config['layout']);
-            elseif (is_array($config['layout']))
-                $config['layout'] = $this->createLayout($config['layout']); else
-                throw new LoggerConfigurationException('Invalid logger layout description');
-
+            } elseif (is_array($config['layout'])) {
+                $config['layout'] = $this->createLayout($config['layout']);
+            } else {
+                $message = 'Invalid logger layout description';
+                switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                    case LoggerPolicy::POLICY_IGNORE:
+                        break;
+                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
+                        trigger_error($message, E_USER_ERROR);
+                        break;
+                    case LoggerPolicy::POLICY_EXIT:
+                        exit($message);
+                    case LoggerPolicy::POLICY_EXCEPTION:
+                    default:
+                        throw new LoggerConfigurationException($message);
+                }
+                unset($config['layout']);
+            }
         }
         return $this->createObject($config);
     }
@@ -98,8 +132,16 @@ class LoggerConfigurator
 
     private function createObject(array $config)
     {
-        if (!isset($config['class']))
-            throw new LoggerConfigurationException('Key "class" is required');
+        if (!isset($config['class'])) {
+            $message = 'Key "class" is required';
+            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
+                case LoggerPolicy::POLICY_EXIT:
+                    exit($message);
+                case LoggerPolicy::POLICY_EXCEPTION:
+                default:
+                    throw new LoggerConfigurationException($message);
+            }
+        }
         $reflection = new ReflectionClass($config['class']);
         unset($config['class']);
 

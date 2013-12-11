@@ -119,6 +119,7 @@ final class Logger
         LoggerNDC::clear();
         LoggerMDC::clear();
         LoggerRender::reset();
+        LoggerPolicy::reset();
     }
 
     /**

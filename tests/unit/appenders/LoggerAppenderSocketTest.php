@@ -17,6 +17,7 @@ class LoggerAppenderSocketTest extends BaseLoggerTestCase
         $this->setExpectedException('LoggerIOException');
         $this->mockFunction('fsockopen', '$host, $port, &$errorCode, &$errorMessage, $delay', 'return true;');
         $this->mockFunction('fwrite', '', 'return false;');
+        $this->mockFunction('fclose', '', 'return false;');
         $appender = new LoggerAppenderSocket('8.8.8.8', 80, 10);
         $appender->write(Logger::INFO, 'test');
     }
