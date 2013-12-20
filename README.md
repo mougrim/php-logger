@@ -3,8 +3,6 @@ Main theme - light and fast library, with simple configuring
 
 [![Build Status](https://api.travis-ci.org/mitallast/php-logger.png)](https://travis-ci.org/mitallast/php-logger)
 
-Example of usage, simple hello world
-
 Configuration
 -------------
 
