@@ -54,7 +54,7 @@ if (!defined('PHP_INT_MIN')) {
  * Logger::getLogger('logger')->info("hello world");
  * </pre>
  */
-final class Logger
+class Logger
 {
     const OFF = PHP_INT_MAX;
     const FATAL = 50000;
@@ -266,6 +266,20 @@ final class Logger
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Simple timer, use like:
+     * <code>
+     * $timer = $logger->timer();
+     * sleep(10);
+     * $timer->info("sleep {time} seconds");
+     * </code>
+     * @return LoggerTimer
+     */
+    public function timer()
+    {
+        return new LoggerTimer($this, microtime(1));
     }
 
     public function trace($message, Exception $throwable = null)

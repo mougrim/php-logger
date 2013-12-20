@@ -2,10 +2,11 @@
 
 class BaseLoggerTestCase extends PHPUnit_Framework_TestCase
 {
-    private $mockFunctions = array();
+    private $mockFunctions;
 
     protected function setUp()
     {
+        $this->mockFunctions = array();
         parent::setUp();
     }
 
@@ -25,7 +26,9 @@ class BaseLoggerTestCase extends PHPUnit_Framework_TestCase
             $this->markTestIncomplete('Extension "runkit" is required');
         }
         ini_set('runkit.internal_override', '1');
+        /** @noinspection PhpUndefinedFunctionInspection */
         runkit_function_rename($funcName, $funcName . '_copy');
+        /** @noinspection PhpUndefinedFunctionInspection */
         runkit_function_add($funcName, $args, $expr);
         $this->mockFunctions[] = $funcName;
     }
@@ -33,7 +36,9 @@ class BaseLoggerTestCase extends PHPUnit_Framework_TestCase
     public function originalFunction($funcName)
     {
         if (in_array($funcName, $this->mockFunctions, true)) {
+            /** @noinspection PhpUndefinedFunctionInspection */
             runkit_function_remove($funcName);
+            /** @noinspection PhpUndefinedFunctionInspection */
             runkit_function_rename($funcName . '_copy', $funcName);
         }
     }
