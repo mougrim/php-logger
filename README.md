@@ -5,7 +5,8 @@ Main theme - light and fast library, with simple configuring
 
 Example of usage, simple hello world
 
-h3. Configuration
+Configuration
+-------------
 
 ```php
 Logger::configure(array(
@@ -46,7 +47,8 @@ Logger::configure(array(
     )
 ));
 ```
-h3. Logging
+Logging
+-------
 
 ```php
 Logger::getLogger('logger')->trace("hello world");
@@ -57,7 +59,8 @@ Logger::getLogger('logger')->fatal("hello world");
 Logger::getLogger('logger')->log(Logger::DEBUG, "hello world");
 ```
 
-h3. Mapped Diagnostic Context, mdc
+Mapped Diagnostic Context, mdc
+------------------------------
 
 ```php
 LoggerMDC::put("request", $i++);
@@ -69,7 +72,8 @@ accesslog [request=12412] new request
 db [request=12412] execute sql
 ```
 
-h3. Timer
+Timer
+-----
 
 ```php
 $logger = Logger::getLogger('db');
