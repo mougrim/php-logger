@@ -18,6 +18,10 @@
  * - {argv}
  * - {callable:get_username} log return value of function <code>string function get_username(){}<code>
  * - {callable:Foo::bar} log return value of method <code>string Foo::bar(){}<code>
+ * - {memory} formatted memory_get_usage(true) value with precision 2 and B, KB, MB, GB, TB
+ * - {memory:3} set custom precision
+ * - {memory:b,kb,mb,gb} set custom precision labels
+ * - {memory:4,kb,mb} set custom precision and custom labels
  */
 class LoggerLayoutPattern implements LoggerLayoutInterface
 {
@@ -39,6 +43,7 @@ class LoggerLayoutPattern implements LoggerLayoutInterface
         'mdc' => 'LoggerPatternMDC',
         'argv' => 'LoggerPatternArgv',
         'call' => 'LoggerPatternCallable',
+        'memory' => 'LoggerMemoryUsage',
     );
     /** @var LoggerPatternInterface[] */
     private $patternMappers = array();
@@ -350,5 +355,40 @@ class LoggerPatternCallable implements LoggerPatternInterface
         } else {
             return LoggerRender::render(null);
         }
+    }
+}
+
+class LoggerMemoryUsage implements LoggerPatternInterface
+{
+    private $units = array('B', 'KB', 'MB', 'GB', 'TB');
+    private $precision = 2;
+
+    public function __construct($string)
+    {
+        if (strpos($string, ',') !== false) {
+            $keys = preg_split('/,/', $string, -1, PREG_SPLIT_NO_EMPTY);
+            if (is_numeric($keys[0])) {
+                $this->precision = (int)$keys[0];
+                unset($keys[0]);
+            }
+            $this->units = array_values($keys);
+        } elseif (is_numeric($string)) {
+            $this->precision = (int)$string;
+        }
+    }
+
+    /**
+     * @param Logger $logger
+     * @param $level
+     * @param $message
+     * @param Exception $throwable
+     * @return string
+     */
+    public function render(Logger $logger, $level, $message, Exception $throwable = null)
+    {
+        $bytes = memory_get_usage(true);
+        $base = log($bytes) / log(1024);
+        $suffix = min((int)floor($base), count($this->units) - 1);
+        return round(pow(1024, $base - $suffix), $this->precision) . $this->units[$suffix];
     }
 }
