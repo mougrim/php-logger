@@ -140,7 +140,7 @@ class LayoutSimpleTest extends BaseLoggerTestCase
         $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [INFO] - test exception' . PHP_EOL,
-            $layout->formatMessage($logger, Logger::INFO, new LoggerLayoutSimpleTestException("test exception")));
+            $layout->formatMessage($logger, Logger::INFO, new LayoutSimpleTestException("test exception")));
     }
 
     public function testRenderObject()
@@ -158,13 +158,13 @@ class LayoutSimpleTest extends BaseLoggerTestCase
     {
         $logger = new Logger("testLogger");
         $layout = new LayoutSimple();
-        $ex = new LoggerLayoutSimpleTestException("exception");
+        $ex = new LayoutSimpleTestException("exception");
         $this->assertEquals('testLogger [INFO] - test exception' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, "test", $ex));
     }
 }
 
-class LoggerLayoutSimpleTestException extends \Exception
+class LayoutSimpleTestException extends \Exception
 {
     public function __toString()
     {

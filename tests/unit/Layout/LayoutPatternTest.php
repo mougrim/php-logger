@@ -23,7 +23,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
         LoggerNDC::push("ndc_context");
         LoggerMDC::put('key', 'value');
         $layout = new LayoutPattern($format);
-        $message = $layout->formatMessage(new Logger("root"), Logger::INFO, 'hello world', new TestLoggerLayoutPatternException("test"));
+        $message = $layout->formatMessage(new Logger("root"), Logger::INFO, 'hello world', new TestLayoutPatternException("test"));
         $this->assertEquals($expected, $message);
     }
 
@@ -157,7 +157,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
         $this->assertEquals('false' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, false));
         $this->assertEquals('true' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, true));
         $this->assertEquals('null' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, null));
-        $this->assertEquals('test' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, new TestLoggerLayoutPatternException("test")));
+        $this->assertEquals('test' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, new TestLayoutPatternException("test")));
         $this->assertEquals(print_r(new \stdClass(), 1) . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, new \stdClass()));
     }
 
@@ -165,7 +165,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
     {
         $layout = new LayoutPattern('{ex}');
         $this->assertEquals('' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, '', null));
-        $this->assertEquals('test' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, '', new TestLoggerLayoutPatternException('test')));
+        $this->assertEquals('test' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, '', new TestLayoutPatternException('test')));
     }
 
     public function testRenderFormat()
@@ -281,7 +281,7 @@ class TestCallableClass
     }
 }
 
-class TestLoggerLayoutPatternException extends \Exception
+class TestLayoutPatternException extends \Exception
 {
     public function __toString()
     {
