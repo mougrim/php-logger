@@ -4,19 +4,21 @@ namespace Mougrim\Logger\Appender;
 use Mougrim\Logger\Logger;
 
 /**
- * Class logger LoggerAppenderStreamBuffer implements log buffer with threshold.
+ * Class logger AppenderStreamBuffer implements log buffer with threshold.
  *
  * If appender have event with level less than threshold, it puts event to in memory buffer.
  * If appender have event with level greater or equal than threshold, it puts buffered messages to stream.
  *
  * Example of use:
+ * <pre>
+ * use Mougrim\Logger\Appender\AppenderStreamBuffer;
  *
- * $appender = new LoggerAppenderStreamBuffer('php://stdout');
+ * $appender = new AppenderStreamBuffer('php://stdout');
  * $appender->setThreshold(Logger::ERROR);
  * $appender->append($logger, Logger::DEBUG, 'debug'); // no output
  * $appender->append($logger, Logger::INFO, 'info');   // no output
  * $appender->append($logger, Logger::ERROR, 'error'); // outputs "debug\ninfo\nerror\n"
- *
+ * </pre>
  */
 class AppenderStreamBuffer extends AppenderStream
 {

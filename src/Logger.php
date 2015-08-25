@@ -12,9 +12,9 @@ if (!defined('PHP_INT_MIN')) {
  * Example of usage:
  *
  * <pre>
- * use Mougrim\Logger\Appender\LoggerAppenderStream;
- * use Mougrim\Logger\Layout\LoggerLayoutPattern;
- * use Mougrim\Logger\Layout\LoggerLayoutSimple;
+ * use Mougrim\Logger\Appender\AppenderStream;
+ * use Mougrim\Logger\Layout\LayoutPattern;
+ * use Mougrim\Logger\Layout\LayoutSimple;
  * use Mougrim\Logger\Logger;
  *
  *  Logger::configure([
@@ -29,16 +29,16 @@ if (!defined('PHP_INT_MIN')) {
  *      ]
  *      'layouts' => [
  *          'simple' => [
- *              'class' => LoggerLayoutSimple::class,
+ *              'class' => LayoutSimple::class,
  *          ],
  *          'pattern' => [
- *              'class' => LoggerLayoutPattern::class,
+ *              'class' => LayoutPattern::class,
  *              'pattern' => '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}',
  *          ],
  *      ],
  *      'appenders' => [
  *          'stream' => [
- *              'class' => LoggerAppenderStream::class,
+ *              'class' => AppenderStream::class,
  *              'stream' => 'php://stdout',
  *              'useLock' => true,
  *              'useLockShortMessage' => false,

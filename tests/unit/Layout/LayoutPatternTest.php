@@ -7,8 +7,6 @@ use Mougrim\Logger\LoggerException;
 use Mougrim\Logger\LoggerMDC;
 use Mougrim\Logger\LoggerNDC;
 
-spl_autoload_call('LoggerLayoutPattern');
-
 class LayoutPatternTest extends BaseLoggerTestCase
 {
     /**
@@ -65,7 +63,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
             ],
             [
                 'format' => '{location}',
-                'expected' => __FILE__ . ':26' . PHP_EOL,
+                'expected' => __FILE__ . ':24' . PHP_EOL,
             ],
             [
                 'format' => '{location:file}',
@@ -73,7 +71,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
             ],
             [
                 'format' => '{location:file-line}',
-                'expected' => __FILE__ . '-26' . PHP_EOL,
+                'expected' => __FILE__ . '-24' . PHP_EOL,
             ],
             [
                 'format' => '{location:class}',
