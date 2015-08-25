@@ -1,7 +1,7 @@
 This is a fork of Apache log4php logging library
 Main theme - light and fast library, with simple configuring
 
-[![Build Status](https://api.travis-ci.org/mitallast/php-logger.png)](https://travis-ci.org/mitallast/php-logger)
+[![Build Status](https://api.travis-ci.org/mougrim/php-logger.png)](https://travis-ci.org/mougrim/php-logger)
 
 Configuration
 -------------
