@@ -1,12 +1,13 @@
 <?php
+namespace Mougrim\Logger;
 
-class BaseLoggerTestCase extends PHPUnit_Framework_TestCase
+class BaseLoggerTestCase extends \PHPUnit_Framework_TestCase
 {
     private $mockFunctions;
 
     protected function setUp()
     {
-        $this->mockFunctions = array();
+        $this->mockFunctions = [];
         parent::setUp();
     }
 

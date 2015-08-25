@@ -1,5 +1,6 @@
 <?php
+namespace Mougrim\Logger;
 
-class LoggerException extends Exception
+class LoggerException extends \Exception
 {
 }

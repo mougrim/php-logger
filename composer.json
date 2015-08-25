@@ -1,5 +1,5 @@
 {
-    "name": "mitallast/php-logger",
+    "name": "mougrim/php-logger",
     "description": "Simple and fast php logging library",
     "type": "library",
     "license": "MIT",
@@ -7,10 +7,14 @@
         {
             "name": "mitallast",
             "email": "mitallast@gmail.com"
+        },
+        {
+            "name": "Mougrim",
+            "email": "rinat@mougrim.ru"
         }
     ],
     "require": {
-        "php": ">=5.2.7"
+        "php": ">=5.5.0"
     },
     "require-dev": {
         "ext-pcntl": "*",
@@ -18,8 +22,8 @@
         "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
-        "psr-0": {
-            "Logger": ["src/", "src/appenders", "src/layouts"]
+        "psr-4": {
+            "Mougrim\\Logger\\": "src"
         }
     }
 }

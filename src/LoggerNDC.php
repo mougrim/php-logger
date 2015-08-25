@@ -1,8 +1,9 @@
 <?php
+namespace Mougrim\Logger;
 
 class LoggerNDC
 {
-    private static $stack = array();
+    private static $stack = [];
 
     public static function push($context)
     {
@@ -22,6 +23,6 @@ class LoggerNDC
 
     public static function clear()
     {
-        self::$stack = array();
+        self::$stack = [];
     }
 }

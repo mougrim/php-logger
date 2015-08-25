@@ -1,6 +1,7 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-interface LoggerAppenderReopen
+interface AppenderReopen
 {
     public function reopen();
 }

@@ -1,4 +1,5 @@
 <?php
+namespace Mougrim\Logger;
 
 class LoggerPolicy
 {
@@ -8,13 +9,13 @@ class LoggerPolicy
     const POLICY_TRIGGER_ERROR = 'trigger_error';
     const POLICY_EXIT = 'exit';
 
-    private static $policyMap = array(
+    private static $policyMap = [
         self::POLICY_IGNORE => self::POLICY_IGNORE,
         self::POLICY_EXCEPTION => self::POLICY_EXCEPTION,
         self::POLICY_TRIGGER_WARN => self::POLICY_TRIGGER_WARN,
         self::POLICY_TRIGGER_ERROR => self::POLICY_TRIGGER_ERROR,
         self::POLICY_EXIT => self::POLICY_EXIT,
-    );
+    ];
 
     private static $ioErrorPolicy = self::POLICY_EXCEPTION;
     private static $configurationErrorPolicy = self::POLICY_EXCEPTION;

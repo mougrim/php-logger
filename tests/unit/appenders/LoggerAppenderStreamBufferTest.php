@@ -1,6 +1,10 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderStreamBufferTest extends BaseLoggerTestCase
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Logger;
+
+class AppenderStreamBufferTest extends BaseLoggerTestCase
 {
     protected $backupGlobals = true;
     private $logFile = '/tmp/log.txt';
@@ -22,7 +26,7 @@ class LoggerAppenderStreamBufferTest extends BaseLoggerTestCase
         $GLOBALS['message'] = '';
         $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
 
-        $appender = new LoggerAppenderStreamBuffer('php://stdout');
+        $appender = new AppenderStreamBuffer('php://stdout');
         $appender->setThreshold(Logger::ERROR);
 
         $logger = new Logger('');
@@ -57,7 +61,7 @@ class LoggerAppenderStreamBufferTest extends BaseLoggerTestCase
         $GLOBALS['message'] = '';
         $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
 
-        $appender = new LoggerAppenderStreamBuffer('php://stdout');
+        $appender = new AppenderStreamBuffer('php://stdout');
         $appender->setThreshold(Logger::ERROR);
         $appender->setMinLevel(Logger::DEBUG);
 
@@ -93,7 +97,7 @@ class LoggerAppenderStreamBufferTest extends BaseLoggerTestCase
         $GLOBALS['message'] = '';
         $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
 
-        $appender = new LoggerAppenderStreamBuffer('php://stdout');
+        $appender = new AppenderStreamBuffer('php://stdout');
         $appender->setThreshold(Logger::ERROR);
         $appender->setMaxLevel(Logger::FATAL);
 

@@ -1,6 +1,7 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderSay extends LoggerAppenderAbstract
+class AppenderSay extends AppenderAbstract
 {
     public function write($level, $message)
     {

@@ -1,8 +1,9 @@
 <?php
+namespace Mougrim\Logger;
 
 class LoggerMDC
 {
-    private static $map = array();
+    private static $map = [];
 
     public static function put($key, $context)
     {
@@ -34,6 +35,6 @@ class LoggerMDC
 
     public static function clear()
     {
-        self::$map = array();
+        self::$map = [];
     }
 }

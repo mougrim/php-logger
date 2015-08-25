@@ -1,12 +1,16 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderAbstractTest extends BaseLoggerTestCase
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Logger;
+
+class AppenderAbstractTest extends BaseLoggerTestCase
 {
     public function testMinLevel()
     {
         $logger = new Logger('root');
 
-        $appender = new LoggerAppenderAbstractTestAppender();
+        $appender = new AppenderAbstractTestAppender();
 
         $appender->append($logger, Logger::INFO, '1');
         $this->assertEquals('1', $appender->data);
@@ -21,7 +25,7 @@ class LoggerAppenderAbstractTest extends BaseLoggerTestCase
     {
         $logger = new Logger('root');
 
-        $appender = new LoggerAppenderAbstractTestAppender();
+        $appender = new AppenderAbstractTestAppender();
 
         $appender->append($logger, Logger::INFO, '1');
         $this->assertEquals('1', $appender->data);
@@ -35,7 +39,7 @@ class LoggerAppenderAbstractTest extends BaseLoggerTestCase
 }
 
 
-class LoggerAppenderAbstractTestAppender extends LoggerAppenderAbstract
+class AppenderAbstractTestAppender extends AppenderAbstract
 {
     public $data = '';
 

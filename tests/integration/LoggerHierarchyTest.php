@@ -1,10 +1,9 @@
 <?php
+namespace Mougrim\Logger\integration;
 
-namespace integration;
-
-use BaseLoggerTestCase;
-use LoggerAppenderStream;
-use LoggerHierarchy;
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Appender\AppenderStream;
+use Mougrim\Logger\LoggerHierarchy;
 
 class LoggerHierarchyTest extends BaseLoggerTestCase
 {
@@ -15,8 +14,8 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
         if (is_file($firstLog)) unlink($firstLog);
         if (is_file($secondLog)) unlink($secondLog);
         $hierarchy = new LoggerHierarchy();
-        $hierarchy->setAppender('first', $firstAppender = new LoggerAppenderStream($firstLog));
-        $hierarchy->setAppender('second', $secondAppender = new LoggerAppenderStream($secondLog));
+        $hierarchy->setAppender('first', $firstAppender = new AppenderStream($firstLog));
+        $hierarchy->setAppender('second', $secondAppender = new AppenderStream($secondLog));
         $rootLogger = $hierarchy->getRootLogger();
         $rootLogger->addAppender($firstAppender);
         $rootLogger->addAppender($secondAppender);
@@ -38,8 +37,8 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
         if (is_file($secondLog)) unlink($secondLog);
         if (is_file($secondLogTmp)) unlink($secondLogTmp);
         $hierarchy = new LoggerHierarchy();
-        $hierarchy->setAppender('first', $firstAppender = new LoggerAppenderStream($firstLog));
-        $hierarchy->setAppender('second', $secondAppender = new LoggerAppenderStream($secondLog));
+        $hierarchy->setAppender('first', $firstAppender = new AppenderStream($firstLog));
+        $hierarchy->setAppender('second', $secondAppender = new AppenderStream($secondLog));
         $rootLogger = $hierarchy->getRootLogger();
         $rootLogger->addAppender($firstAppender);
         $rootLogger->addAppender($secondAppender);

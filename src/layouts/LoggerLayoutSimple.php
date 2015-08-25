@@ -1,12 +1,18 @@
 <?php
+namespace Mougrim\Logger\Layout;
+
+use Mougrim\Logger\Logger;
+use Mougrim\Logger\LoggerMDC;
+use Mougrim\Logger\LoggerNDC;
+use Mougrim\Logger\LoggerRender;
 
 /**
  * Simple logger layout.
  * Format like as "loggerName [INFO] ndc_message mdc=context: message exception"
  */
-class LoggerLayoutSimple implements LoggerLayoutInterface
+class LayoutSimple implements LayoutInterface
 {
-    public function formatMessage(Logger $logger, $level, $message, Exception $throwable = null)
+    public function formatMessage(Logger $logger, $level, $message, \Exception $throwable = null)
     {
         $formatted = $logger->getName()
             . ' [' . Logger::getLevelName($level) . '] ';

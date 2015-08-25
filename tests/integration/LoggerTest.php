@@ -1,9 +1,9 @@
 <?php
+namespace Mougrim\Logger\integration;
 
-namespace integration;
-
-use BaseLoggerTestCase;
-use Logger;
+use Mougrim\Logger\Appender\AppenderStream;
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Logger;
 
 class LoggerTest extends BaseLoggerTestCase
 {
@@ -16,21 +16,21 @@ class LoggerTest extends BaseLoggerTestCase
         if (is_file($f2)) unlink($f2);
         if (is_file($f2 . '_tmp')) unlink($f2 . '_tmp');
 
-        Logger::configure(array(
-            'appenders' => array(
-                'stream1' => array(
-                    'class' => 'LoggerAppenderStream',
+        Logger::configure([
+            'appenders' => [
+                'stream1' => [
+                    'class' => AppenderStream::class,
                     'stream' => $f1
-                ),
-                'stream2' => array(
-                    'class' => 'LoggerAppenderStream',
+                ],
+                'stream2' => [
+                    'class' => AppenderStream::class,
                     'stream' => $f2
-                ),
-            ),
-            'root' => array(
-                'appenders' => array('stream1', 'stream2'),
-            )
-        ));
+                ],
+            ],
+            'root' => [
+                'appenders' => ['stream1', 'stream2'],
+            ]
+        ]);
         Logger::getRootLogger()->info($expected = uniqid());
         $this->assertEquals($expected, file_get_contents($f1));
         $this->assertEquals($expected, file_get_contents($f2));
@@ -48,17 +48,17 @@ class LoggerTest extends BaseLoggerTestCase
 
     public function testTest()
     {
-        Logger::configure(array(
-            'appenders' => array(
-                'stream' => array(
-                    'class' => 'LoggerAppenderStream',
+        Logger::configure([
+            'appenders' => [
+                'stream' => [
+                    'class' => AppenderStream::class,
                     'stream' => '/dev/null'
-                ),
-            ),
-            'root' => array(
-                'appenders' => array('stream'),
-            )
-        ));
+                ],
+            ],
+            'root' => [
+                'appenders' => ['stream'],
+            ]
+        ]);
 
         $logger = Logger::getLogger('test');
         $start = microtime(1);

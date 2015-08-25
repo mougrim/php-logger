@@ -1,6 +1,11 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderStreamTest extends BaseLoggerTestCase
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Logger;
+use Mougrim\Logger\LoggerIOException;
+
+class AppenderStreamTest extends BaseLoggerTestCase
 {
     protected $backupGlobals = true;
     private $logFile = '/tmp/log.txt';
@@ -19,15 +24,15 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
 
     public function testConstructIOException()
     {
-        $this->setExpectedException('LoggerIOException');
-        new LoggerAppenderStream('invalid://wefwef');
+        $this->setExpectedException(LoggerIOException::class);
+        new AppenderStream('invalid://wefwef');
     }
 
     public function testNotUseLock()
     {
         $GLOBALS['called']=false;
         $this->mockFunction('flock', '', '$GLOBALS["called"]=true; return true;');
-        $appender = new LoggerAppenderStream($this->logFile);
+        $appender = new AppenderStream($this->logFile);
         $appender->setUseLock(false);
         $appender->write(Logger::INFO, 'ok');
         $appender->write(Logger::INFO, str_pad('', 4096, '1'));
@@ -39,7 +44,7 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
     {
         $GLOBALS['called']=false;
         $this->mockFunction('flock', '', '$GLOBALS["called"]=true; return true;');
-        $appender = new LoggerAppenderStream($this->logFile);
+        $appender = new AppenderStream($this->logFile);
         $appender->setUseLock(true);
         $appender->setUseLockShortMessage(false);
         $appender->write(Logger::INFO, '');
@@ -51,7 +56,7 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
     {
         $GLOBALS['called'] = false;
         $this->mockFunction('flock', '', '$GLOBALS["called"]=true; return true;');
-        $appender = new LoggerAppenderStream($this->logFile);
+        $appender = new AppenderStream($this->logFile);
         $appender->setUseLock(true);
         $appender->setUseLockShortMessage(false);
         $appender->write(Logger::INFO, str_pad('', 4097, '1'));
@@ -66,7 +71,7 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
         $secondChild = uniqid('secondChild');
         $after = uniqid('after');
 
-        $writer = new LoggerAppenderStream($this->logFile);
+        $writer = new AppenderStream($this->logFile);
         $writer->write(1, $before);
         // first fork
         $pid = pcntl_fork();
@@ -100,7 +105,7 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
 
     public function testReopen()
     {
-        $appender = new LoggerAppenderStream($this->logFile);
+        $appender = new AppenderStream($this->logFile);
         $appender->write(Logger::INFO, $first = uniqid('', true));
         $this->assertEquals($first, file_get_contents($this->logFile));
         unlink($this->logFile);
@@ -111,7 +116,7 @@ class LoggerAppenderStreamTest extends BaseLoggerTestCase
 
     public function testReopenForkClose()
     {
-        $appender = new LoggerAppenderStream($this->logFile);
+        $appender = new AppenderStream($this->logFile);
 
         $pid = pcntl_fork();
         if ($pid == -1) {

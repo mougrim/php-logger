@@ -1,6 +1,13 @@
 <?php
+namespace Mougrim\Logger\Layout;
 
-class LoggerLayoutSimpleTest extends BaseLoggerTestCase
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Logger;
+use Mougrim\Logger\LoggerMDC;
+use Mougrim\Logger\LoggerNDC;
+use Mougrim\Logger\LoggerRender;
+
+class LayoutSimpleTest extends BaseLoggerTestCase
 {
     public function setUp()
     {
@@ -12,7 +19,7 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
     public function testLoggerName()
     {
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
         $this->assertEquals('testLogger [INFO] - test message' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, "test message"));
     }
@@ -20,7 +27,7 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
     public function testLevel()
     {
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [OFF] - test message' . PHP_EOL,
             $layout->formatMessage($logger, Logger::OFF, "test message"));
@@ -44,7 +51,7 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
     public function testLoggerNDC()
     {
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [INFO] - test message' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, "test message"));
@@ -69,7 +76,7 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
     public function testLoggerMDC()
     {
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [INFO] - test message' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, "test message"));
@@ -94,7 +101,7 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
     public function testRenderScalar()
     {
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [INFO] - string' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, "string"));
@@ -115,7 +122,7 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
         LoggerRender::$trueMessage = '1';
         LoggerRender::$falseMessage = '-1';
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [INFO] - -' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, null));
@@ -130,7 +137,7 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
     public function renderObjectToString()
     {
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [INFO] - test exception' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, new LoggerLayoutSimpleTestException("test exception")));
@@ -138,10 +145,10 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
 
     public function testRenderObject()
     {
-        $testObject = new stdClass();
+        $testObject = new \stdClass();
 
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
 
         $this->assertEquals('testLogger [INFO] - ' . print_r($testObject, 1) . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, $testObject));
@@ -150,14 +157,14 @@ class LoggerLayoutSimpleTest extends BaseLoggerTestCase
     public function testRenderMessageAndException()
     {
         $logger = new Logger("testLogger");
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
         $ex = new LoggerLayoutSimpleTestException("exception");
         $this->assertEquals('testLogger [INFO] - test exception' . PHP_EOL,
             $layout->formatMessage($logger, Logger::INFO, "test", $ex));
     }
 }
 
-class LoggerLayoutSimpleTestException extends Exception
+class LoggerLayoutSimpleTestException extends \Exception
 {
     public function __toString()
     {

@@ -1,6 +1,10 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderStream extends LoggerAppenderAbstract implements LoggerAppenderReopen
+use Mougrim\Logger\LoggerIOException;
+use Mougrim\Logger\LoggerPolicy;
+
+class AppenderStream extends AppenderAbstract implements AppenderReopen
 {
     const MESSAGE_THRESHOLD = 4096;
 

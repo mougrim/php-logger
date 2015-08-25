@@ -1,15 +1,19 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-abstract class LoggerAppenderAbstract
+use Mougrim\Logger\Layout\LayoutInterface;
+use Mougrim\Logger\Logger;
+
+abstract class AppenderAbstract
 {
     protected $minLevel;
     protected $maxLevel;
-    /** @var LoggerLayoutInterface|null */
+    /** @var LayoutInterface|null */
     protected $layout = null;
 
     abstract public function write($level, $message);
 
-    public function append(Logger $logger, $level, $message, Exception $throwable = null)
+    public function append(Logger $logger, $level, $message, \Exception $throwable = null)
     {
         if ($this->minLevel !== null && $level < $this->minLevel) {
             return;
@@ -33,7 +37,7 @@ abstract class LoggerAppenderAbstract
         $this->minLevel = (int)$minLevel;
     }
 
-    public function setLayout(LoggerLayoutInterface $layout)
+    public function setLayout(LayoutInterface $layout)
     {
         $this->layout = $layout;
     }

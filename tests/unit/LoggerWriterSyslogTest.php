@@ -1,31 +1,34 @@
 <?php
+namespace Mougrim\Logger;
+
+use Mougrim\Logger\Appender\AppenderSyslog;
 
 class LoggerWriterSyslogTest extends BaseLoggerTestCase
 {
     public function syslogProvider()
     {
-        return array(
-            array(LOG_ALERT, Logger::OFF),
-            array(LOG_ALERT, Logger::OFF - 1),
-            array(LOG_ALERT, Logger::FATAL),
-            array(LOG_ALERT, Logger::FATAL + 1),
-            array(LOG_ERR, Logger::FATAL - 1),
-            array(LOG_ERR, Logger::ERROR + 1),
-            array(LOG_ERR, Logger::ERROR),
-            array(LOG_WARNING, Logger::ERROR - 1),
-            array(LOG_WARNING, Logger::WARN + 1),
-            array(LOG_WARNING, Logger::WARN),
-            array(LOG_INFO, Logger::WARN - 1),
-            array(LOG_INFO, Logger::INFO + 1),
-            array(LOG_INFO, Logger::INFO),
-            array(LOG_DEBUG, Logger::INFO - 1),
-            array(LOG_DEBUG, Logger::DEBUG + 1),
-            array(LOG_DEBUG, Logger::DEBUG),
-            array(LOG_DEBUG, Logger::TRACE + 1),
-            array(LOG_DEBUG, Logger::TRACE),
-            array(LOG_DEBUG, Logger::TRACE - 1),
-            array(LOG_DEBUG, Logger::ALL),
-        );
+        return [
+            [LOG_ALERT, Logger::OFF],
+            [LOG_ALERT, Logger::OFF - 1],
+            [LOG_ALERT, Logger::FATAL],
+            [LOG_ALERT, Logger::FATAL + 1],
+            [LOG_ERR, Logger::FATAL - 1],
+            [LOG_ERR, Logger::ERROR + 1],
+            [LOG_ERR, Logger::ERROR],
+            [LOG_WARNING, Logger::ERROR - 1],
+            [LOG_WARNING, Logger::WARN + 1],
+            [LOG_WARNING, Logger::WARN],
+            [LOG_INFO, Logger::WARN - 1],
+            [LOG_INFO, Logger::INFO + 1],
+            [LOG_INFO, Logger::INFO],
+            [LOG_DEBUG, Logger::INFO - 1],
+            [LOG_DEBUG, Logger::DEBUG + 1],
+            [LOG_DEBUG, Logger::DEBUG],
+            [LOG_DEBUG, Logger::TRACE + 1],
+            [LOG_DEBUG, Logger::TRACE],
+            [LOG_DEBUG, Logger::TRACE - 1],
+            [LOG_DEBUG, Logger::ALL],
+        ];
     }
 
     /**
@@ -35,6 +38,6 @@ class LoggerWriterSyslogTest extends BaseLoggerTestCase
      */
     public function testGetSyslogPriority($expected, $actual)
     {
-        $this->assertEquals($expected, LoggerAppenderSyslog::getSyslogPriority($actual));
+        $this->assertEquals($expected, AppenderSyslog::getSyslogPriority($actual));
     }
 }

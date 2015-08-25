@@ -1,4 +1,8 @@
 <?php
+namespace Mougrim\Logger;
+
+use Mougrim\Logger\Appender\AppenderStd;
+use Mougrim\Logger\Layout\LayoutSimple;
 
 class LoggerHierarchyTest extends BaseLoggerTestCase
 {
@@ -15,7 +19,7 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
         $hierarchy = new LoggerHierarchy();
         $hierarchy->setRootLogger($logger);
         $this->assertTrue($logger === $hierarchy->getRootLogger());
-        $this->assertEquals(array(), $hierarchy->getAppenderMap());
+        $this->assertEquals([], $hierarchy->getAppenderMap());
     }
 
     public function testGetLoggerCreate()
@@ -27,12 +31,12 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
         $logger = $hierarchy->getLogger('newLogger');
         $this->assertEquals('newLogger', $logger->getName());
         $this->assertEquals($rootLogger, $logger->getParent());
-        $this->assertEquals(array('newLogger' => $logger), $hierarchy->getLoggerMap());
+        $this->assertEquals(['newLogger' => $logger], $hierarchy->getLoggerMap());
     }
 
     public function testGetAppenderNotExists()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $hierarchy = new LoggerHierarchy();
         $hierarchy->getAppender('new');
     }
@@ -40,15 +44,15 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
     public function testGetAppenderExists()
     {
         $hierarchy = new LoggerHierarchy();
-        $appender = new LoggerAppenderStd();
+        $appender = new AppenderStd();
         $hierarchy->setAppender('appender', $appender);
         $this->assertEquals($appender, $hierarchy->getAppender('appender'));
-        $this->assertEquals(array('appender' => $appender), $hierarchy->getAppenderMap());
+        $this->assertEquals(['appender' => $appender], $hierarchy->getAppenderMap());
     }
 
     public function testGetLayoutNotExists()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $hierarchy = new LoggerHierarchy();
         $hierarchy->getLayout('new');
     }
@@ -56,9 +60,9 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
     public function testGetLayoutExists()
     {
         $hierarchy = new LoggerHierarchy();
-        $layout = new LoggerLayoutSimple();
+        $layout = new LayoutSimple();
         $hierarchy->setLayout('simple', $layout);
         $this->assertEquals($layout, $hierarchy->getLayout('simple'));
-        $this->assertEquals(array('simple' => $layout), $hierarchy->getLayoutMap());
+        $this->assertEquals(['simple' => $layout], $hierarchy->getLayoutMap());
     }
 }

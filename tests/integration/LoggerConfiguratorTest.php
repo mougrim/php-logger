@@ -1,14 +1,15 @@
 <?php
+namespace Mougrim\Logger\integration;
 
-namespace integration;
-
-use BaseLoggerTestCase;
-use Logger;
-use LoggerAppenderStream;
-use LoggerConfigurator;
-use LoggerHierarchy;
-use LoggerLayoutSimple;
-use LoggerRender;
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Layout\LayoutPattern;
+use Mougrim\Logger\Logger;
+use Mougrim\Logger\Appender\AppenderStream;
+use Mougrim\Logger\LoggerConfigurator;
+use Mougrim\Logger\LoggerException;
+use Mougrim\Logger\LoggerHierarchy;
+use Mougrim\Logger\Layout\LayoutSimple;
+use Mougrim\Logger\LoggerRender;
 use stdClass;
 
 class LoggerConfiguratorTest extends BaseLoggerTestCase
@@ -17,56 +18,58 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
     {
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
-        $configurator->configure($hierarchy, array(
-            'policy' => array(
+        $configurator->configure($hierarchy, [
+            'policy' => [
                 'ioError' => 'trigger_error',
                 'configurationError' => 'exit'
-            ),
-            'renderer' => array(
+            ],
+            'renderer' => [
                 'nullMessage' => '-',
                 'trueMessage' => '1',
                 'falseMessage' => '-1',
-            ),
-            'layouts' => array(
-                'simple' => array(
-                    'class' => 'LoggerLayoutSimple',
-                ),
-                'pattern' => array(
-                    'class' => 'LoggerLayoutPattern',
+            ],
+            'layouts' => [
+                'simple' => [
+                    'class' => LayoutSimple::class,
+                ],
+                'pattern' => [
+                    'class' => LayoutPattern::class,
                     'pattern' => '{date:Y/m/d} [{level}] {logger} {file}:{line} {class}:{function} {mdc:key} {mdc} {ndc}: {message} {ex}',
-                ),
-            ),
-            'appenders' => array(
-                'stream' => array(
-                    'class' => 'LoggerAppenderStream',
+                ],
+            ],
+            'appenders' => [
+                'stream' => [
+                    'class' => AppenderStream::class,
                     'stream' => 'php://stdout',
                     'useLock' => true,
                     'useLockShortMessage' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
                     'layout' => 'simple',
-                ),
-            ),
-            'loggers' => array(
-                'logger' => array(
-                    'appenders' => array('stream', array(
-                        'class' => 'LoggerAppenderStream',
+                ],
+            ],
+            'loggers' => [
+                'logger' => [
+                    'appenders' => [
+                        'stream', [
+                        'class' => AppenderStream::class,
                         'stream' => 'php://stdout',
                         'useLock' => true,
                         'useLockShortMessage' => false,
                         'minLevel' => 0,
                         'maxLevel' => PHP_INT_MAX,
                         'layout' => 'simple'
-                    )),
+                        ]
+                    ],
                     'addictive' => false,
                     'minLevel' => Logger::DEBUG,
                     'maxLevel' => Logger::FATAL,
-                ),
-            ),
-            'root' => array(
-                'appenders' => array('stream'),
-            )
-        ));
+                ],
+            ],
+            'root' => [
+                'appenders' => ['stream'],
+            ]
+        ]);
         $this->assertArrayHasKey('simple', $hierarchy->getLayoutMap());
         $this->assertArrayHasKey('pattern', $hierarchy->getLayoutMap());
         $this->assertArrayHasKey('stream', $hierarchy->getAppenderMap());
@@ -79,87 +82,87 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
 
     public function testInvalidLayout()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
-        $configurator->configure($hierarchy, array(
-            'layouts' => array(
-                'simple' => array(),
-            )
-        ));
+        $configurator->configure($hierarchy, [
+            'layouts' => [
+                'simple' => [],
+            ]
+        ]);
     }
 
     public function testInvalidLayoutInAppenderEmpty()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
-        $configurator->configure($hierarchy, array(
-            'appenders' => array(
-                'stream' => array(
-                    'class' => 'LoggerAppenderStream',
+        $configurator->configure($hierarchy, [
+            'appenders' => [
+                'stream' => [
+                    'class' => AppenderStream::class,
                     'stream' => 'php://stdout',
                     'useLock' => true,
                     'useLockShortMessage' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
-                    'layout' => array(),
-                ),
-            ),
-        ));
+                    'layout' => [],
+                ],
+            ],
+        ]);
     }
 
     public function testInvalidLayoutInAppenderInvalidType()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
-        $configurator->configure($hierarchy, array(
-            'appenders' => array(
-                'stream' => array(
-                    'class' => 'LoggerAppenderStream',
+        $configurator->configure($hierarchy, [
+            'appenders' => [
+                'stream' => [
+                    'class' => AppenderStream::class,
                     'stream' => 'php://stdout',
                     'useLock' => true,
                     'useLockShortMessage' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
                     'layout' => new stdClass(),
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
     }
 
     public function testInvalidAppender()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
-        $configurator->configure($hierarchy, array(
-            'appenders' => array(
-                'stream' => array(
+        $configurator->configure($hierarchy, [
+            'appenders' => [
+                'stream' => [
                     'stream' => 'php://stdout',
                     'useLock' => true,
                     'useLockShortMessage' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
     }
 
     public function testInvalidAppenderInLogger()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $hierarchy = new LoggerHierarchy();
         $configurator = new LoggerConfigurator();
-        $configurator->configure($hierarchy, array(
-            'loggers' => array(
-                'logger' => array(
-                    'appenders' => array(new stdClass()),
+        $configurator->configure($hierarchy, [
+            'loggers' => [
+                'logger' => [
+                    'appenders' => [new stdClass()],
                     'addictive' => false,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
     }
 
     public function testLogSimple()
@@ -175,8 +178,8 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
         $path = '/tmp/log.txt';
         if (is_file($path)) unlink($path);
         Logger::configure();
-        $appender = new LoggerAppenderStream($path);
-        $appender->setLayout(new LoggerLayoutSimple());
+        $appender = new AppenderStream($path);
+        $appender->setLayout(new LayoutSimple());
         Logger::getRootLogger()->addAppender($appender);
         Logger::getRootLogger()->info("hello world");
         $this->assertEquals("root [INFO] - hello world" . PHP_EOL, file_get_contents($path));

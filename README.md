@@ -7,43 +7,48 @@ Configuration
 -------------
 
 ```php
-Logger::configure(array(
-    'policy' => array(
+use Mougrim\Logger\Appender\LoggerAppenderStream;
+use Mougrim\Logger\Layout\LoggerLayoutPattern;
+use Mougrim\Logger\Layout\LoggerLayoutSimple;
+use Mougrim\Logger\Logger;
+
+Logger::configure([
+    'policy' => [
         'ioError' => 'trigger_error', // ignore, trigger_warn, trigger_error, exception or exit
         'configurationError' => 'exception'
-    ),
-    'layouts' => array(
-        'simple' => array(
-            'class' => 'LoggerLayoutSimple',
-        ),
-        'pattern' => array(
-            'class' => 'LoggerLayoutPattern',
+    ],
+    'layouts' => [
+        'simple' => [
+            'class' => LoggerLayoutSimple::class,
+        ],
+        'pattern' => [
+            'class' => LoggerLayoutPattern::class,
             'pattern' => '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}',
-        ),
-    ),
-    'appenders' => array(
-        'stream' => array(
-            'class' => 'LoggerAppenderStream',
+        ],
+    ],
+    'appenders' => [
+        'stream' => [
+            'class' => LoggerAppenderStream::class,
             'stream' => 'php://stdout',
             'useLock' => true,
             'useLockShortMessage' => false,
             'minLevel' => Logger::DEBUG,
             'maxLevel' => Logger::FATAL,
             'layout' => 'simple',
-        ),
-    ),
-    'loggers' => array(
-        'logger' => array(
-            'appenders' => array('stream'),
+        ],
+    ],
+    'loggers' => [
+        'logger' => [
+            'appenders' => ['stream'],
             'addictive' => false,
             'minLevel' => Logger::TRACE,
             'maxLevel' => Logger::FATAL,
-        ),
-    ),
-    'root' => array(
-        'appenders' => array('stream'),
-    )
-));
+        ],
+    ],
+    'root' => [
+        'appenders' => ['stream'],
+    ]
+]);
 ```
 Logging
 -------
@@ -79,3 +84,8 @@ $timer = $logger->timer();
 $pdo->exec('select * from foo');
 $timer->info("sql executed at {time}"); // rendered at
 ```
+
+Thanks
+-----
+
+Thanks to [mitallast](https://github.com/mitallast/) for the development of the main part of this project.

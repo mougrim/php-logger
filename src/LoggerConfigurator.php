@@ -1,4 +1,8 @@
 <?php
+namespace Mougrim\Logger;
+
+use Mougrim\Logger\Appender\AppenderAbstract;
+use Mougrim\Logger\Layout\LayoutInterface;
 
 class LoggerConfigurator
 {
@@ -94,7 +98,8 @@ class LoggerConfigurator
     /**
      * @param LoggerHierarchy $hierarchy
      * @param $config
-     * @return LoggerAppenderAbstract
+     *
+*@return AppenderAbstract
      * @throws LoggerException
      */
     private function createAppender(LoggerHierarchy $hierarchy, $config)
@@ -129,7 +134,8 @@ class LoggerConfigurator
 
     /**
      * @param $config
-     * @return LoggerLayoutInterface
+     *
+*@return LayoutInterface
      */
     private function createLayout($config)
     {
@@ -148,10 +154,10 @@ class LoggerConfigurator
                     throw new LoggerConfigurationException($message);
             }
         }
-        $reflection = new ReflectionClass($config['class']);
+        $reflection = new \ReflectionClass($config['class']);
         unset($config['class']);
 
-        $params = array();
+        $params = [];
         $constructor = $reflection->getConstructor();
         if ($constructor) {
             foreach ($constructor->getParameters() as $param) {
@@ -171,7 +177,7 @@ class LoggerConfigurator
         foreach ($config as $name => $value) {
             $method = 'set' . $name;
             if (method_exists($object, $method)) {
-                call_user_func(array($object, $method), $value);
+                call_user_func([$object, $method], $value);
             }
         }
         return $object;

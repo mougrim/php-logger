@@ -1,6 +1,9 @@
 <?php
+namespace Mougrim\Logger\functional;
 
-class LoggerWriterSteamTest extends PHPUnit_Framework_TestCase
+use Mougrim\Logger\Appender\AppenderStream;
+
+class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
 {
     public function testWrite()
     {
@@ -14,7 +17,7 @@ class LoggerWriterSteamTest extends PHPUnit_Framework_TestCase
         for ($i = 0; $i < 1000; $i++) $message .= uniqid();
         $message .= PHP_EOL;
 
-        $pids = array();
+        $pids = [];
         $start = microtime(1);
         for ($w = 0; $w < $workers; $w++) {
             $pid = pcntl_fork();
@@ -23,7 +26,7 @@ class LoggerWriterSteamTest extends PHPUnit_Framework_TestCase
             } else if ($pid) {
                 $pids[] = $pid;
             } else {
-                $writer = new LoggerAppenderStream($path);
+                $writer = new AppenderStream($path);
                 for ($i = 0; $i < $count; $i++) $writer->write(1, $message);
                 die();
             }
@@ -31,7 +34,7 @@ class LoggerWriterSteamTest extends PHPUnit_Framework_TestCase
         foreach ($pids as $p) {
             pcntl_waitpid($p, $status);
         }
-        $this->lessThan(0.2, microtime(1) - $start);
+        $this->assertLessThan(0.2, microtime(1) - $start);
         $this->assertTrue(strlen($message) === 13001);
         $c = str_pad("", $count * $workers * strlen($message), $message);
         sleep(1);

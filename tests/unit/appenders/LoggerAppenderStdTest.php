@@ -1,6 +1,11 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderStdTest extends BaseLoggerTestCase
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Logger;
+use Mougrim\Logger\LoggerConfigurationException;
+
+class AppenderStdTest extends BaseLoggerTestCase
 {
     protected $backupGlobals = true;
 
@@ -10,7 +15,7 @@ class LoggerAppenderStdTest extends BaseLoggerTestCase
         $GLOBALS['stream'] = null;
         $this->mockFunction('fwrite', '$a', '$GLOBALS["stream"]=$a;');
 
-        $appender = new LoggerAppenderStd();
+        $appender = new AppenderStd();
         $appender->write(Logger::INFO, 'test');
         $this->assertTrue(STDOUT === $GLOBALS['stream']);
     }
@@ -20,7 +25,7 @@ class LoggerAppenderStdTest extends BaseLoggerTestCase
         $GLOBALS['stream'] = null;
         $this->mockFunction('fwrite', '$a', '$GLOBALS["stream"]=$a;');
 
-        $appender = new LoggerAppenderStd();
+        $appender = new AppenderStd();
         $appender->setStream('STDOUT');
         $appender->write(Logger::INFO, 'test');
         $this->assertTrue(STDOUT === $GLOBALS['stream']);
@@ -31,7 +36,7 @@ class LoggerAppenderStdTest extends BaseLoggerTestCase
         $GLOBALS['stream'] = null;
         $this->mockFunction('fwrite', '$a', '$GLOBALS["stream"]=$a;');
 
-        $appender = new LoggerAppenderStd();
+        $appender = new AppenderStd();
         $appender->setStream('STDERR');
         $appender->write(Logger::INFO, 'test');
 
@@ -40,8 +45,8 @@ class LoggerAppenderStdTest extends BaseLoggerTestCase
 
     public function testInvalidStream()
     {
-        $this->setExpectedException('LoggerConfigurationException');
-        $appender = new LoggerAppenderStd();
+        $this->setExpectedException(LoggerConfigurationException::class);
+        $appender = new AppenderStd();
         $appender->setStream('ERROR');
     }
 }

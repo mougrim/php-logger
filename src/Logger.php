@@ -1,4 +1,7 @@
 <?php
+namespace Mougrim\Logger;
+
+use Mougrim\Logger\Appender\AppenderAbstract;
 
 if (!defined('PHP_INT_MIN')) {
     define('PHP_INT_MIN', PHP_INT_MAX * -1 - 1);
@@ -9,48 +12,53 @@ if (!defined('PHP_INT_MIN')) {
  * Example of usage:
  *
  * <pre>
- *  Logger::configure(array(
- *      'policy' => array(
+ * use Mougrim\Logger\Appender\LoggerAppenderStream;
+ * use Mougrim\Logger\Layout\LoggerLayoutPattern;
+ * use Mougrim\Logger\Layout\LoggerLayoutSimple;
+ * use Mougrim\Logger\Logger;
+ *
+ *  Logger::configure([
+ *      'policy' => [
  *          'ioError' => 'trigger_error', // ignore, trigger_warn, trigger_error, exception or exit
  *          'configurationError' => 'exception'
- *      ),
- *      'renderer' => array(
+ *      ],
+ *      'renderer' => [
  *          'nullMessage' => 'null',
  *          'trueMessage' => 'true',
  *          'falseMessage' => 'false',
- *      )
- *      'layouts' => array(
- *          'simple' => array(
- *              'class' => 'LoggerLayoutSimple',
- *          ),
- *          'pattern' => array(
- *              'class' => 'LoggerLayoutPattern',
+ *      ]
+ *      'layouts' => [
+ *          'simple' => [
+ *              'class' => LoggerLayoutSimple::class,
+ *          ],
+ *          'pattern' => [
+ *              'class' => LoggerLayoutPattern::class,
  *              'pattern' => '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}',
- *          ),
- *      ),
- *      'appenders' => array(
- *          'stream' => array(
- *              'class' => 'LoggerAppenderStream',
+ *          ],
+ *      ],
+ *      'appenders' => [
+ *          'stream' => [
+ *              'class' => LoggerAppenderStream::class,
  *              'stream' => 'php://stdout',
  *              'useLock' => true,
  *              'useLockShortMessage' => false,
  *              'minLevel' => Logger::TRACE,
  *              'maxLevel' => Logger::FATAL,
  *              'layout' => 'simple',
- *          ),
- *      ),
- *      'loggers' => array(
- *          'logger' => array(
- *              'appenders' => array('stream'),
+ *          ],
+ *      ],
+ *      'loggers' => [
+ *          'logger' => [
+ *              'appenders' => ['stream'],
  *              'addictive' => false,
  *              'minLevel' => Logger::DEBUG,
  *              'maxLevel' => Logger::FATAL,
- *          ),
- *      ),
- *      'root' => array(
- *          'appenders' => array('stream'),
- *      )
- * ));
+ *          ],
+ *      ],
+ *      'root' => [
+ *          'appenders' => ['stream'],
+ *      ]
+ * ]);
  * Logger::getLogger('logger')->info("hello world");
  * </pre>
  */
@@ -103,6 +111,7 @@ class Logger
         self::reset();
         if (is_string($configuration) && is_file($configuration)) {
             if (preg_match('/\.php$/', $configuration)) {
+                /** @noinspection PhpIncludeInspection */
                 $configuration = require $configuration;
             }
         }
@@ -197,10 +206,10 @@ class Logger
      */
 
     private $name;
-    /** @var \Logger */
+    /** @var Logger */
     private $parent;
-    /** @var LoggerAppenderAbstract[] */
-    private $appenders = array();
+    /** @var AppenderAbstract[] */
+    private $appenders = [];
     /** @var bool */
     private $addictive = true;
     private $minLevel;
@@ -228,14 +237,14 @@ class Logger
         $this->maxLevel = (int)$maxLevel;
     }
 
-    public function addAppender(LoggerAppenderAbstract $appender)
+    public function addAppender(AppenderAbstract $appender)
     {
         if (!in_array($appender, $this->appenders)) {
             $this->appenders[] = $appender;
         }
     }
 
-    public function removeAppender(LoggerAppenderAbstract $appender)
+    public function removeAppender(AppenderAbstract $appender)
     {
         $key = array_search($appender, $this->appenders);
         if ($key !== false) {
@@ -282,37 +291,37 @@ class Logger
         return new LoggerTimer($this, microtime(1));
     }
 
-    public function trace($message, Exception $throwable = null)
+    public function trace($message, \Exception $throwable = null)
     {
         $this->log(self::TRACE, $message, $throwable);
     }
 
-    public function debug($message, Exception $throwable = null)
+    public function debug($message, \Exception $throwable = null)
     {
         $this->log(self::DEBUG, $message, $throwable);
     }
 
-    public function info($message, Exception $throwable = null)
+    public function info($message, \Exception $throwable = null)
     {
         $this->log(self::INFO, $message, $throwable);
     }
 
-    public function warn($message, Exception $throwable = null)
+    public function warn($message, \Exception $throwable = null)
     {
         $this->log(self::WARN, $message, $throwable);
     }
 
-    public function error($message, Exception $throwable = null)
+    public function error($message, \Exception $throwable = null)
     {
         $this->log(self::ERROR, $message, $throwable);
     }
 
-    public function fatal($message, Exception $throwable = null)
+    public function fatal($message, \Exception $throwable = null)
     {
         $this->log(self::FATAL, $message, $throwable);
     }
 
-    public function log($level, $message, Exception $throwable = null)
+    public function log($level, $message, \Exception $throwable = null)
     {
         if (!($this->minLevel !== null && $level < $this->minLevel) &&
             !($this->maxLevel !== null && $level > $this->maxLevel)

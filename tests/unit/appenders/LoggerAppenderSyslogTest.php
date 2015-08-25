@@ -1,45 +1,50 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderSyslogTest extends BaseLoggerTestCase
+use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Logger;
+use Mougrim\Logger\LoggerException;
+
+class AppenderSyslogTest extends BaseLoggerTestCase
 {
     protected $backupGlobals = true;
 
     public function testWriteSyslog()
     {
-        $GLOBALS['syslog'] = array();
-        $appender = new LoggerAppenderSyslog('id', LOG_PID, 0);
+        $GLOBALS['syslog'] = [];
+        $appender = new AppenderSyslog('id', LOG_PID, 0);
         $this->mockFunction('openlog', '', '$GLOBALS["syslog"][]="openlog";return true;');
         $this->mockFunction('syslog', '$priority, $message', '$GLOBALS["syslog"][]="syslog";$GLOBALS["syslog"][]=$priority;$GLOBALS["syslog"][]=$message;');
         $this->mockFunction('closelog', '', '$GLOBALS["syslog"][]="closelog";');
         $appender->write(Logger::INFO, 'test syslog');
-        $this->assertEquals(array(
+        $this->assertEquals([
             'openlog',
             'syslog',
             LOG_INFO,
             'test syslog',
             'closelog'
-        ), $GLOBALS['syslog']);
+        ], $GLOBALS['syslog']);
     }
 
     public function testErrorOpenSyslog()
     {
-        $this->setExpectedException('LoggerException');
+        $this->setExpectedException(LoggerException::class);
         $this->mockFunction('openlog', '', 'return false;');
 
-        $appender = new LoggerAppenderSyslog('id', LOG_PID, 0);
+        $appender = new AppenderSyslog('id', LOG_PID, 0);
         $appender->write(Logger::INFO, 'test syslog');
     }
 
     public function optionsProvider()
     {
-        return array(
-            array(LOG_PID, 'LOG_PID'),
-            array(LOG_PID, LOG_PID),
-            array(LOG_PID, array(LOG_PID)),
-            array(LOG_PID | LOG_CONS, 'LOG_PID|LOG_CONS'),
-            array(LOG_PID | LOG_CONS, LOG_PID | LOG_CONS),
-            array(LOG_PID | LOG_CONS, array(LOG_PID, LOG_CONS)),
-        );
+        return [
+            [LOG_PID, 'LOG_PID'],
+            [LOG_PID, LOG_PID],
+            [LOG_PID, [LOG_PID]],
+            [LOG_PID | LOG_CONS, 'LOG_PID|LOG_CONS'],
+            [LOG_PID | LOG_CONS, LOG_PID | LOG_CONS],
+            [LOG_PID | LOG_CONS, [LOG_PID, LOG_CONS]],
+        ];
     }
 
     /**
@@ -50,40 +55,40 @@ class LoggerAppenderSyslogTest extends BaseLoggerTestCase
     public function testParseOptions($expected, $options)
     {
         $this->assertEquals($expected,
-            LoggerAppenderSyslog::parseOptions($options)
+            AppenderSyslog::parseOptions($options)
         );
     }
 
     public function testErrorInvalidOption()
     {
-        $this->setExpectedException('LoggerException');
-        LoggerAppenderSyslog::parseOptions('array');
+        $this->setExpectedException(LoggerException::class);
+        AppenderSyslog::parseOptions('array');
     }
 
     public function testErrorBadType()
     {
-        $this->setExpectedException('LoggerException');
-        LoggerAppenderSyslog::parseOptions('STDOUT');
+        $this->setExpectedException(LoggerException::class);
+        AppenderSyslog::parseOptions('STDOUT');
     }
 
     public function testErrorBadArgument()
     {
-        $this->setExpectedException('LoggerException');
-        LoggerAppenderSyslog::parseOptions(STDOUT);
+        $this->setExpectedException(LoggerException::class);
+        AppenderSyslog::parseOptions(STDOUT);
     }
 
     public function syslogPriorityProvider()
     {
-        return array(
-            array(LOG_ALERT, Logger::OFF),
-            array(LOG_ALERT, Logger::FATAL),
-            array(LOG_ERR, Logger::ERROR),
-            array(LOG_WARNING, Logger::WARN),
-            array(LOG_INFO, Logger::INFO),
-            array(LOG_DEBUG, Logger::DEBUG),
-            array(LOG_DEBUG, Logger::TRACE),
-            array(LOG_DEBUG, Logger::ALL),
-        );
+        return [
+            [LOG_ALERT, Logger::OFF],
+            [LOG_ALERT, Logger::FATAL],
+            [LOG_ERR, Logger::ERROR],
+            [LOG_WARNING, Logger::WARN],
+            [LOG_INFO, Logger::INFO],
+            [LOG_DEBUG, Logger::DEBUG],
+            [LOG_DEBUG, Logger::TRACE],
+            [LOG_DEBUG, Logger::ALL],
+        ];
     }
 
     /**
@@ -95,7 +100,7 @@ class LoggerAppenderSyslogTest extends BaseLoggerTestCase
     {
         $this->assertEquals(
             $expected,
-            LoggerAppenderSyslog::getSyslogPriority($level)
+            AppenderSyslog::getSyslogPriority($level)
         );
     }
 }

@@ -1,11 +1,18 @@
 <?php
+namespace Mougrim\Logger;
+
+use Mougrim\Logger\Appender\AppenderAbstract;
+use Mougrim\Logger\Appender\AppenderNull;
+use Mougrim\Logger\Appender\AppenderReopen;
+use Mougrim\Logger\Layout\LayoutInterface;
+use Mougrim\Logger\Layout\LayoutSimple;
 
 class LoggerHierarchy
 {
     private $rootLogger;
-    private $loggerMap = array();
-    private $appenderMap = array();
-    private $layoutMap = array();
+    private $loggerMap = [];
+    private $appenderMap = [];
+    private $layoutMap = [];
 
     /**
      * Reopen appenders, what has support reopen log stream
@@ -13,7 +20,7 @@ class LoggerHierarchy
     public function reopen()
     {
         foreach ($this->appenderMap as $appender) {
-            if ($appender instanceof LoggerAppenderReopen) {
+            if ($appender instanceof AppenderReopen) {
                 $appender->reopen();
             }
         }
@@ -45,14 +52,15 @@ class LoggerHierarchy
         return new Logger($name, $this->getRootLogger());
     }
 
-    public function setAppender($name, LoggerAppenderAbstract $appender)
+    public function setAppender($name, AppenderAbstract $appender)
     {
         $this->appenderMap[$name] = $appender;
     }
 
     /**
      * @param $name
-     * @return LoggerAppenderAbstract
+     *
+*@return AppenderAbstract
      * @throws LoggerConfigurationException
      */
     public function getAppender($name)
@@ -76,11 +84,11 @@ class LoggerHierarchy
                 default:
                     throw new LoggerConfigurationException($message);
             }
-            return new LoggerAppenderNull();
+            return new AppenderNull();
         }
     }
 
-    public function setLayout($name, LoggerLayoutInterface $layout)
+    public function setLayout($name, LayoutInterface $layout)
     {
         $this->layoutMap[$name] = $layout;
     }
@@ -106,7 +114,7 @@ class LoggerHierarchy
                 default:
                     throw new LoggerConfigurationException($message);
             }
-            return new LoggerLayoutSimple();
+            return new LayoutSimple();
         }
     }
 

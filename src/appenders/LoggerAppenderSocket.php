@@ -1,6 +1,10 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderSocket extends LoggerAppenderAbstract
+use Mougrim\Logger\LoggerIOException;
+use Mougrim\Logger\LoggerPolicy;
+
+class AppenderSocket extends AppenderAbstract
 {
     private $host;
     private $port;

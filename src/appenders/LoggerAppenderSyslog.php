@@ -1,6 +1,12 @@
 <?php
+namespace Mougrim\Logger\Appender;
 
-class LoggerAppenderSyslog extends LoggerAppenderAbstract
+use Mougrim\Logger\Logger;
+use Mougrim\Logger\LoggerConfigurationException;
+use Mougrim\Logger\LoggerIOException;
+use Mougrim\Logger\LoggerPolicy;
+
+class AppenderSyslog extends AppenderAbstract
 {
     private $identifier;
     private $option;

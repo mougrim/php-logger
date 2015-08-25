@@ -1,4 +1,7 @@
 <?php
+namespace Mougrim\Logger\Appender;
+
+use Mougrim\Logger\Logger;
 
 /**
  * Class logger LoggerAppenderStreamBuffer implements log buffer with threshold.
@@ -15,75 +18,38 @@
  * $appender->append($logger, Logger::ERROR, 'error'); // outputs "debug\ninfo\nerror\n"
  *
  */
+class AppenderStreamBuffer extends AppenderStream
+{
+    private $buffer;
+    private $threshold = Logger::ERROR;
 
-if (class_exists('SplDoublyLinkedList', false)) { // like php 5.3 +
-
-    class LoggerAppenderStreamBuffer extends LoggerAppenderStream
+    public function __construct($stream)
     {
-        private $buffer;
-        private $threshold = Logger::ERROR;
+        $this->buffer = new \SplDoublyLinkedList();
+        parent::__construct($stream);
+    }
 
-        public function __construct($stream)
-        {
-            $this->buffer = new SplDoublyLinkedList();
-            parent::__construct($stream);
+    public function append(Logger $logger, $level, $message, \Exception $throwable = null)
+    {
+        if ($this->minLevel !== null && $level < $this->minLevel) {
+            return;
         }
-
-        public function append(Logger $logger, $level, $message, Exception $throwable = null)
-        {
-            if ($this->minLevel !== null && $level < $this->minLevel) {
-                return;
-            }
-            if ($this->maxLevel !== null && $level > $this->maxLevel) {
-                return;
-            }
-            if ($this->layout) {
-                $message = $this->layout->formatMessage($logger, $level, $message, $throwable);
-            }
-            $this->buffer->push($message);
-            if ($level >= $this->threshold) {
-                while (!$this->buffer->isEmpty() && ($message = $this->buffer->shift())) {
-                    $this->write($level, $message);
-                }
-            }
+        if ($this->maxLevel !== null && $level > $this->maxLevel) {
+            return;
         }
-
-        public function setThreshold($threshold)
-        {
-            $this->threshold = (int)$threshold;
+        if ($this->layout) {
+            $message = $this->layout->formatMessage($logger, $level, $message, $throwable);
+        }
+        $this->buffer->push($message);
+        if ($level >= $this->threshold) {
+            while (!$this->buffer->isEmpty() && ($message = $this->buffer->shift())) {
+                $this->write($level, $message);
+            }
         }
     }
 
-} else { // like php 5.2
-
-    class LoggerAppenderStreamBuffer extends LoggerAppenderStream
+    public function setThreshold($threshold)
     {
-        private $buffer = array();
-        private $threshold = Logger::ERROR;
-
-        public function append(Logger $logger, $level, $message, Exception $throwable = null)
-        {
-            if ($this->minLevel !== null && $level < $this->minLevel) {
-                return;
-            }
-            if ($this->maxLevel !== null && $level > $this->maxLevel) {
-                return;
-            }
-            if ($this->layout) {
-                $message = $this->layout->formatMessage($logger, $level, $message, $throwable);
-            }
-            array_push($this->buffer, $message);
-            if ($level >= $this->threshold) {
-                while ($message = array_shift($this->buffer)) {
-                    $this->write($level, $message);
-                }
-            }
-        }
-
-        public function setThreshold($threshold)
-        {
-            $this->threshold = (int)$threshold;
-        }
+        $this->threshold = (int)$threshold;
     }
-
 }
