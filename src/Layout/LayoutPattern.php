@@ -40,6 +40,8 @@ use Mougrim\Logger\Logger;
  * - {memory:3} set custom precision
  * - {memory:b,kb,mb,gb} set custom precision labels
  * - {memory:4,kb,mb} set custom precision and custom labels
+ * - {memory:2,2} set custom precision and round to, rounds to: 0 - B, 1 - KB, 2 - MB, 3 - GB, 4 - TB
+ * - {memory:2,2,mb} set custom precision, round to and custom label
  */
 class LayoutPattern implements LayoutInterface
 {

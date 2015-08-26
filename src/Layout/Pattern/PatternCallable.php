@@ -1,8 +1,4 @@
 <?php
-/**
- * @author Mougrim <rinat@mougrim.ru>
- */
-
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;

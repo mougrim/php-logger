@@ -27,11 +27,17 @@ class BaseLoggerTestCase extends \PHPUnit_Framework_TestCase
             $this->markTestIncomplete('Extension "runkit" is required');
         }
         ini_set('runkit.internal_override', '1');
-        /** @noinspection PhpUndefinedFunctionInspection */
-        runkit_function_rename($funcName, $funcName . '_copy');
+        // copy original function only once
+        if (!function_exists($funcName . '_original')) {
+            /** @noinspection PhpUndefinedFunctionInspection */
+            runkit_function_rename($funcName, $funcName . '_original');
+            $this->mockFunctions[] = $funcName;
+        } else {
+            /** @noinspection PhpUndefinedFunctionInspection */
+            runkit_function_remove($funcName);
+        }
         /** @noinspection PhpUndefinedFunctionInspection */
         runkit_function_add($funcName, $args, $expr);
-        $this->mockFunctions[] = $funcName;
     }
 
     public function originalFunction($funcName)
@@ -40,7 +46,7 @@ class BaseLoggerTestCase extends \PHPUnit_Framework_TestCase
             /** @noinspection PhpUndefinedFunctionInspection */
             runkit_function_remove($funcName);
             /** @noinspection PhpUndefinedFunctionInspection */
-            runkit_function_rename($funcName . '_copy', $funcName);
+            runkit_function_rename($funcName . '_original', $funcName);
         }
     }
 }
