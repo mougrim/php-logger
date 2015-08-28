@@ -31,81 +31,81 @@ class LayoutPatternTest extends BaseLoggerTestCase
         $argv = [uniqid(), uniqid(), uniqid()];
         $command = join(' ', $argv);
         return [
-            [
+            'Format space' => [
                 'format' => ' ',
                 'expected' => ' ' . PHP_EOL,
             ],
-            [
+            'Format date' => [
                 'format' => '{date}',
                 'expected' => date('Y:m:d') . PHP_EOL,
             ],
-            [
+            'Format date format' => [
                 'format' => '{date:Y:m:d}',
                 'expected' => date('Y:m:d') . PHP_EOL],
-            [
+            'Format pid' => [
                 'format' => '{pid}',
                 'expected' => posix_getpid() . PHP_EOL],
-            [
+            'Format level' => [
                 'format' => '{level}',
                 'expected' => 'INFO' . PHP_EOL,
             ],
-            [
+            'Format logger' => [
                 'format' => '{logger}',
                 'expected' => 'root' . PHP_EOL,
             ],
-            [
+            'Format exception short' => [
                 'format' => '{ex}',
                 'expected' => 'test' . PHP_EOL,
             ],
-            [
+            'Format exception' => [
                 'format' => '{exception}',
                 'expected' => 'test' . PHP_EOL,
             ],
-            [
+            'Format location' => [
                 'format' => '{location}',
                 'expected' => __FILE__ . ':24' . PHP_EOL,
             ],
-            [
+            'Format location file' => [
                 'format' => '{location:file}',
                 'expected' => __FILE__ . PHP_EOL,
             ],
-            [
+            'Format location file-line' => [
                 'format' => '{location:file-line}',
                 'expected' => __FILE__ . '-24' . PHP_EOL,
             ],
-            [
+            'Format location class' => [
                 'format' => '{location:class}',
                 'expected' => __CLASS__ . PHP_EOL,
             ],
-            [
+            'Format location class-function' => [
                 'format' => '{location:class-function}',
                 'expected' => __CLASS__ . '-testFormat' . PHP_EOL,
             ],
-            [
+            'Format global var' => [
                 'format' => '{global:somevar}',
                 'expected' => ($GLOBALS['somevar'] = uniqid()) . PHP_EOL,
             ],
-            [
+            'Format global nesting var' => [
                 'format' => '{global:some.var}',
                 'expected' => ($GLOBALS['some']['var'] = uniqid()) . PHP_EOL,
             ],
-            [
+            'Format ndc' => [
                 'format' => '{ndc}',
                 'expected' => 'ndc_context' . PHP_EOL,
             ],
-            [
+            'Format mdc' => [
                 'format' => '{mdc}',
                 'expected' => 'key=value' . PHP_EOL,
             ],
-            [
+            'Format argv' => [
                 'format' => '{argv}',
                 'expected' => $command . PHP_EOL,
             ],
-            [
+            'Format function' => [
                 'format' => '{call:Mougrim\Logger\Layout\testCallableFunction}',
                 'expected' => 'Mougrim\Logger\Layout\testCallableFunction' . PHP_EOL,
             ],
-            [
+            'Format callback' => [
                 'format' => '{call:' . TestCallableClass::class . '::testMethod}',
                 'expected' => TestCallableClass::class . '::testMethod' . PHP_EOL,
             ],

@@ -84,14 +84,38 @@ class LoggerTest extends BaseLoggerTestCase
     public function levelProvider()
     {
         return [
-            [Logger::OFF, 'OFF'],
-            [Logger::FATAL, 'FATAL'],
-            [Logger::ERROR, 'ERROR'],
-            [Logger::WARN, 'WARN'],
-            [Logger::INFO, 'INFO'],
-            [Logger::DEBUG, 'DEBUG'],
-            [Logger::TRACE, 'TRACE'],
-            [Logger::ALL, 'ALL'],
+            'Level off' => [
+                'level' => Logger::OFF,
+                'expected' => 'OFF',
+            ],
+            'Level fatal' => [
+                'level' => Logger::FATAL,
+                'expected' => 'FATAL',
+            ],
+            'Level error' => [
+                'level' => Logger::ERROR,
+                'expected' => 'ERROR',
+            ],
+            'Level warn' => [
+                'level' => Logger::WARN,
+                'expected' => 'WARN',
+            ],
+            'Level info' => [
+                'level' => Logger::INFO,
+                'expected' => 'INFO',
+            ],
+            'Level debug' => [
+                'level' => Logger::DEBUG,
+                'expected' => 'DEBUG',
+            ],
+            'Level trace' => [
+                'level' => Logger::TRACE,
+                'expected' => 'TRACE',
+            ],
+            'Level all' => [
+                'level' => Logger::ALL,
+                'expected' => 'ALL',
+            ],
         ];
     }
 

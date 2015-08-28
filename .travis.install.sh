@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 rm -rf runkit*
 git clone https://github.com/zenovich/runkit.git
 cd runkit

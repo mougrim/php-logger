@@ -38,12 +38,30 @@ class AppenderSyslogTest extends BaseLoggerTestCase
     public function optionsProvider()
     {
         return [
-            [LOG_PID, 'LOG_PID'],
-            [LOG_PID, LOG_PID],
-            [LOG_PID, [LOG_PID]],
-            [LOG_PID | LOG_CONS, 'LOG_PID|LOG_CONS'],
-            [LOG_PID | LOG_CONS, LOG_PID | LOG_CONS],
-            [LOG_PID | LOG_CONS, [LOG_PID, LOG_CONS]],
+            'String option' => [
+                'expected' => LOG_PID,
+                'options' => 'LOG_PID',
+            ],
+            'One bitwise option' => [
+                'expected' => LOG_PID,
+                'options' => LOG_PID,
+            ],
+            'Array of one bitwise option' => [
+                'expected' => LOG_PID,
+                'options' => [LOG_PID],
+            ],
+            'Two bitwise string options' => [
+                'expected' => LOG_PID | LOG_CONS,
+                'options' => 'LOG_PID|LOG_CONS',
+            ],
+            'Two bitwise options' => [
+                'expected' => LOG_PID | LOG_CONS,
+                'options' => LOG_PID | LOG_CONS,
+            ],
+            'Array of two bitwise options' => [
+                'expected' => LOG_PID | LOG_CONS,
+                'options' => [LOG_PID, LOG_CONS],
+            ],
         ];
     }
 
@@ -80,14 +98,38 @@ class AppenderSyslogTest extends BaseLoggerTestCase
     public function syslogPriorityProvider()
     {
         return [
-            [LOG_ALERT, Logger::OFF],
-            [LOG_ALERT, Logger::FATAL],
-            [LOG_ERR, Logger::ERROR],
-            [LOG_WARNING, Logger::WARN],
-            [LOG_INFO, Logger::INFO],
-            [LOG_DEBUG, Logger::DEBUG],
-            [LOG_DEBUG, Logger::TRACE],
-            [LOG_DEBUG, Logger::ALL],
+            'Level off' => [
+                'expected' => LOG_ALERT,
+                'level' => Logger::OFF,
+            ],
+            'Level fatal' => [
+                'expected' => LOG_ALERT,
+                'level' => Logger::FATAL,
+            ],
+            'Level error' => [
+                'expected' => LOG_ERR,
+                'level' => Logger::ERROR,
+            ],
+            'Level warn' => [
+                'expected' => LOG_WARNING,
+                'level' => Logger::WARN,
+            ],
+            'Level info' => [
+                'expected' => LOG_INFO,
+                'level' => Logger::INFO,
+            ],
+            'Level debug' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::DEBUG,
+            ],
+            'Level trace' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::TRACE,
+            ],
+            'Level all' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::ALL,
+            ],
         ];
     }
 
