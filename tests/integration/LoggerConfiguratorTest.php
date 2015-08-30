@@ -2,7 +2,9 @@
 namespace Mougrim\Logger\integration;
 
 use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Layout\LayoutInterface;
 use Mougrim\Logger\Layout\LayoutPattern;
+use Mougrim\Logger\Layout\Pattern\PatternLogger;
 use Mougrim\Logger\Logger;
 use Mougrim\Logger\Appender\AppenderStream;
 use Mougrim\Logger\LoggerConfigurator;
@@ -35,6 +37,13 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
                 'pattern' => [
                     'class' => LayoutPattern::class,
                     'pattern' => '{date:Y/m/d} [{level}] {logger} {file}:{line} {class}:{function} {mdc:key} {mdc} {ndc}: {message} {ex}',
+                ],
+                'additional_pattern' => [
+                    'class' => LayoutPattern::class,
+                    'pattern' => '{additional_logger}',
+                    'additionalPatternMap' => [
+                        'additional_logger' => PatternLogger::class,
+                    ],
                 ],
             ],
             'appenders' => [
@@ -72,6 +81,13 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
         ]);
         $this->assertArrayHasKey('simple', $hierarchy->getLayoutMap());
         $this->assertArrayHasKey('pattern', $hierarchy->getLayoutMap());
+        $this->assertArrayHasKey('additional_pattern', $hierarchy->getLayoutMap());
+        /** @var LayoutInterface $additional_pattern_layout */
+        $additional_pattern_layout = $hierarchy->getLayoutMap()['additional_pattern'];
+        $this->assertEquals(
+            'test' . PHP_EOL,
+            $additional_pattern_layout->formatMessage($hierarchy->getLogger('test'), Logger::INFO, 'message')
+        );
         $this->assertArrayHasKey('stream', $hierarchy->getAppenderMap());
         $this->assertArrayHasKey('logger', $hierarchy->getLoggerMap());
 

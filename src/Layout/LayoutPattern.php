@@ -46,7 +46,7 @@ use Mougrim\Logger\Logger;
 class LayoutPattern implements LayoutInterface
 {
     const PATTERN_FULL = '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}';
-    const PATTERN_EXPRESSION = '/\{([a-z]+)(:([^}]+))?\}/i';
+    const PATTERN_EXPRESSION = '/\{([a-z_-]+)(:([^}]+))?\}/i';
 
     private $pattern = self::PATTERN_FULL;
     private $patternMap = [
@@ -68,11 +68,12 @@ class LayoutPattern implements LayoutInterface
     /** @var PatternInterface[] */
     private $patternMappers = [];
 
-    public function __construct($pattern = null)
+    public function __construct($pattern = null, array $additionalPatternMap = [])
     {
         if ($pattern) {
             $this->pattern = $pattern;
         }
+        $this->patternMap = $additionalPatternMap + $this->patternMap;
         if (preg_match_all(self::PATTERN_EXPRESSION, $this->pattern, $matches)) {
             foreach ($matches[1] as $key => $patternName) {
                 $fullMatch = $matches[0][$key];

@@ -2,6 +2,7 @@
 namespace Mougrim\Logger\Layout;
 
 use Mougrim\Logger\BaseLoggerTestCase;
+use Mougrim\Logger\Layout\Pattern\PatternInterface;
 use Mougrim\Logger\Logger;
 use Mougrim\Logger\LoggerException;
 use Mougrim\Logger\LoggerMDC;
@@ -10,17 +11,19 @@ use Mougrim\Logger\LoggerNDC;
 class LayoutPatternTest extends BaseLoggerTestCase
 {
     /**
-     * @param $format
-     * @param $expected
+     * @param       $format
+     * @param       $expected
+     * @param array $additionalPatternMap
+     *
      * @dataProvider formatProvider
      */
-    public function testFormat($format, $expected)
+    public function testFormat($format, $expected, array $additionalPatternMap)
     {
         LoggerNDC::clear();
         LoggerMDC::clear();
         LoggerNDC::push("ndc_context");
         LoggerMDC::put('key', 'value');
-        $layout = new LayoutPattern($format);
+        $layout = new LayoutPattern($format, $additionalPatternMap);
         $message = $layout->formatMessage(new Logger("root"), Logger::INFO, 'hello world', new TestLayoutPatternException("test"));
         $this->assertEquals($expected, $message);
     }
@@ -34,80 +37,109 @@ class LayoutPatternTest extends BaseLoggerTestCase
             'Format space' => [
                 'format' => ' ',
                 'expected' => ' ' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format date' => [
                 'format' => '{date}',
                 'expected' => date('Y:m:d') . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format date format' => [
                 'format' => '{date:Y:m:d}',
-                'expected' => date('Y:m:d') . PHP_EOL],
+                'expected' => date('Y:m:d') . PHP_EOL,
+                'additionalPatternMap' => [],
+            ],
             'Format pid' => [
                 'format' => '{pid}',
-                'expected' => posix_getpid() . PHP_EOL],
+                'expected' => posix_getpid() . PHP_EOL,
+                'additionalPatternMap' => [],
+            ],
             'Format level' => [
                 'format' => '{level}',
                 'expected' => 'INFO' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format logger' => [
                 'format' => '{logger}',
                 'expected' => 'root' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format exception short' => [
                 'format' => '{ex}',
                 'expected' => 'test' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format exception' => [
                 'format' => '{exception}',
                 'expected' => 'test' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format location' => [
                 'format' => '{location}',
-                'expected' => __FILE__ . ':24' . PHP_EOL,
+                'expected' => __FILE__ . ':27' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format location file' => [
                 'format' => '{location:file}',
                 'expected' => __FILE__ . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format location file-line' => [
                 'format' => '{location:file-line}',
-                'expected' => __FILE__ . '-24' . PHP_EOL,
+                'expected' => __FILE__ . '-27' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format location class' => [
                 'format' => '{location:class}',
                 'expected' => __CLASS__ . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format location class-function' => [
                 'format' => '{location:class-function}',
                 'expected' => __CLASS__ . '-testFormat' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format global var' => [
                 'format' => '{global:somevar}',
                 'expected' => ($GLOBALS['somevar'] = uniqid()) . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format global nesting var' => [
                 'format' => '{global:some.var}',
                 'expected' => ($GLOBALS['some']['var'] = uniqid()) . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format ndc' => [
                 'format' => '{ndc}',
                 'expected' => 'ndc_context' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format mdc' => [
                 'format' => '{mdc}',
                 'expected' => 'key=value' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format argv' => [
                 'format' => '{argv}',
                 'expected' => $command . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format function' => [
                 'format' => '{call:Mougrim\Logger\Layout\testCallableFunction}',
                 'expected' => 'Mougrim\Logger\Layout\testCallableFunction' . PHP_EOL,
+                'additionalPatternMap' => [],
             ],
             'Format callback' => [
                 'format' => '{call:' . TestCallableClass::class . '::testMethod}',
                 'expected' => TestCallableClass::class . '::testMethod' . PHP_EOL,
+                'additionalPatternMap' => [],
+            ],
+            'Format additional pattern' => [
+                'format' => '{additional_pattern}',
+                'expected' => 'additional_pattern' . PHP_EOL,
+                'additionalPatternMap' => [
+                    'additional_pattern' => TestAdditionalPattern::class,
+                ],
             ],
         ];
     }
@@ -306,5 +338,13 @@ class TestLayoutPatternException extends \Exception
     public function __toString()
     {
         return $this->getMessage();
+    }
+}
+
+class TestAdditionalPattern implements PatternInterface
+{
+    public function render(Logger $logger, $level, $message, \Exception $throwable = null)
+    {
+        return 'additional_pattern';
     }
 }
