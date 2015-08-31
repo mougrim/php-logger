@@ -1,6 +1,8 @@
-This is a fork of Apache log4php logging library
-Main theme - light and fast library, with simple configuring
-If you want use classes without namespaces, see [mougrim/php-logger-old-interface](https://github.com/mougrim/php-logger-old-interface)
+This is a fork of Apache log4php logging library.
+
+Main theme - light and fast library, with simple configuring.
+
+If you want use classes without namespaces, see [mougrim/php-logger-old-interface](https://github.com/mougrim/php-logger-old-interface).
 
 [![Build Status](https://api.travis-ci.org/mougrim/php-logger.png)](https://travis-ci.org/mougrim/php-logger)
 
