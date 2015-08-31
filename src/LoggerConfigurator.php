@@ -99,7 +99,7 @@ class LoggerConfigurator
      * @param LoggerHierarchy $hierarchy
      * @param $config
      *
-*@return AppenderAbstract
+     * @return AppenderAbstract
      * @throws LoggerException
      */
     private function createAppender(LoggerHierarchy $hierarchy, $config)
@@ -135,7 +135,7 @@ class LoggerConfigurator
     /**
      * @param $config
      *
-*@return LayoutInterface
+     * @return LayoutInterface
      */
     private function createLayout($config)
     {

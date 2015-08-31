@@ -60,7 +60,7 @@ class LoggerHierarchy
     /**
      * @param $name
      *
-*@return AppenderAbstract
+     * @return AppenderAbstract
      * @throws LoggerConfigurationException
      */
     public function getAppender($name)

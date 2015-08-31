@@ -204,7 +204,6 @@ class Logger
     /*
      * Logger object description
      */
-
     private $name;
     /** @var Logger */
     private $parent;
