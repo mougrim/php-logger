@@ -13,17 +13,17 @@ class LoggerRender
 
     public static function reset()
     {
-        self::$nullMessage = self::DEFAULT_NULL_MESSAGE;
-        self::$trueMessage = self::DEFAULT_TRUE_MESSAGE;
-        self::$falseMessage = self::DEFAULT_FALSE_MESSAGE;
+        static::$nullMessage = static::DEFAULT_NULL_MESSAGE;
+        static::$trueMessage = static::DEFAULT_TRUE_MESSAGE;
+        static::$falseMessage = static::DEFAULT_FALSE_MESSAGE;
     }
 
     public static function render($message)
     {
         if (is_null($message)) {
-            $rendered = self::$nullMessage;
+            $rendered = static::$nullMessage;
         } else if (is_bool($message)) {
-            $rendered = $message ? self::$trueMessage : self::$falseMessage;
+            $rendered = $message ? static::$trueMessage : static::$falseMessage;
         } else if (is_scalar($message)) {
             $rendered = (string)$message;
         } else if (is_object($message) && method_exists($message, '__toString')) {

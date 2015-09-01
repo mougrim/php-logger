@@ -15,15 +15,15 @@ class AppenderSyslog extends AppenderAbstract
     public function __construct($identifier, $options, $facility)
     {
         $this->identifier = (string)$identifier;
-        $this->option = self::parseOptions($options);
-        $this->facility = self::parseOptions($facility);
+        $this->option = static::parseOptions($options);
+        $this->facility = static::parseOptions($facility);
 
     }
 
     public function write($priority, $message)
     {
         if (openlog($this->identifier, $this->option, $this->facility)) {
-            syslog(self::getSyslogPriority($priority), $message);
+            syslog(static::getSyslogPriority($priority), $message);
             closelog();
         } else {
             $message = 'Error open syslog';

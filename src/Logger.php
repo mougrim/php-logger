@@ -86,7 +86,7 @@ class Logger
     public static function getLogger($name)
     {
         if (!self::$isConfigured) {
-            self::configure();
+            static::configure();
         }
         return self::$hierarchy->getLogger($name);
     }
@@ -98,7 +98,7 @@ class Logger
     public static function getRootLogger()
     {
         if (!self::$isConfigured) {
-            self::configure();
+            static::configure();
         }
         return self::$hierarchy->getRootLogger();
     }
@@ -108,7 +108,7 @@ class Logger
      */
     public static function configure($configuration = null)
     {
-        self::reset();
+        static::reset();
         if (is_string($configuration) && is_file($configuration)) {
             if (preg_match('/\.php$/', $configuration)) {
                 /** @noinspection PhpIncludeInspection */
@@ -142,7 +142,7 @@ class Logger
     public static function reopen()
     {
         if (!self::$isConfigured) {
-            self::configure();
+            static::configure();
         }
         self::$hierarchy->reopen();
     }
@@ -155,19 +155,19 @@ class Logger
     {
         $level = (int)$level;
         switch (true) {
-            case $level >= self::OFF:
+            case $level >= static::OFF:
                 return 'OFF';
-            case $level >= self::FATAL:
+            case $level >= static::FATAL:
                 return 'FATAL';
-            case $level >= self::ERROR:
+            case $level >= static::ERROR:
                 return 'ERROR';
-            case $level >= self::WARN:
+            case $level >= static::WARN:
                 return 'WARN';
-            case $level >= self::INFO:
+            case $level >= static::INFO:
                 return 'INFO';
-            case $level >= self::DEBUG:
+            case $level >= static::DEBUG:
                 return 'DEBUG';
-            case $level >= self::TRACE:
+            case $level >= static::TRACE:
                 return 'TRACE';
             default:
                 return 'ALL';
@@ -183,21 +183,21 @@ class Logger
         $level = strtoupper($level);
         switch (true) {
             case $level === 'OFF':
-                return self::OFF;
+                return static::OFF;
             case $level === 'FATAL':
-                return self::FATAL;
+                return static::FATAL;
             case $level === 'ERROR':
-                return self::ERROR;
+                return static::ERROR;
             case $level === 'WARN':
-                return self::WARN;
+                return static::WARN;
             case $level === 'INFO':
-                return self::INFO;
+                return static::INFO;
             case $level === 'DEBUG':
-                return self::DEBUG;
+                return static::DEBUG;
             case $level === 'TRACE':
-                return self::TRACE;
+                return static::TRACE;
             default:
-                return self::ALL;
+                return static::ALL;
         }
     }
 
@@ -292,32 +292,32 @@ class Logger
 
     public function trace($message, \Exception $throwable = null)
     {
-        $this->log(self::TRACE, $message, $throwable);
+        $this->log(static::TRACE, $message, $throwable);
     }
 
     public function debug($message, \Exception $throwable = null)
     {
-        $this->log(self::DEBUG, $message, $throwable);
+        $this->log(static::DEBUG, $message, $throwable);
     }
 
     public function info($message, \Exception $throwable = null)
     {
-        $this->log(self::INFO, $message, $throwable);
+        $this->log(static::INFO, $message, $throwable);
     }
 
     public function warn($message, \Exception $throwable = null)
     {
-        $this->log(self::WARN, $message, $throwable);
+        $this->log(static::WARN, $message, $throwable);
     }
 
     public function error($message, \Exception $throwable = null)
     {
-        $this->log(self::ERROR, $message, $throwable);
+        $this->log(static::ERROR, $message, $throwable);
     }
 
     public function fatal($message, \Exception $throwable = null)
     {
-        $this->log(self::FATAL, $message, $throwable);
+        $this->log(static::FATAL, $message, $throwable);
     }
 
     public function log($level, $message, \Exception $throwable = null)

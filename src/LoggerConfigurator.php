@@ -15,42 +15,42 @@ class LoggerConfigurator
 
     public function configure(LoggerHierarchy $hierarchy, array $config)
     {
-        if (isset($config[self::LOGGER_POLICY]['ioError'])) {
-            LoggerPolicy::setIoErrorPolicy($config[self::LOGGER_POLICY]['ioError']);
+        if (isset($config[static::LOGGER_POLICY]['ioError'])) {
+            LoggerPolicy::setIoErrorPolicy($config[static::LOGGER_POLICY]['ioError']);
         }
-        if (isset($config[self::LOGGER_POLICY]['configurationError'])) {
-            LoggerPolicy::setConfigurationErrorPolicy($config[self::LOGGER_POLICY]['configurationError']);
+        if (isset($config[static::LOGGER_POLICY]['configurationError'])) {
+            LoggerPolicy::setConfigurationErrorPolicy($config[static::LOGGER_POLICY]['configurationError']);
         }
-        if (isset($config[self::LOGGER_RENDERER])) {
-            if (isset($config[self::LOGGER_RENDERER]['nullMessage'])) {
-                LoggerRender::$nullMessage = (string)$config[self::LOGGER_RENDERER]['nullMessage'];
+        if (isset($config[static::LOGGER_RENDERER])) {
+            if (isset($config[static::LOGGER_RENDERER]['nullMessage'])) {
+                LoggerRender::$nullMessage = (string)$config[static::LOGGER_RENDERER]['nullMessage'];
             }
-            if (isset($config[self::LOGGER_RENDERER]['trueMessage'])) {
-                LoggerRender::$trueMessage = (string)$config[self::LOGGER_RENDERER]['trueMessage'];
+            if (isset($config[static::LOGGER_RENDERER]['trueMessage'])) {
+                LoggerRender::$trueMessage = (string)$config[static::LOGGER_RENDERER]['trueMessage'];
             }
-            if (isset($config[self::LOGGER_RENDERER]['falseMessage'])) {
-                LoggerRender::$falseMessage = (string)$config[self::LOGGER_RENDERER]['falseMessage'];
+            if (isset($config[static::LOGGER_RENDERER]['falseMessage'])) {
+                LoggerRender::$falseMessage = (string)$config[static::LOGGER_RENDERER]['falseMessage'];
             }
         }
-        if (isset($config[self::LOGGER_LAYOUTS])) {
-            foreach ($config[self::LOGGER_LAYOUTS] as $layoutName => $layoutConfig) {
+        if (isset($config[static::LOGGER_LAYOUTS])) {
+            foreach ($config[static::LOGGER_LAYOUTS] as $layoutName => $layoutConfig) {
                 $hierarchy->setLayout($layoutName, $this->createLayout($layoutConfig));
             }
         }
-        if (isset($config[self::LOGGER_APPENDERS])) {
-            foreach ($config[self::LOGGER_APPENDERS] as $appenderName => $appenderConfig) {
+        if (isset($config[static::LOGGER_APPENDERS])) {
+            foreach ($config[static::LOGGER_APPENDERS] as $appenderName => $appenderConfig) {
                 $hierarchy->setAppender($appenderName, $this->createAppender($hierarchy, $appenderConfig));
             }
         }
-        if (isset($config[self::LOGGER_LOGGERS])) {
-            foreach ($config[self::LOGGER_LOGGERS] as $loggerName => $loggerConfig) {
+        if (isset($config[static::LOGGER_LOGGERS])) {
+            foreach ($config[static::LOGGER_LOGGERS] as $loggerName => $loggerConfig) {
                 $logger = $hierarchy->getLogger($loggerName);
                 $this->createLogger($logger, $hierarchy, $loggerConfig);
             }
         }
-        if (isset($config[self::LOGGER_ROOT])) {
+        if (isset($config[static::LOGGER_ROOT])) {
             $logger = $hierarchy->getRootLogger();
-            $this->createLogger($logger, $hierarchy, $config[self::LOGGER_ROOT]);
+            $this->createLogger($logger, $hierarchy, $config[static::LOGGER_ROOT]);
         }
     }
 

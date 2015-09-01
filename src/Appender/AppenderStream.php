@@ -49,7 +49,7 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
             return;
         }
         if ($this->useLock) {
-            if (!$this->useLockShortMessage && strlen($message) <= self::MESSAGE_THRESHOLD) {
+            if (!$this->useLockShortMessage && strlen($message) <= static::MESSAGE_THRESHOLD) {
                 fwrite($steam, $message);
             } else if (flock($steam, LOCK_EX)) {
                 fwrite($steam, $message);

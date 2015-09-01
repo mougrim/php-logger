@@ -74,7 +74,7 @@ class LayoutPattern implements LayoutInterface
             $this->pattern = $pattern;
         }
         $this->patternMap = $additionalPatternMap + $this->patternMap;
-        if (preg_match_all(self::PATTERN_EXPRESSION, $this->pattern, $matches)) {
+        if (preg_match_all(static::PATTERN_EXPRESSION, $this->pattern, $matches)) {
             foreach ($matches[1] as $key => $patternName) {
                 $fullMatch = $matches[0][$key];
                 $rule = $matches[3][$key];
