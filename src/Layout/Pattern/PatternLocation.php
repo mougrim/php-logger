@@ -29,6 +29,12 @@ class PatternLocation implements PatternInterface
                     $locationInfo['file'] = $hop['file'];
                     break;
                 }
+                // for backward compatibility with first version
+                if (!empty($className) && strpos($className, 'Logger') === 0) {
+                    $locationInfo['line'] = $hop['line'];
+                    $locationInfo['file'] = $hop['file'];
+                    break;
+                }
             }
             $prevHop = $hop;
             $hop     = array_pop($trace);
