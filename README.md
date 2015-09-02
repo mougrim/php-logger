@@ -4,6 +4,8 @@ Main theme - light and fast library, with simple configuring.
 
 If you want use classes without namespaces, see [mougrim/php-logger-old-interface](https://github.com/mougrim/php-logger-old-interface).
 
+See [changelog](CHANGELOG.md) and [upgrade instructions](UPGRADE.md).
+
 [![Build Status](https://api.travis-ci.org/mougrim/php-logger.png)](https://travis-ci.org/mougrim/php-logger)
 
 Configuration
