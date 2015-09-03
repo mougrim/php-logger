@@ -1,8 +1,8 @@
 Php Logger v2 Change Log
 ==========================
 
-v2.0.0 under development
-------------------------
+v2.0.0 September 03, 2015
+-------------------------
 
 - moved repository to [mougrim/php-logger](https://github.com/mougrim/php-logger)
 - moved to new packagist place [mougrim/php-logger](https://packagist.org/packages/mougrim/php-logger)
