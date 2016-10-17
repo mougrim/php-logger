@@ -6,7 +6,10 @@ If you want use classes without namespaces, see [mougrim/php-logger-old-interfac
 
 See [changelog](CHANGELOG.md) and [upgrade instructions](UPGRADE.md).
 
-[![Build Status](https://api.travis-ci.org/mougrim/php-logger.png)](https://travis-ci.org/mougrim/php-logger)
+[![Latest Stable Version](https://poser.pugx.org/mougrim/php-logger/version)](https://packagist.org/packages/mougrim/php-logger)
+[![Latest Unstable Version](https://poser.pugx.org/mougrim/php-logger/v/unstable)](https://packagist.org/packages/mougrim/php-logger)
+[![License](https://poser.pugx.org/mougrim/php-logger/license)](https://packagist.org/packages/mougrim/php-logger)
+[![Build Status](https://api.travis-ci.org/mougrim/php-logger.png?branch=master)](https://travis-ci.org/mougrim/php-logger)
 
 Configuration
 -------------

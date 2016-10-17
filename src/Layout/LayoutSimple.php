@@ -8,7 +8,7 @@ use Mougrim\Logger\LoggerRender;
 
 /**
  * Simple logger layout.
- * Format like as "loggerName [INFO] ndc_message mdc=context: message exception"
+ * Format like as "loggerName [INFO] ndc_message mdc=context - message exception"
  */
 class LayoutSimple implements LayoutInterface
 {
