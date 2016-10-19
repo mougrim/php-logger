@@ -218,77 +218,77 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testBacktraceMain()
     {
-        $this->mockFunction('debug_backtrace', '', 'return [];');
+        $this->mockFunction('debug_backtrace', function () {return [];});
         $layout = new LayoutPattern('{location:function}');
         $this->assertEquals('main' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryBytes()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1000;');
+        $this->mockFunction('memory_get_usage', function () {return 1000;});
         $layout = new LayoutPattern('{memory}');
         $this->assertEquals('1000B' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryKBytes()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024;');
+        $this->mockFunction('memory_get_usage', function () {return 1024;});
         $layout = new LayoutPattern('{memory}');
         $this->assertEquals('1KB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryMBytes()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 * 1024;});
         $layout = new LayoutPattern('{memory}');
         $this->assertEquals('1MB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryGBytes()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024*1024*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 * 1024 * 1024;});
         $layout = new LayoutPattern('{memory}');
         $this->assertEquals('1GB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryTBytes()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024*1024*1024*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 * 1024 * 1024 * 1024;});
         $layout = new LayoutPattern('{memory}');
         $this->assertEquals('1TB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryExtraBig()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024*1024*1024*1024*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 * 1024 * 1024 * 1024 * 1024;});
         $layout = new LayoutPattern('{memory}');
         $this->assertEquals('1024TB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryPrecisionDefault()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024+128;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 + 128;});
         $layout = new LayoutPattern('{memory}');
         $this->assertEquals('1.13KB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryPrecisionNone()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024+128;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 + 128;});
         $layout = new LayoutPattern('{memory:0}');
         $this->assertEquals('1KB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryPrecisionTree()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024+128;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 + 128;});
         $layout = new LayoutPattern('{memory:3}');
         $this->assertEquals('1.125KB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemoryPrecisionLabel()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 1024*1024*1024*1024*1024+12*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 1024 * 1024 * 1024 * 1024 * 1024 + 12 * 1024;});
 
         $layout = new LayoutPattern('{memory:0,bytes,kbytes,mbytes}');
         $this->assertEquals('1073741824mbytes' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
@@ -299,22 +299,22 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemorySuffix()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 12*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 12 * 1024;});
         $layout = new LayoutPattern('{memory:0,2}');
         $this->assertEquals('0MB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
 
-        $this->mockFunction('memory_get_usage', '', 'return 12*1024*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 12 * 1024 * 1024;});
         $layout = new LayoutPattern('{memory:0,2}');
         $this->assertEquals('12MB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
 
-        $this->mockFunction('memory_get_usage', '', 'return 12*1024*1024*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 12 * 1024 * 1024 * 1024;});
         $layout = new LayoutPattern('{memory:0,2}');
         $this->assertEquals('12288MB' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }
 
     public function testMemorySuffixLabel()
     {
-        $this->mockFunction('memory_get_usage', '', 'return 12*1024*1024;');
+        $this->mockFunction('memory_get_usage', function () {return 12 * 1024 * 1024;});
         $layout = new LayoutPattern('{memory:0,2,mbytes}');
         $this->assertEquals('12mbytes' . PHP_EOL, $layout->formatMessage(new Logger("root"), Logger::INFO, ''));
     }

@@ -21,32 +21,42 @@ class BaseLoggerTestCase extends \PHPUnit_Framework_TestCase
         LoggerPolicy::reset();
     }
 
-    public function mockFunction($funcName, $args, $expr)
+    public function mockFunction($name, \Closure $function)
     {
-        if (!extension_loaded('runkit')) {
-            $this->markTestIncomplete('Extension "runkit" is required');
-        }
-        ini_set('runkit.internal_override', '1');
-        // copy original function only once
-        if (!function_exists($funcName . '_original')) {
+        if (extension_loaded('uopz')) {
             /** @noinspection PhpUndefinedFunctionInspection */
-            runkit_function_rename($funcName, $funcName . '_original');
-            $this->mockFunctions[] = $funcName;
+            uopz_set_return($name, $function, true);
+            $this->mockFunctions[] = $name;
+        } elseif (extension_loaded('runkit')) {
+            ini_set('runkit.internal_override', '1');
+            // copy original function only once
+            if (!function_exists($name . '_original')) {
+                /** @noinspection PhpUndefinedFunctionInspection */
+                runkit_function_rename($name, $name . '_original');
+                $this->mockFunctions[] = $name;
+            } else {
+                /** @noinspection PhpUndefinedFunctionInspection */
+                runkit_function_remove($name);
+            }
+            /** @noinspection PhpUndefinedFunctionInspection */
+            runkit_function_add($name, $function);
         } else {
-            /** @noinspection PhpUndefinedFunctionInspection */
-            runkit_function_remove($funcName);
+            $this->markTestIncomplete('Extension "uopz" or "runkit" is required');
         }
-        /** @noinspection PhpUndefinedFunctionInspection */
-        runkit_function_add($funcName, $args, $expr);
     }
 
-    public function originalFunction($funcName)
+    public function originalFunction($name)
     {
-        if (in_array($funcName, $this->mockFunctions, true)) {
-            /** @noinspection PhpUndefinedFunctionInspection */
-            runkit_function_remove($funcName);
-            /** @noinspection PhpUndefinedFunctionInspection */
-            runkit_function_rename($funcName . '_original', $funcName);
+        if (in_array($name, $this->mockFunctions, true)) {
+            if (extension_loaded('uopz')) {
+                /** @noinspection PhpUndefinedFunctionInspection */
+                uopz_unset_return($name);
+            } elseif (extension_loaded('runkit')) {
+                /** @noinspection PhpUndefinedFunctionInspection */
+                runkit_function_remove($name);
+                /** @noinspection PhpUndefinedFunctionInspection */
+                runkit_function_rename($name . '_original', $name);
+            }
         }
     }
 }

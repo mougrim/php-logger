@@ -49,7 +49,8 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testTrace()
     {
-        $this->mockFunction('microtime', '', "return " . var_export($this->end, true) . ';');
+        $end = $this->end;
+        $this->mockFunction('microtime', function () use($end) {return $end;});
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -64,7 +65,8 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testDebug()
     {
-        $this->mockFunction('microtime', '', "return " . var_export($this->end, true) . ';');
+        $end = $this->end;
+        $this->mockFunction('microtime', function () use($end) {return $end;});
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -79,7 +81,8 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testInfo()
     {
-        $this->mockFunction('microtime', '', "return " . var_export($this->end, true) . ';');
+        $end = $this->end;
+        $this->mockFunction('microtime', function () use($end) {return $end;});
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -94,7 +97,8 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testWarn()
     {
-        $this->mockFunction('microtime', '', "return " . var_export($this->end, true) . ';');
+        $end = $this->end;
+        $this->mockFunction('microtime', function () use($end) {return $end;});
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -109,7 +113,8 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testError()
     {
-        $this->mockFunction('microtime', '', "return " . var_export($this->end, true) . ';');
+        $end = $this->end;
+        $this->mockFunction('microtime', function () use($end) {return $end;});
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -124,7 +129,8 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testFatal()
     {
-        $this->mockFunction('microtime', '', "return " . var_export($this->end, true) . ';');
+        $end = $this->end;
+        $this->mockFunction('microtime', function () use($end) {return $end;});
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -139,7 +145,8 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testLog()
     {
-        $this->mockFunction('microtime', '', "return " . var_export($this->end, true) . ';');
+        $end = $this->end;
+        $this->mockFunction('microtime', function () use($end) {return $end;});
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])

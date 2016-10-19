@@ -18,12 +18,12 @@ class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
         $message .= PHP_EOL;
 
         $pids = [];
-        $start = microtime(1);
         for ($w = 0; $w < $workers; $w++) {
             $pid = pcntl_fork();
-            if ($pid == -1) {
-                $this->markTestIncomplete('could not fork');
-            } else if ($pid) {
+            $error_number = pcntl_get_last_error();
+            $error = "[{$error_number}] " . pcntl_strerror($error_number);
+            $this->assertNotSame(-1, $pid, "Can't fork: " . $error);
+            if ($pid) {
                 $pids[] = $pid;
             } else {
                 $writer = new AppenderStream($path);
@@ -34,11 +34,8 @@ class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
         foreach ($pids as $p) {
             pcntl_waitpid($p, $status);
         }
-        $this->assertLessThan(0.2, microtime(1) - $start);
-        $this->assertTrue(strlen($message) === 13001);
-        $c = str_pad("", $count * $workers * strlen($message), $message);
-        sleep(1);
-        file_put_contents($path . '.ex', $c);
+        $this->assertSame(13001, strlen($message));
+        $c = str_pad('', $count * $workers * strlen($message), $message);
         $this->assertEquals($c, file_get_contents($path));
         if (is_file($path)) {
             unlink($path);

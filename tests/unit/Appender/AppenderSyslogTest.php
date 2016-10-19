@@ -13,9 +13,22 @@ class AppenderSyslogTest extends BaseLoggerTestCase
     {
         $GLOBALS['syslog'] = [];
         $appender = new AppenderSyslog('id', LOG_PID, 0);
-        $this->mockFunction('openlog', '', '$GLOBALS["syslog"][]="openlog";return true;');
-        $this->mockFunction('syslog', '$priority, $message', '$GLOBALS["syslog"][]="syslog";$GLOBALS["syslog"][]=$priority;$GLOBALS["syslog"][]=$message;');
-        $this->mockFunction('closelog', '', '$GLOBALS["syslog"][]="closelog";');
+        $this->mockFunction(
+            'openlog',
+            function() {
+                $GLOBALS['syslog'][] = 'openlog';
+                return true;
+            }
+        );
+        $this->mockFunction(
+            'syslog',
+            function($priority, $message) {
+                $GLOBALS['syslog'][] = 'syslog';
+                $GLOBALS['syslog'][] = $priority;
+                $GLOBALS['syslog'][] = $message;
+            }
+        );
+        $this->mockFunction('closelog', function() {$GLOBALS['syslog'][]= 'closelog';});
         $appender->write(Logger::INFO, 'test syslog');
         $this->assertEquals([
             'openlog',
@@ -29,7 +42,7 @@ class AppenderSyslogTest extends BaseLoggerTestCase
     public function testErrorOpenSyslog()
     {
         $this->setExpectedException(LoggerException::class);
-        $this->mockFunction('openlog', '', 'return false;');
+        $this->mockFunction('openlog', function () {return false;});
 
         $appender = new AppenderSyslog('id', LOG_PID, 0);
         $appender->write(Logger::INFO, 'test syslog');

@@ -13,7 +13,7 @@ class AppenderStdTest extends BaseLoggerTestCase
     {
         $error = null;
         $GLOBALS['stream'] = null;
-        $this->mockFunction('fwrite', '$a', '$GLOBALS["stream"]=$a;');
+        $this->mockFunction('fwrite', function($a) {$GLOBALS['stream'] = $a;});
 
         $appender = new AppenderStd();
         $appender->write(Logger::INFO, 'test');
@@ -23,7 +23,7 @@ class AppenderStdTest extends BaseLoggerTestCase
     public function testWriteStdout()
     {
         $GLOBALS['stream'] = null;
-        $this->mockFunction('fwrite', '$a', '$GLOBALS["stream"]=$a;');
+        $this->mockFunction('fwrite', function($a) {$GLOBALS['stream'] = $a;});
 
         $appender = new AppenderStd();
         $appender->setStream('STDOUT');
@@ -34,7 +34,7 @@ class AppenderStdTest extends BaseLoggerTestCase
     public function testWriteStderr()
     {
         $GLOBALS['stream'] = null;
-        $this->mockFunction('fwrite', '$a', '$GLOBALS["stream"]=$a;');
+        $this->mockFunction('fwrite', function($a) {$GLOBALS['stream'] = $a;});
 
         $appender = new AppenderStd();
         $appender->setStream('STDERR');

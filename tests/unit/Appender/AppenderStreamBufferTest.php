@@ -24,7 +24,7 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
     public function testThreshold()
     {
         $GLOBALS['message'] = '';
-        $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
+        $this->mockFunction('fwrite', function($stream, $message) {$GLOBALS['message'] .= $message;});
 
         $appender = new AppenderStreamBuffer('php://stdout');
         $appender->setThreshold(Logger::ERROR);
@@ -59,7 +59,7 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
     public function testThresholdMin()
     {
         $GLOBALS['message'] = '';
-        $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
+        $this->mockFunction('fwrite', function($stream, $message) {$GLOBALS['message'] .= $message;});
 
         $appender = new AppenderStreamBuffer('php://stdout');
         $appender->setThreshold(Logger::ERROR);
@@ -95,7 +95,7 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
     public function testThresholdMax()
     {
         $GLOBALS['message'] = '';
-        $this->mockFunction('fwrite', '$stream, $message', '$GLOBALS["message"].=$message;');
+        $this->mockFunction('fwrite', function($stream, $message) {$GLOBALS['message'] .= $message;});
 
         $appender = new AppenderStreamBuffer('php://stdout');
         $appender->setThreshold(Logger::ERROR);

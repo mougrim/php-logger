@@ -18,8 +18,11 @@
     },
     "require-dev": {
         "ext-pcntl": "*",
-        "ext-runkit": "*",
         "phpunit/phpunit": "3.7.*"
+    },
+    "suggest": {
+        "ext-runkit": "For run tests on php5.x",
+        "ext-uopz": "For run tests on php7.x or above"
     },
     "autoload": {
         "psr-4": {
