@@ -20,8 +20,12 @@ class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
         $pids = [];
         for ($w = 0; $w < $workers; $w++) {
             $pid = pcntl_fork();
-            $error_number = pcntl_get_last_error();
-            $error = "[{$error_number}] " . pcntl_strerror($error_number);
+            if (function_exists('pcntl_get_last_error')) {
+                $error_number = pcntl_get_last_error();
+                $error = "[{$error_number}] ".pcntl_strerror($error_number);
+            } else {
+                $error = var_export(error_get_last(), true);
+            }
             $this->assertNotSame(-1, $pid, "Can't fork: " . $error);
             if ($pid) {
                 $pids[] = $pid;

@@ -18,15 +18,18 @@
     },
     "require-dev": {
         "ext-pcntl": "*",
-        "phpunit/phpunit": "3.7.*"
-    },
-    "suggest": {
-        "ext-runkit": "For run tests on php5.x",
-        "ext-uopz": "For run tests on php7.x or above"
+        "phpunit/phpunit": "3.7.*",
+        "badoo/soft-mocks": "dev-forLogger"
     },
     "autoload": {
         "psr-4": {
             "Mougrim\\Logger\\": "src"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:mougrim/soft-mocks.git"
+        }
+    ]
 }
