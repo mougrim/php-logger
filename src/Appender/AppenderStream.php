@@ -6,6 +6,9 @@ use Mougrim\Logger\LoggerPolicy;
 
 class AppenderStream extends AppenderAbstract implements AppenderReopen
 {
+    /**
+     * @deprecated should remove in next major version
+     */
     const MESSAGE_THRESHOLD = 4096;
 
     /** @var string */
@@ -14,7 +17,12 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
     private $stream;
     /** @var bool */
     private $useLock = true;
-    /** @var bool if message less than 4096, do not use locks */
+    /**
+     * https://github.com/mougrim/php-logger/issues/4
+     * @deprecated should remove in next major version
+     * @var bool <strike>if message less than 4096, do not use locks</strike><br>
+     * don't use lock
+     */
     private $useLockShortMessage = false;
 
     public function __construct($stream)
@@ -48,10 +56,9 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
         if (!$steam) {
             return;
         }
-        if ($this->useLock) {
-            if (!$this->useLockShortMessage && strlen($message) <= static::MESSAGE_THRESHOLD) {
-                fwrite($steam, $message);
-            } else if (flock($steam, LOCK_EX)) {
+        // useLockShortMessage should remove in next major version
+        if ($this->useLock && $this->useLockShortMessage) {
+            if (flock($steam, LOCK_EX)) {
                 fwrite($steam, $message);
                 flock($steam, LOCK_UN);
             } else {
@@ -87,7 +94,8 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
     }
 
     /**
-     * @param boolean $useLockShortMessage
+     * @deprecated should remove in next major version
+     * @param boolean $useLockShortMessage pass true for use lock
      */
     public function setUseLockShortMessage($useLockShortMessage)
     {
@@ -100,7 +108,7 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
      */
     private function getStream()
     {
-        if ($this->stream && get_resource_type($this->stream) == 'Unknown') {
+        if ($this->stream && get_resource_type($this->stream) === 'Unknown') {
             fclose($this->stream);
             $this->stream = null;
         }

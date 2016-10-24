@@ -62,6 +62,8 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $appender->write(Logger::INFO, '');
         $appender->write(Logger::INFO, str_pad('', 4096, '1'));
         $this->assertEquals(false, $GLOBALS['called']);
+        $appender->write(Logger::INFO, str_pad('', 4097, '1'));
+        $this->assertEquals(false, $GLOBALS['called']);
     }
 
     public function testUseLockShortMessage()
@@ -76,7 +78,10 @@ class AppenderStreamTest extends BaseLoggerTestCase
         );
         $appender = new AppenderStream($this->logFile);
         $appender->setUseLock(true);
-        $appender->setUseLockShortMessage(false);
+        $appender->setUseLockShortMessage(true);
+        $appender->write(Logger::INFO, str_pad('', 4096, '1'));
+        $this->assertEquals(true, $GLOBALS['called']);
+        $GLOBALS['called'] = false;
         $appender->write(Logger::INFO, str_pad('', 4097, '1'));
         $this->assertEquals(true, $GLOBALS['called']);
     }

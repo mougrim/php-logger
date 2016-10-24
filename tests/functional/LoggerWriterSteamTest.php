@@ -31,6 +31,8 @@ class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
                 $pids[] = $pid;
             } else {
                 $writer = new AppenderStream($path);
+                $writer->setUseLock(true);
+                $writer->setUseLockShortMessage(true);
                 for ($i = 0; $i < $count; $i++) $writer->write(1, $message);
                 die();
             }

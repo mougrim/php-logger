@@ -38,7 +38,8 @@ Logger::configure([
         'stream' => [
             'class' => AppenderStream::class,
             'stream' => 'php://stdout',
-            'useLock' => true,
+            // pass useLock and useLockShortMessage true for enable lock
+            'useLock' => false,
             'useLockShortMessage' => false,
             'minLevel' => Logger::DEBUG,
             'maxLevel' => Logger::FATAL,

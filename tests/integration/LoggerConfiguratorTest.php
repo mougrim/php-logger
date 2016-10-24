@@ -50,8 +50,7 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
                 'stream' => [
                     'class' => AppenderStream::class,
                     'stream' => 'php://stdout',
-                    'useLock' => true,
-                    'useLockShortMessage' => false,
+                    'useLock' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
                     'layout' => 'simple',
@@ -63,8 +62,7 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
                         'stream', [
                         'class' => AppenderStream::class,
                         'stream' => 'php://stdout',
-                        'useLock' => true,
-                        'useLockShortMessage' => false,
+                        'useLock' => false,
                         'minLevel' => 0,
                         'maxLevel' => PHP_INT_MAX,
                         'layout' => 'simple'
@@ -118,8 +116,7 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
                 'stream' => [
                     'class' => AppenderStream::class,
                     'stream' => 'php://stdout',
-                    'useLock' => true,
-                    'useLockShortMessage' => false,
+                    'useLock' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
                     'layout' => [],
@@ -138,8 +135,7 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
                 'stream' => [
                     'class' => AppenderStream::class,
                     'stream' => 'php://stdout',
-                    'useLock' => true,
-                    'useLockShortMessage' => false,
+                    'useLock' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
                     'layout' => new stdClass(),
@@ -157,8 +153,7 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
             'appenders' => [
                 'stream' => [
                     'stream' => 'php://stdout',
-                    'useLock' => true,
-                    'useLockShortMessage' => false,
+                    'useLock' => false,
                     'minLevel' => 0,
                     'maxLevel' => PHP_INT_MAX,
                 ],
