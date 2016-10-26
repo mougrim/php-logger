@@ -83,40 +83,15 @@ class LoggerTest extends BaseLoggerTestCase
 
     public function levelProvider()
     {
-        return [
-            'Level off' => [
-                'level' => Logger::OFF,
-                'expected' => 'OFF',
-            ],
-            'Level fatal' => [
-                'level' => Logger::FATAL,
-                'expected' => 'FATAL',
-            ],
-            'Level error' => [
-                'level' => Logger::ERROR,
-                'expected' => 'ERROR',
-            ],
-            'Level warn' => [
-                'level' => Logger::WARN,
-                'expected' => 'WARN',
-            ],
-            'Level info' => [
-                'level' => Logger::INFO,
-                'expected' => 'INFO',
-            ],
-            'Level debug' => [
-                'level' => Logger::DEBUG,
-                'expected' => 'DEBUG',
-            ],
-            'Level trace' => [
-                'level' => Logger::TRACE,
-                'expected' => 'TRACE',
-            ],
-            'Level all' => [
-                'level' => Logger::ALL,
-                'expected' => 'ALL',
-            ],
-        ];
+        $cases = [];
+        $reflection = new \ReflectionClass(Logger::class);
+        foreach ($reflection->getConstants() as $name => $value) {
+            $cases['Level ' . strtolower($name)] = [
+                'level' => $value,
+                'expected' => $name,
+            ];
+        }
+        return $cases;
     }
 
     /**
@@ -139,6 +114,11 @@ class LoggerTest extends BaseLoggerTestCase
      */
     public function testGetLevelByName($expected, $levelName)
     {
+        $this->assertEquals(
+            $expected,
+            Logger::getLevelByName($levelName)
+        );
+        strtolower($levelName);
         $this->assertEquals(
             $expected,
             Logger::getLevelByName($levelName)

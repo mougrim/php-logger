@@ -77,6 +77,16 @@ class Logger
     /** @var LoggerHierarchy */
     private static $hierarchy;
     private static $isConfigured = false;
+    private static $levelNameToLevel = [
+        'OFF' => self::OFF,
+        'FATAL' => self::FATAL,
+        'ERROR' => self::ERROR,
+        'WARN' => self::WARN,
+        'INFO' => self::INFO,
+        'DEBUG' => self::DEBUG,
+        'TRACE' => self::TRACE,
+        'ALL' => self::ALL,
+    ];
 
     /**
      * Returns a Logger by name. If it does not exist, it will be created.
@@ -155,24 +165,12 @@ class Logger
     public static function getLevelName($level)
     {
         $level = (int)$level;
-        switch (true) {
-            case $level >= static::OFF:
-                return 'OFF';
-            case $level >= static::FATAL:
-                return 'FATAL';
-            case $level >= static::ERROR:
-                return 'ERROR';
-            case $level >= static::WARN:
-                return 'WARN';
-            case $level >= static::INFO:
-                return 'INFO';
-            case $level >= static::DEBUG:
-                return 'DEBUG';
-            case $level >= static::TRACE:
-                return 'TRACE';
-            default:
-                return 'ALL';
+        foreach (static::$levelNameToLevel as $levelName => $currentLevel) {
+            if ($level >= $currentLevel) {
+                return $levelName;
+            }
         }
+        return static::$levelNameToLevel[static::ALL];
     }
 
     /**
@@ -182,24 +180,10 @@ class Logger
     public static function getLevelByName($level)
     {
         $level = strtoupper($level);
-        switch (true) {
-            case $level === 'OFF':
-                return static::OFF;
-            case $level === 'FATAL':
-                return static::FATAL;
-            case $level === 'ERROR':
-                return static::ERROR;
-            case $level === 'WARN':
-                return static::WARN;
-            case $level === 'INFO':
-                return static::INFO;
-            case $level === 'DEBUG':
-                return static::DEBUG;
-            case $level === 'TRACE':
-                return static::TRACE;
-            default:
-                return static::ALL;
+        if (!isset(static::$levelNameToLevel[$level])) {
+            return static::ALL;
         }
+        return static::$levelNameToLevel[$level];
     }
 
     /*
