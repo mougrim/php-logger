@@ -115,29 +115,81 @@ class AppenderSyslogTest extends BaseLoggerTestCase
                 'expected' => LOG_ALERT,
                 'level' => Logger::OFF,
             ],
+            'Level less off' => [
+                'expected' => LOG_ALERT,
+                'level' => Logger::OFF - 1,
+            ],
+            'Level greater fatal' => [
+                'expected' => LOG_ALERT,
+                'level' => Logger::FATAL + 1,
+            ],
             'Level fatal' => [
                 'expected' => LOG_ALERT,
                 'level' => Logger::FATAL,
+            ],
+            'Level less fatal' => [
+                'expected' => LOG_ERR,
+                'level' => Logger::FATAL - 1,
+            ],
+            'Level greater error' => [
+                'expected' => LOG_ERR,
+                'level' => Logger::ERROR + 1,
             ],
             'Level error' => [
                 'expected' => LOG_ERR,
                 'level' => Logger::ERROR,
             ],
+            'Level less error' => [
+                'expected' => LOG_WARNING,
+                'level' => Logger::ERROR - 1,
+            ],
+            'Level greater warn' => [
+                'expected' => LOG_WARNING,
+                'level' => Logger::WARN + 1,
+            ],
             'Level warn' => [
                 'expected' => LOG_WARNING,
                 'level' => Logger::WARN,
+            ],
+            'Level less warn' => [
+                'expected' => LOG_INFO,
+                'level' => Logger::WARN - 1,
+            ],
+            'Level greater info' => [
+                'expected' => LOG_INFO,
+                'level' => Logger::INFO + 1,
             ],
             'Level info' => [
                 'expected' => LOG_INFO,
                 'level' => Logger::INFO,
             ],
+            'Level less info' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::INFO - 1,
+            ],
+            'Level greater debug' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::DEBUG + 1,
+            ],
             'Level debug' => [
                 'expected' => LOG_DEBUG,
                 'level' => Logger::DEBUG,
             ],
+            'Level less debug' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::DEBUG - 1,
+            ],
+            'Level greater trace' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::TRACE + 1,
+            ],
             'Level trace' => [
                 'expected' => LOG_DEBUG,
                 'level' => Logger::TRACE,
+            ],
+            'Level less trace' => [
+                'expected' => LOG_DEBUG,
+                'level' => Logger::TRACE - 1,
             ],
             'Level all' => [
                 'expected' => LOG_DEBUG,

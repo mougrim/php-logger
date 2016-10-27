@@ -8,6 +8,13 @@ use Mougrim\Logger\LoggerPolicy;
 
 class AppenderSyslog extends AppenderAbstract
 {
+    private static $levelToPriority = [
+        Logger::OFF => LOG_ALERT,
+        Logger::FATAL => LOG_ALERT,
+        Logger::ERROR => LOG_ERR,
+        Logger::WARN => LOG_WARNING,
+        Logger::INFO => LOG_INFO,
+    ];
     private $identifier;
     private $option;
     private $facility;
@@ -48,23 +55,12 @@ class AppenderSyslog extends AppenderAbstract
     public static function getSyslogPriority($level)
     {
         $level = (int)$level;
-        switch (true) {
-            case $level >= Logger::OFF:
-            case $level >= Logger::FATAL:
-                return LOG_ALERT;
-                break;
-            case $level >= Logger::ERROR:
-                return LOG_ERR;
-                break;
-            case $level >= Logger::WARN:
-                return LOG_WARNING;
-                break;
-            case $level >= Logger::INFO:
-                return LOG_INFO;
-                break;
-            default:
-                return LOG_DEBUG;
+        foreach (static::$levelToPriority as $currentLevel => $priority) {
+            if ($level >= $currentLevel) {
+                return $priority;
+            }
         }
+        return LOG_DEBUG;
     }
 
     public static function parseOptions($options)
