@@ -12,17 +12,17 @@ class AppenderSayTest extends BaseLoggerTestCase
 
     public function testWrite()
     {
-        $GLOBALS['say']=null;
+        $commands = [];
         $this->mockFunction(
             'system',
-            function ($c) {
-                $GLOBALS['say'] = $c;
+            function ($command) use (&$commands) {
+                $commands[] = $command;
                 return '';
             }
         );
         $appender = new AppenderSay();
         $return = $appender->write(1, 'fuck, web site is down!');
-        $this->assertTrue($return !== false);
-        $this->assertEquals('say \'fuck, web site is down!\'', $GLOBALS['say']);
+        $this->assertNotFalse($return);
+        $this->assertEquals(["say 'fuck, web site is down!'"], $commands);
     }
 }

@@ -7,8 +7,8 @@ class PatternArgv extends PatternPrintFormat
 {
     public function render(Logger $logger, $level, $message, \Exception $throwable = null)
     {
-        global $argv;
+        $argv = $GLOBALS['argv'] ?: [];
 
-        return $this->format(join(' ', is_array($argv) ? $argv : []));
+        return $this->format(implode(' ', is_array($argv) ? $argv : []));
     }
 }

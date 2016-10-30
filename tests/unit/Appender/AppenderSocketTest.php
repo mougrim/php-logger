@@ -29,34 +29,34 @@ class AppenderSocketTest extends BaseLoggerTestCase
 
     public function testWrite()
     {
-        $GLOBALS["socket"] = [];
+        $sockOpenCalls = [];
         $this->mockFunction(
             'fsockopen',
-            function($host, $port, &$errorCode, &$errorMessage, $delay) {
-                $GLOBALS['socket'][] = func_get_args();
+            function($host, $port, &$errorCode, &$errorMessage, $delay) use (&$sockOpenCalls) {
+                $sockOpenCalls[] = func_get_args();
                 return 'SocketMock';
             }
         );
+        $writeCalls = [];
         $this->mockFunction(
             'fwrite',
-            function() {
-                $GLOBALS['socket'][] = func_get_args();
+            function() use (&$writeCalls) {
+                $writeCalls[] = func_get_args();
                 return true;
             }
         );
+        $closeCalls = [];
         $this->mockFunction(
             'fclose',
-            function() {
-                $GLOBALS['socket'][] = func_get_args();
+            function() use (&$closeCalls) {
+                $closeCalls[] = func_get_args();
                 return true;
             }
         );
         $appender = new AppenderSocket('8.8.8.8', 80, 10);
         $appender->write(Logger::INFO, 'test');
-        $this->assertEquals([
-            ['8.8.8.8', 80, null, null, 10],
-            ["SocketMock", 'test'],
-            ['SocketMock']
-        ], $GLOBALS["socket"]);
+        $this->assertSame([['8.8.8.8', 80, null, null, 10]], $sockOpenCalls);
+        $this->assertSame([['SocketMock', 'test']], $writeCalls);
+        $this->assertSame([['SocketMock']], $closeCalls);
     }
 }

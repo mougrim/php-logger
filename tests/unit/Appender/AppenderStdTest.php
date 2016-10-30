@@ -11,36 +11,53 @@ class AppenderStdTest extends BaseLoggerTestCase
 
     public function testWriteDefault()
     {
-        $error = null;
-        $GLOBALS['stream'] = null;
-        $this->mockFunction('fwrite', function($a) {$GLOBALS['stream'] = $a;});
+        $writeCalls = [];
+        $this->mockFunction(
+            'fwrite',
+            function($handle, $string, $length = null) use (&$writeCalls) {
+                $writeCalls[] = func_get_args();
+                return true;
+            }
+        );
 
         $appender = new AppenderStd();
         $appender->write(Logger::INFO, 'test');
-        $this->assertTrue(STDOUT === $GLOBALS['stream']);
+        $this->assertSame([[STDOUT, 'test']], $writeCalls);
     }
 
     public function testWriteStdout()
     {
-        $GLOBALS['stream'] = null;
-        $this->mockFunction('fwrite', function($a) {$GLOBALS['stream'] = $a;});
+        $writeCalls = [];
+        $this->mockFunction(
+            'fwrite',
+            function($handle, $string, $length = null) use (&$writeCalls) {
+                $writeCalls[] = func_get_args();
+                return true;
+            }
+        );
 
         $appender = new AppenderStd();
         $appender->setStream('STDOUT');
         $appender->write(Logger::INFO, 'test');
-        $this->assertTrue(STDOUT === $GLOBALS['stream']);
+        $this->assertSame([[STDOUT, 'test']], $writeCalls);
     }
 
     public function testWriteStderr()
     {
-        $GLOBALS['stream'] = null;
-        $this->mockFunction('fwrite', function($a) {$GLOBALS['stream'] = $a;});
+        $writeCalls = [];
+        $this->mockFunction(
+            'fwrite',
+            function($handle, $string, $length = null) use (&$writeCalls) {
+                $writeCalls[] = func_get_args();
+                return true;
+            }
+        );
 
         $appender = new AppenderStd();
         $appender->setStream('STDERR');
         $appender->write(Logger::INFO, 'test');
 
-        $this->assertTrue(STDERR === $GLOBALS['stream']);
+        $this->assertSame([[STDERR, 'test']], $writeCalls);
     }
 
     public function testInvalidStream()

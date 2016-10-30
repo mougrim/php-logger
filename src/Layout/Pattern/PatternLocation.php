@@ -40,10 +40,10 @@ class PatternLocation implements PatternInterface
             $hop     = array_pop($trace);
         }
         $locationInfo['class'] = isset($prevHop['class']) ? $prevHop['class'] : 'main';
-        if (isset($prevHop['function']) and
-            $prevHop['function'] !== 'include' and
-            $prevHop['function'] !== 'include_once' and
-            $prevHop['function'] !== 'require' and
+        if (isset($prevHop['function']) &&
+            $prevHop['function'] !== 'include' &&
+            $prevHop['function'] !== 'include_once' &&
+            $prevHop['function'] !== 'require' &&
             $prevHop['function'] !== 'require_once'
         ) {
             $locationInfo['function'] = $prevHop['function'];

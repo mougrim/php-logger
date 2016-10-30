@@ -19,14 +19,15 @@ class PatternMDC implements PatternInterface
         if ($this->key) {
             return LoggerRender::render(LoggerMDC::get($this->key));
         }
-        $formatted = '';
-        if ($mdc = LoggerMDC::getMap()) {
-            foreach ($mdc as $key => $context) {
-                $formatted .= $key . '=' . $context . ' ';
-            }
+        $mdc = LoggerMDC::getMap();
+        if (!$mdc) {
+            return '';
+        }
+        $formatted = [];
+        foreach ($mdc as $key => $context) {
+            $formatted[] = $key . '=' . $context;
         }
 
-        // @todo optimize this sheet
-        return rtrim($formatted);
+        return implode(' ', $formatted);
     }
 }

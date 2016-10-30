@@ -30,11 +30,11 @@ class AppenderStreamTest extends BaseLoggerTestCase
 
     public function testNotUseLock()
     {
-        $GLOBALS['called']=false;
+        $callsQty = 0;
         $this->mockFunction(
             'flock',
-            function() {
-                $GLOBALS['called'] = true;
+            function() use (&$callsQty) {
+                $callsQty++;
                 return true;
             }
         );
@@ -43,16 +43,16 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $appender->write(Logger::INFO, 'ok');
         $appender->write(Logger::INFO, str_pad('', 4096, '1'));
         $appender->write(Logger::INFO, str_pad('', 4097, '1'));
-        $this->assertEquals(false, $GLOBALS['called']);
+        $this->assertSame(0, $callsQty);
     }
 
     public function testNotUseLockShortMessage()
     {
-        $GLOBALS['called']=false;
+        $callsQty = 0;
         $this->mockFunction(
             'flock',
-            function() {
-                $GLOBALS['called'] = true;
+            function() use (&$callsQty) {
+                $callsQty++;
                 return true;
             }
         );
@@ -61,18 +61,18 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $appender->setUseLockShortMessage(false);
         $appender->write(Logger::INFO, '');
         $appender->write(Logger::INFO, str_pad('', 4096, '1'));
-        $this->assertEquals(false, $GLOBALS['called']);
+        $this->assertSame(0, $callsQty);
         $appender->write(Logger::INFO, str_pad('', 4097, '1'));
-        $this->assertEquals(false, $GLOBALS['called']);
+        $this->assertSame(0, $callsQty);
     }
 
     public function testUseLockShortMessage()
     {
-        $GLOBALS['called'] = false;
+        $callsQty = 0;
         $this->mockFunction(
             'flock',
-            function() {
-                $GLOBALS['called'] = true;
+            function() use (&$callsQty) {
+                $callsQty++;
                 return true;
             }
         );
@@ -80,10 +80,9 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $appender->setUseLock(true);
         $appender->setUseLockShortMessage(true);
         $appender->write(Logger::INFO, str_pad('', 4096, '1'));
-        $this->assertEquals(true, $GLOBALS['called']);
-        $GLOBALS['called'] = false;
+        $this->assertSame(2, $callsQty);
         $appender->write(Logger::INFO, str_pad('', 4097, '1'));
-        $this->assertEquals(true, $GLOBALS['called']);
+        $this->assertSame(4, $callsQty);
     }
 
     public function testFork()
@@ -109,11 +108,8 @@ class AppenderStreamTest extends BaseLoggerTestCase
         pcntl_waitpid($pid, $status);
         // second fork
         $pid = pcntl_fork();
-        if ($pid == -1) {
-            $this->markTestIncomplete('could not fork');
-        } else if ($pid) {
-
-        } else {
+        static::assertNotSame(-1, $pid, 'could not fork');
+        if (!$pid) {
             $writer->write(1, $secondChild);
             die();
         }
@@ -140,10 +136,8 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $appender = new AppenderStream($this->logFile);
 
         $pid = pcntl_fork();
-        if ($pid == -1) {
-            $this->markTestIncomplete('could not fork');
-        } else if ($pid) {
-        } else {
+        static::assertNotSame(-1, $pid, 'could not fork');
+        if (!$pid) {
             $appender->close();
             die();
         }

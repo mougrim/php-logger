@@ -11,32 +11,28 @@ class AppenderSyslogTest extends BaseLoggerTestCase
 
     public function testWriteSyslog()
     {
-        $GLOBALS['syslog'] = [];
-        $appender = new AppenderSyslog('id', LOG_PID, 0);
+        $openLogCalls = [];
         $this->mockFunction(
             'openlog',
-            function() {
-                $GLOBALS['syslog'][] = 'openlog';
+            function() use (&$openLogCalls) {
+                $openLogCalls[] = func_get_args();
                 return true;
             }
         );
+        $sysLogCalls = [];
         $this->mockFunction(
             'syslog',
-            function($priority, $message) {
-                $GLOBALS['syslog'][] = 'syslog';
-                $GLOBALS['syslog'][] = $priority;
-                $GLOBALS['syslog'][] = $message;
+            function($priority, $message) use (&$sysLogCalls) {
+                $sysLogCalls[] = func_get_args();
             }
         );
-        $this->mockFunction('closelog', function() {$GLOBALS['syslog'][]= 'closelog';});
+        $closeLogCalls = [];
+        $this->mockFunction('closelog', function() use (&$closeLogCalls) {$closeLogCalls[] = func_get_args();});
+        $appender = new AppenderSyslog('id', LOG_PID, 0);
         $appender->write(Logger::INFO, 'test syslog');
-        $this->assertEquals([
-            'openlog',
-            'syslog',
-            LOG_INFO,
-            'test syslog',
-            'closelog'
-        ], $GLOBALS['syslog']);
+        $this->assertSame([['id', LOG_PID, 0]], $openLogCalls);
+        $this->assertSame([[LOG_INFO, 'test syslog']], $sysLogCalls);
+        $this->assertSame([[]], $closeLogCalls);
     }
 
     public function testErrorOpenSyslog()
