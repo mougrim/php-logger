@@ -62,7 +62,7 @@ class LoggerTest extends BaseLoggerTestCase
 
         $logger = Logger::getLogger('test');
         $start = microtime(1);
-        for ($i = 10000; $i--;) {
+        for ($i = 1000; $i--;) {
             $logger->info('test');
         }
         $end = microtime(1);
@@ -70,7 +70,7 @@ class LoggerTest extends BaseLoggerTestCase
 
         $logger = Logger::getRootLogger();
         $start = microtime(1);
-        for ($i = 10000; $i--;) {
+        for ($i = 1000; $i--;) {
             $logger->info('test');
         }
         $end = microtime(1);
@@ -79,7 +79,7 @@ class LoggerTest extends BaseLoggerTestCase
         $appenders = Logger::getRootLogger()->getAppenders();
         $appender = $appenders[0];
         $start = microtime(1);
-        for ($i = 10000; $i--;) {
+        for ($i = 1000; $i--;) {
             $appender->append($logger, Logger::INFO, 'test', null);
         }
         $end = microtime(1);

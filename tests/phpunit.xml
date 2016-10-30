@@ -3,8 +3,7 @@
          backupStaticAttributes="false"
          cacheTokens="false"
          verbose="true"
-         strict="true"
-         colors="false"
+         colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
@@ -21,4 +20,27 @@
             <directory>integration</directory>
         </testsuite>
     </testsuites>
+    <listeners>
+        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener">
+            <arguments>
+                <array>
+                    <element key="slowThreshold">
+                        <integer>100</integer>
+                    </element>
+                    <element key="reportLength">
+                        <integer>10</integer>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../src</directory>
+        </whitelist>
+    </filter>
+    <!--<logging>-->
+        <!--<log type="coverage-html" target="/home/sites/coverage/web/php-logger" lowUpperBound="35"-->
+             <!--highLowerBound="70"/>-->
+    <!--</logging>-->
 </phpunit>

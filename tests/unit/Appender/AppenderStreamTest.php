@@ -107,7 +107,6 @@ class AppenderStreamTest extends BaseLoggerTestCase
             die();
         }
         pcntl_waitpid($pid, $status);
-        sleep(1);
         // second fork
         $pid = pcntl_fork();
         if ($pid == -1) {
@@ -119,7 +118,6 @@ class AppenderStreamTest extends BaseLoggerTestCase
             die();
         }
         pcntl_waitpid($pid, $status);
-        sleep(1);
         $writer->write(1, $after);
 
         $expected = $before . $firstChild . $secondChild . $after;
@@ -150,7 +148,6 @@ class AppenderStreamTest extends BaseLoggerTestCase
             die();
         }
         pcntl_waitpid($pid, $status);
-        sleep(1);
 
         $appender->write(Logger::INFO, $second = uniqid('', true));
         $appender->close();

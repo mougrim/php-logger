@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
+use Mougrim\Logger\PHPUnitCommand;
+
 require_once dirname(__DIR__) . '/bootstrap.php';
 define('PHPUNIT_COMPOSER_INSTALL', dirname(dirname(__DIR__)) . '/vendor/autoload.php');
 
-define('PHPUnit_MAIN_METHOD', 'PHPUnit_TextUI_Command::main');
-PHPUnit_TextUI_Command::main();
+define('PHPUnit_MAIN_METHOD', PHPUnitCommand::class . '::main');
+PHPUnitCommand::main();
