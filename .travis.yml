@@ -12,8 +12,19 @@ matrix:
   fast_finish: true
   allow_failures:
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+addons:
+  code_climate:
+    repo_token: 28ebd9b89b0ba2f8e3f2d98bae1fbfc40c6d4ac6bb4294788d96261a798ed9a7
+
 before_script:
   - sh .travis.install.sh
   - composer install
 
-script: phpunit --configuration tests/phpunit.xml
+script: if [ `./.travis.check-php-version-coverage.php` -eq "1" ]; then tests/bin/phpunit --configuration tests/phpunit.xml --coverage-clover build/logs/clover.xml; else tests/bin/phpunit --configuration tests/phpunit.xml; fi
+
+after_script:
+  - if [ `./.travis.check-php-version-coverage.php` -eq "1" ]; then vendor/bin/test-reporter; fi

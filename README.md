@@ -10,6 +10,7 @@ See [changelog](CHANGELOG.md) and [upgrade instructions](UPGRADE.md).
 [![Latest Unstable Version](https://poser.pugx.org/mougrim/php-logger/v/unstable)](https://packagist.org/packages/mougrim/php-logger)
 [![License](https://poser.pugx.org/mougrim/php-logger/license)](https://packagist.org/packages/mougrim/php-logger)
 [![Build Status](https://api.travis-ci.org/mougrim/php-logger.png?branch=master)](https://travis-ci.org/mougrim/php-logger)
+[![Test Coverage](https://codeclimate.com/github/mougrim/php-logger/badges/coverage.svg)](https://codeclimate.com/github/mougrim/php-logger/coverage)
 
 Configuration
 -------------
