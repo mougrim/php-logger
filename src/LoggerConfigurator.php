@@ -63,22 +63,7 @@ class LoggerConfigurator
                 } else if (is_array($appenderConfig)) {
                     $appender = $this->createAppender($hierarchy, $appenderConfig);
                 } else {
-                    $message = 'Appender invalid config';
-                    switch (LoggerPolicy::getConfigurationErrorPolicy()) {
-                        case LoggerPolicy::POLICY_IGNORE:
-                            break;
-                        case LoggerPolicy::POLICY_TRIGGER_WARN:
-                            trigger_error($message, E_USER_WARNING);
-                            break;
-                        case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                            trigger_error($message, E_USER_ERROR);
-                            break;
-                        case LoggerPolicy::POLICY_EXIT:
-                            exit($message);
-                        case LoggerPolicy::POLICY_EXCEPTION:
-                        default:
-                            throw new LoggerConfigurationException($message);
-                    }
+                    LoggerPolicy::processConfigurationError('Appender invalid config');
                     continue;
                 }
                 $logger->addAppender($appender);
@@ -110,25 +95,12 @@ class LoggerConfigurator
             } elseif (is_array($config['layout'])) {
                 $config['layout'] = $this->createLayout($config['layout']);
             } else {
-                $message = 'Invalid logger layout description';
-                switch (LoggerPolicy::getConfigurationErrorPolicy()) {
-                    case LoggerPolicy::POLICY_IGNORE:
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_WARN:
-                        trigger_error($message, E_USER_WARNING);
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                        trigger_error($message, E_USER_ERROR);
-                        break;
-                    case LoggerPolicy::POLICY_EXIT:
-                        exit($message);
-                    case LoggerPolicy::POLICY_EXCEPTION:
-                    default:
-                        throw new LoggerConfigurationException($message);
-                }
+                LoggerPolicy::processConfigurationError('Invalid logger layout description');
                 unset($config['layout']);
             }
         }
+
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->createObject($config);
     }
 
@@ -139,6 +111,7 @@ class LoggerConfigurator
      */
     private function createLayout($config)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->createObject($config);
     }
 
@@ -177,7 +150,7 @@ class LoggerConfigurator
         foreach ($config as $name => $value) {
             $method = 'set' . $name;
             if (method_exists($object, $method)) {
-                call_user_func([$object, $method], $value);
+                $object->{$method}($value);
             }
         }
         return $object;

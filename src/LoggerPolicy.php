@@ -41,6 +41,33 @@ class LoggerPolicy
     }
 
     /**
+     * @return string
+     */
+    public static function getConfigurationErrorPolicy()
+    {
+        return self::$configurationErrorPolicy;
+    }
+
+    public static function processConfigurationError($message)
+    {
+        switch (self::getConfigurationErrorPolicy()) {
+            case self::POLICY_IGNORE:
+                return;
+            case self::POLICY_TRIGGER_WARN:
+                trigger_error($message, E_USER_WARNING);
+                return;
+            case self::POLICY_TRIGGER_ERROR:
+                trigger_error($message, E_USER_ERROR);
+                return;
+            case self::POLICY_EXIT:
+                exit($message);
+            case self::POLICY_EXCEPTION:
+            default:
+                throw new LoggerConfigurationException($message);
+        }
+    }
+
+    /**
      * @param string $policy
      * @throws LoggerConfigurationException
      */
@@ -61,11 +88,22 @@ class LoggerPolicy
         return self::$ioErrorPolicy;
     }
 
-    /**
-     * @return string
-     */
-    public static function getConfigurationErrorPolicy()
+    public static function processIOError($message)
     {
-        return self::$configurationErrorPolicy;
+        switch (self::getIOErrorPolicy()) {
+            case self::POLICY_IGNORE:
+                return;
+            case self::POLICY_TRIGGER_WARN:
+                trigger_error($message, E_USER_WARNING);
+                return;
+            case self::POLICY_TRIGGER_ERROR:
+                trigger_error($message, E_USER_ERROR);
+                return;
+            case self::POLICY_EXIT:
+                exit($message);
+            case self::POLICY_EXCEPTION:
+            default:
+                throw new LoggerIOException($message);
+        }
     }
 }

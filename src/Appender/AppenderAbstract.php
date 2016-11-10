@@ -9,7 +9,7 @@ abstract class AppenderAbstract
     protected $minLevel;
     protected $maxLevel;
     /** @var LayoutInterface|null */
-    protected $layout = null;
+    protected $layout;
 
     abstract public function write($level, $message);
 

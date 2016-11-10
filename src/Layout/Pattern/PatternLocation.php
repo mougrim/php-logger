@@ -21,7 +21,7 @@ class PatternLocation implements PatternInterface
         // make a down search to identify the caller
         $hop = array_pop($trace);
         while ($hop !== null) {
-            if (isset($hop['line']) && isset($hop['class'])) {
+            if (isset($hop['line'], $hop['class'])) {
                 // we are sometimes in functions = no class available: avoid php warning here
                 $className = $hop['class'];
                 if (!empty($className) && strpos($className, 'Mougrim\\Logger\\') === 0) {

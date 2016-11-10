@@ -8,7 +8,7 @@ class LoggerNDC
     public static function push($context)
     {
         $context = (string)$context;
-        array_push(self::$stack, $context);
+        self::$stack[] = $context;
     }
 
     public static function pop()

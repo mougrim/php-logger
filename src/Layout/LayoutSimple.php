@@ -17,7 +17,7 @@ class LayoutSimple implements LayoutInterface
         $formatted = $logger->getName()
             . ' [' . Logger::getLevelName($level) . '] ';
         if ($ndc = LoggerNDC::getStack()) {
-            $formatted .= join(' ', $ndc) . ' ';
+            $formatted .= implode(' ', $ndc) . ' ';
         }
         if ($mdc = LoggerMDC::getMap()) {
             foreach ($mdc as $key => $context) {

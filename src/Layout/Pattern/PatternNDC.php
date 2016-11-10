@@ -8,10 +8,10 @@ class PatternNDC implements PatternInterface
 {
     public function render(Logger $logger, $level, $message, \Exception $throwable = null)
     {
-        if ($ndc = LoggerNDC::getStack()) {
-            return join(' ', $ndc);
-        } else {
+        $ndc = LoggerNDC::getStack();
+        if (!$ndc) {
             return '';
         }
+        return implode(' ', $ndc);
     }
 }

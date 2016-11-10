@@ -57,32 +57,17 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
             return;
         }
         // useLockShortMessage should remove in next major version
-        if ($this->useLock && $this->useLockShortMessage) {
-            if (flock($steam, LOCK_EX)) {
-                fwrite($steam, $message);
-                flock($steam, LOCK_UN);
-            } else {
-                $message = 'Error get lock';
-                switch (LoggerPolicy::getIOErrorPolicy()) {
-                    case LoggerPolicy::POLICY_IGNORE:
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_WARN:
-                        trigger_error($message, E_USER_WARNING);
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                        trigger_error($message, E_USER_ERROR);
-                        break;
-                    case LoggerPolicy::POLICY_EXIT:
-                        exit($message);
-                    case LoggerPolicy::POLICY_EXCEPTION:
-                    default:
-                        throw new LoggerIOException($message);
-                }
-                fwrite($steam, $message);
-            }
-        } else {
+        if (!$this->useLock || !$this->useLockShortMessage) {
             fwrite($steam, $message);
+            return;
         }
+        if (!flock($steam, LOCK_EX)) {
+            LoggerPolicy::processIOError('Error get lock');
+            fwrite($steam, $message);
+            return;
+        }
+        fwrite($steam, $message);
+        flock($steam, LOCK_UN);
     }
 
     /**
@@ -115,22 +100,7 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
         if (!$this->stream) {
             $this->stream = @fopen($this->streamUrl, 'a');
             if (!$this->stream) {
-                $message = "Error open $this->streamUrl";
-                switch (LoggerPolicy::getIOErrorPolicy()) {
-                    case LoggerPolicy::POLICY_IGNORE:
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_WARN:
-                        trigger_error($message, E_USER_WARNING);
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                        trigger_error($message, E_USER_ERROR);
-                        break;
-                    case LoggerPolicy::POLICY_EXIT:
-                        exit($message);
-                    case LoggerPolicy::POLICY_EXCEPTION:
-                    default:
-                        throw new LoggerIOException($message);
-                }
+                LoggerPolicy::processIOError("Error open $this->streamUrl");
                 $this->stream = null;
             }
         }

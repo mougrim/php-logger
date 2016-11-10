@@ -20,9 +20,10 @@ class LoggerHierarchy
     public function reopen()
     {
         foreach ($this->appenderMap as $appender) {
-            if ($appender instanceof AppenderReopen) {
-                $appender->reopen();
+            if (!$appender instanceof AppenderReopen) {
+                continue;
             }
+            $appender->reopen();
         }
     }
 
@@ -33,18 +34,18 @@ class LoggerHierarchy
 
     public function getRootLogger()
     {
-        if (isset($this->rootLogger))
-            return $this->rootLogger;
-        else
+        if ($this->rootLogger === null) {
             return $this->rootLogger = new Logger('root');
+        }
+        return $this->rootLogger;
     }
 
     public function getLogger($name)
     {
-        if (isset($this->loggerMap[$name]))
-            return $this->loggerMap[$name];
-        else
+        if (!isset($this->loggerMap[$name])) {
             return $this->loggerMap[$name] = $this->createLogger($name);
+        }
+        return $this->loggerMap[$name];
     }
 
     public function createLogger($name)
@@ -65,27 +66,11 @@ class LoggerHierarchy
      */
     public function getAppender($name)
     {
-        if (isset($this->appenderMap[$name])) {
-            return $this->appenderMap[$name];
-        } else {
-            $message = "Appender {$name} not found";
-            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
-                case LoggerPolicy::POLICY_IGNORE:
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_WARN:
-                    trigger_error($message, E_USER_WARNING);
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                    trigger_error($message, E_USER_ERROR);
-                    break;
-                case LoggerPolicy::POLICY_EXIT:
-                    exit($message);
-                case LoggerPolicy::POLICY_EXCEPTION:
-                default:
-                    throw new LoggerConfigurationException($message);
-            }
+        if (!isset($this->appenderMap[$name])) {
+            LoggerPolicy::processConfigurationError("Appender {$name} not found");
             return new AppenderNull();
         }
+        return $this->appenderMap[$name];
     }
 
     public function setLayout($name, LayoutInterface $layout)
@@ -95,27 +80,11 @@ class LoggerHierarchy
 
     public function getLayout($name)
     {
-        if (isset($this->layoutMap[$name])) {
-            return $this->layoutMap[$name];
-        } else {
-            $message = "Layout {$name} not found";
-            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
-                case LoggerPolicy::POLICY_IGNORE:
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_WARN:
-                    trigger_error($message, E_USER_WARNING);
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                    trigger_error($message, E_USER_ERROR);
-                    break;
-                case LoggerPolicy::POLICY_EXIT:
-                    exit($message);
-                case LoggerPolicy::POLICY_EXCEPTION:
-                default:
-                    throw new LoggerConfigurationException($message);
-            }
+        if (!isset($this->layoutMap[$name])) {
+            LoggerPolicy::processConfigurationError("Layout {$name} not found");
             return new LayoutSimple();
         }
+        return $this->layoutMap[$name];
     }
 
     public function getAppenderMap()

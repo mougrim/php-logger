@@ -1,7 +1,6 @@
 <?php
 namespace Mougrim\Logger\Appender;
 
-use Mougrim\Logger\LoggerIOException;
 use Mougrim\Logger\LoggerPolicy;
 
 class AppenderSocket extends AppenderAbstract
@@ -25,43 +24,15 @@ class AppenderSocket extends AppenderAbstract
     {
         $socket = fsockopen($this->host, $this->port, $errorCode, $errorMessage, $this->timeout);
         if ($socket === false) {
-            $message = "Could not open socket to {$this->host}:{$this->port} – {$errorCode} {$errorMessage}. Closing appender.";
-            switch (LoggerPolicy::getIOErrorPolicy()) {
-                case LoggerPolicy::POLICY_IGNORE:
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_WARN:
-                    trigger_error($message, E_USER_WARNING);
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                    trigger_error($message, E_USER_ERROR);
-                    break;
-                case LoggerPolicy::POLICY_EXIT:
-                    exit($message);
-                case LoggerPolicy::POLICY_EXCEPTION:
-                default:
-                    throw new LoggerIOException($message);
-            }
+            LoggerPolicy::processIOError(
+                "Could not open socket to {$this->host}:{$this->port} – {$errorCode} {$errorMessage}. Closing appender."
+            );
             return;
         }
         $write = fwrite($socket, $message);
         fclose($socket);
-        if (false === $write) {
-            $message = "Error writing to socket to {$this->host}:{$this->port}";
-            switch (LoggerPolicy::getIOErrorPolicy()) {
-                case LoggerPolicy::POLICY_IGNORE:
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_WARN:
-                    trigger_error($message, E_USER_WARNING);
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                    trigger_error($message, E_USER_ERROR);
-                    break;
-                case LoggerPolicy::POLICY_EXIT:
-                    exit($message);
-                case LoggerPolicy::POLICY_EXCEPTION:
-                default:
-                    throw new LoggerIOException($message);
-            }
+        if ($write === false) {
+            LoggerPolicy::processIOError("Error writing to socket to {$this->host}:{$this->port}");
             return;
         }
     }

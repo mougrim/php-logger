@@ -28,28 +28,13 @@ class AppenderStd extends AppenderAbstract
         switch ($streamName) {
             case 'STDOUT':
                 $this->stream = self::STDOUT;
-                break;
+                return;
             case 'STDERR':
                 $this->stream = self::STDERR;
-                break;
+                return;
             default:
-                $message = "Stream must be STDOUT or STDERR, got '{$streamName}'";
-                switch (LoggerPolicy::getConfigurationErrorPolicy()) {
-                    case LoggerPolicy::POLICY_IGNORE:
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_WARN:
-                        trigger_error($message, E_USER_WARNING);
-                        break;
-                    case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                        trigger_error($message, E_USER_ERROR);
-                        break;
-                    case LoggerPolicy::POLICY_EXIT:
-                        exit($message);
-                    case LoggerPolicy::POLICY_EXCEPTION:
-                    default:
-                        throw new LoggerConfigurationException($message);
-                }
-                break;
+                LoggerPolicy::processConfigurationError("Stream must be STDOUT or STDERR, got '{$streamName}'");
+                return;
         }
     }
 }

@@ -2,8 +2,6 @@
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\Logger;
-use Mougrim\Logger\LoggerConfigurationException;
-use Mougrim\Logger\LoggerIOException;
 use Mougrim\Logger\LoggerPolicy;
 
 class AppenderSyslog extends AppenderAbstract
@@ -29,27 +27,12 @@ class AppenderSyslog extends AppenderAbstract
 
     public function write($priority, $message)
     {
-        if (openlog($this->identifier, $this->option, $this->facility)) {
-            syslog(static::getSyslogPriority($priority), $message);
-            closelog();
-        } else {
-            $message = 'Error open syslog';
-            switch (LoggerPolicy::getIOErrorPolicy()) {
-                case LoggerPolicy::POLICY_IGNORE:
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_WARN:
-                    trigger_error($message, E_USER_WARNING);
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                    trigger_error($message, E_USER_ERROR);
-                    break;
-                case LoggerPolicy::POLICY_EXIT:
-                    exit($message);
-                case LoggerPolicy::POLICY_EXCEPTION:
-                default:
-                    throw new LoggerIOException($message);
-            }
+        if (!openlog($this->identifier, $this->option, $this->facility)) {
+            LoggerPolicy::processIOError('Error open syslog');
+            return;
         }
+        syslog(static::getSyslogPriority($priority), $message);
+        closelog();
     }
 
     public static function getSyslogPriority($level)
@@ -70,53 +53,24 @@ class AppenderSyslog extends AppenderAbstract
         }
         if (is_array($options)) {
             $optionInteger = 0;
-            foreach ($options as $opt) {
-                if (is_string($opt) && defined($opt)) {
-                    $opt = constant($opt);
+            foreach ($options as $option) {
+                if (is_string($option) && defined($option)) {
+                    $option = constant($option);
                 }
-                if (is_int($opt)) {
-                    $optionInteger |= $opt;
-                } else {
-                    $message = "Error parse syslog options";
-                    switch (LoggerPolicy::getConfigurationErrorPolicy()) {
-                        case LoggerPolicy::POLICY_IGNORE:
-                            break;
-                        case LoggerPolicy::POLICY_TRIGGER_WARN:
-                            trigger_error($message, E_USER_WARNING);
-                            break;
-                        case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                            trigger_error($message, E_USER_ERROR);
-                            break;
-                        case LoggerPolicy::POLICY_EXIT:
-                            exit($message);
-                        case LoggerPolicy::POLICY_EXCEPTION:
-                        default:
-                            throw new LoggerConfigurationException($message);
-                    }
+                if (!is_int($option)) {
+                    LoggerPolicy::processConfigurationError(
+                        'Error parse syslog options, option: ' . var_export($option, true)
+                    );
+                    continue;
                 }
+                $optionInteger |= $option;
             }
             $options = $optionInteger;
         }
-        if (is_int($options)) {
-            return $options;
-        } else {
-            $message = "Invalid syslog options";
-            switch (LoggerPolicy::getConfigurationErrorPolicy()) {
-                case LoggerPolicy::POLICY_IGNORE:
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_WARN:
-                    trigger_error($message, E_USER_WARNING);
-                    break;
-                case LoggerPolicy::POLICY_TRIGGER_ERROR:
-                    trigger_error($message, E_USER_ERROR);
-                    break;
-                case LoggerPolicy::POLICY_EXIT:
-                    exit($message);
-                case LoggerPolicy::POLICY_EXCEPTION:
-                default:
-                    throw new LoggerConfigurationException($message);
-            }
+        if (!is_int($options)) {
+            LoggerPolicy::processConfigurationError('Invalid syslog options: ' . var_export($options, true));
             return 0;
         }
+        return $options;
     }
 }
