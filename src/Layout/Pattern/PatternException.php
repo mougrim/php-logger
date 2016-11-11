@@ -7,10 +7,9 @@ class PatternException extends PatternPrintFormat
 {
     public function render(Logger $logger, $level, $message, \Exception $throwable = null)
     {
-        if ($throwable) {
-            return (string) $throwable;
-        } else {
+        if (!$throwable) {
             return '';
         }
+        return (string) $throwable;
     }
 }

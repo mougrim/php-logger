@@ -9,23 +9,11 @@ engines:
     enabled: true
   phpmd:
     enabled: true
-    checks:
-      Design/TooManyPublicMethods:
-        enabled: false
-      UnusedFormalParameter:
-        enabled: false
-      CleanCode/StaticAccess:
-        enabled: false
-      Design/ExitExpression:
-        enabled: false
+    config:
+      file_extensions: "php"
+      rulesets: "cleancode,codesize,controversial,design,naming,unusedcode,.phpmdRuleset.xml"
 ratings:
   paths:
-  - "**.inc"
-  - "**.js"
-  - "**.jsx"
-  - "**.module"
   - "**.php"
-  - "**.py"
-  - "**.rb"
 exclude_paths:
 - tests/

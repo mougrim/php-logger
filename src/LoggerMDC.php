@@ -21,11 +21,10 @@ class LoggerMDC
     public static function get($key)
     {
         $key = (string)$key;
-        if (array_key_exists($key, self::$map)) {
-            return self::$map[$key];
-        } else {
+        if (!array_key_exists($key, self::$map)) {
             return null;
         }
+        return self::$map[$key];
     }
 
     public static function getMap()

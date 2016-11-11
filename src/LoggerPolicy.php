@@ -33,11 +33,10 @@ class LoggerPolicy
      */
     public static function setConfigurationErrorPolicy($policy)
     {
-        if (in_array($policy, self::$policyMap, true)) {
-            self::$configurationErrorPolicy = $policy;
-        } else {
+        if (!in_array($policy, self::$policyMap, true)) {
             throw new LoggerConfigurationException("Policy '{$policy}' not found");
         }
+        self::$configurationErrorPolicy = $policy;
     }
 
     /**
@@ -73,11 +72,10 @@ class LoggerPolicy
      */
     public static function setIoErrorPolicy($policy)
     {
-        if (in_array($policy, self::$policyMap, true)) {
-            self::$ioErrorPolicy = $policy;
-        } else {
+        if (!in_array($policy, self::$policyMap, true)) {
             throw new LoggerConfigurationException("Policy '{$policy}' not found");
         }
+        self::$ioErrorPolicy = $policy;
     }
 
     /**

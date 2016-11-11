@@ -45,9 +45,8 @@ class PatternMemoryUsage implements PatternInterface
     {
         $bytes  = memory_get_usage(true);
         $base   = log($bytes) / log(1024);
-        if ($this->roundTo !== null) {
-            $roundTo = $this->roundTo;
-        } else {
+        $roundTo = $this->roundTo;
+        if ($roundTo === null) {
             // auto
             $roundTo = min((int) floor($base), count($this->units) - 1);
         }

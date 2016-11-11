@@ -9,10 +9,9 @@ class PatternDate implements PatternInterface
 
     public function __construct($dateFormat)
     {
+        $this->dateFormat = 'Y:m:d';
         if ($dateFormat) {
             $this->dateFormat = (string)$dateFormat;
-        } else {
-            $this->dateFormat = 'Y:m:d';
         }
     }
 
