@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;
@@ -12,6 +13,7 @@ class PatternNDC implements PatternInterface
         if (!$ndc) {
             return '';
         }
+
         return implode(' ', $ndc);
     }
 }

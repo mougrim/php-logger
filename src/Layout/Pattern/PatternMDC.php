@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;
@@ -25,7 +26,7 @@ class PatternMDC implements PatternInterface
         }
         $formatted = [];
         foreach ($mdc as $key => $context) {
-            $formatted[] = $key . '=' . $context;
+            $formatted[] = $key.'='.$context;
         }
 
         return implode(' ', $formatted);

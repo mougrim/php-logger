@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\BaseLoggerTestCase;
@@ -14,8 +15,9 @@ class AppenderStdTest extends BaseLoggerTestCase
         $writeCalls = [];
         $this->mockFunction(
             'fwrite',
-            function($handle, $string, $length = null) use (&$writeCalls) {
+            function ($handle, $string, $length = null) use (&$writeCalls) {
                 $writeCalls[] = func_get_args();
+
                 return true;
             }
         );
@@ -30,8 +32,9 @@ class AppenderStdTest extends BaseLoggerTestCase
         $writeCalls = [];
         $this->mockFunction(
             'fwrite',
-            function($handle, $string, $length = null) use (&$writeCalls) {
+            function ($handle, $string, $length = null) use (&$writeCalls) {
                 $writeCalls[] = func_get_args();
+
                 return true;
             }
         );
@@ -47,8 +50,9 @@ class AppenderStdTest extends BaseLoggerTestCase
         $writeCalls = [];
         $this->mockFunction(
             'fwrite',
-            function($handle, $string, $length = null) use (&$writeCalls) {
+            function ($handle, $string, $length = null) use (&$writeCalls) {
                 $writeCalls[] = func_get_args();
+
                 return true;
             }
         );

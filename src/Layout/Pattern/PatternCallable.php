@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;
@@ -13,6 +14,7 @@ class PatternCallable implements PatternInterface
     {
         if (!is_callable($callableString)) {
             LoggerPolicy::processConfigurationError("'$callableString' is not callable");
+
             return;
         }
         $this->callable = $callableString;
@@ -31,6 +33,7 @@ class PatternCallable implements PatternInterface
         if (!is_callable($this->callable)) {
             return LoggerRender::render(null);
         }
+
         return LoggerRender::render(call_user_func($this->callable));
     }
 }

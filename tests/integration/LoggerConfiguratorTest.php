@@ -1,16 +1,17 @@
 <?php
+
 namespace Mougrim\Logger\integration;
 
+use Mougrim\Logger\Appender\AppenderStream;
 use Mougrim\Logger\BaseLoggerTestCase;
 use Mougrim\Logger\Layout\LayoutInterface;
 use Mougrim\Logger\Layout\LayoutPattern;
+use Mougrim\Logger\Layout\LayoutSimple;
 use Mougrim\Logger\Layout\Pattern\PatternLogger;
 use Mougrim\Logger\Logger;
-use Mougrim\Logger\Appender\AppenderStream;
 use Mougrim\Logger\LoggerConfigurator;
 use Mougrim\Logger\LoggerException;
 use Mougrim\Logger\LoggerHierarchy;
-use Mougrim\Logger\Layout\LayoutSimple;
 use Mougrim\Logger\LoggerRender;
 use stdClass;
 
@@ -23,7 +24,7 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
         $configurator->configure($hierarchy, [
             'policy' => [
                 'ioError' => 'trigger_error',
-                'configurationError' => 'exit'
+                'configurationError' => 'exit',
             ],
             'renderer' => [
                 'nullMessage' => '-',
@@ -65,8 +66,8 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
                         'useLock' => false,
                         'minLevel' => 0,
                         'maxLevel' => PHP_INT_MAX,
-                        'layout' => 'simple'
-                        ]
+                        'layout' => 'simple',
+                        ],
                     ],
                     'addictive' => false,
                     'minLevel' => Logger::DEBUG,
@@ -75,23 +76,23 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
             ],
             'root' => [
                 'appenders' => ['stream'],
-            ]
+            ],
         ]);
         $this->assertArrayHasKey('simple', $hierarchy->getLayoutMap());
         $this->assertArrayHasKey('pattern', $hierarchy->getLayoutMap());
         $this->assertArrayHasKey('additional_pattern', $hierarchy->getLayoutMap());
         /** @var LayoutInterface $additional_pattern_layout */
         $additional_pattern_layout = $hierarchy->getLayoutMap()['additional_pattern'];
-        $this->assertEquals(
-            'test' . PHP_EOL,
+        $this->assertSame(
+            'test'.PHP_EOL,
             $additional_pattern_layout->formatMessage($hierarchy->getLogger('test'), Logger::INFO, 'message')
         );
         $this->assertArrayHasKey('stream', $hierarchy->getAppenderMap());
         $this->assertArrayHasKey('logger', $hierarchy->getLoggerMap());
 
-        $this->assertEquals('-', LoggerRender::$nullMessage);
-        $this->assertEquals('1', LoggerRender::$trueMessage);
-        $this->assertEquals('-1', LoggerRender::$falseMessage);
+        $this->assertSame('-', LoggerRender::$nullMessage);
+        $this->assertSame('1', LoggerRender::$trueMessage);
+        $this->assertSame('-1', LoggerRender::$falseMessage);
     }
 
     public function testInvalidLayout()
@@ -102,7 +103,7 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
         $configurator->configure($hierarchy, [
             'layouts' => [
                 'simple' => [],
-            ]
+            ],
         ]);
     }
 
@@ -187,12 +188,14 @@ class LoggerConfiguratorTest extends BaseLoggerTestCase
     public function testLogStream()
     {
         $path = '/tmp/log.txt';
-        if (is_file($path)) unlink($path);
+        if (is_file($path)) {
+            unlink($path);
+        }
         Logger::configure();
         $appender = new AppenderStream($path);
         $appender->setLayout(new LayoutSimple());
         Logger::getRootLogger()->addAppender($appender);
-        Logger::getRootLogger()->info("hello world");
-        $this->assertEquals("root [INFO] - hello world" . PHP_EOL, file_get_contents($path));
+        Logger::getRootLogger()->info('hello world');
+        $this->assertSame('root [INFO] - hello world'.PHP_EOL, file_get_contents($path));
     }
 }

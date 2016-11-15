@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 class LoggerMDC
@@ -7,23 +8,24 @@ class LoggerMDC
 
     public static function put($key, $context)
     {
-        $key = (string)$key;
-        $context = (string)$context;
+        $key = (string) $key;
+        $context = (string) $context;
         self::$map[$key] = $context;
     }
 
     public static function remove($key)
     {
-        $key = (string)$key;
+        $key = (string) $key;
         unset(self::$map[$key]);
     }
 
     public static function get($key)
     {
-        $key = (string)$key;
+        $key = (string) $key;
         if (!array_key_exists($key, self::$map)) {
             return null;
         }
+
         return self::$map[$key];
     }
 

@@ -1,7 +1,7 @@
 <?php
+
 namespace Mougrim\Logger\Layout;
 
-use Mougrim\Logger\Layout\Pattern\PatternMemoryUsage;
 use Mougrim\Logger\Layout\Pattern\PatternArgv;
 use Mougrim\Logger\Layout\Pattern\PatternCallable;
 use Mougrim\Logger\Layout\Pattern\PatternDate;
@@ -12,15 +12,16 @@ use Mougrim\Logger\Layout\Pattern\PatternLevel;
 use Mougrim\Logger\Layout\Pattern\PatternLocation;
 use Mougrim\Logger\Layout\Pattern\PatternLogger;
 use Mougrim\Logger\Layout\Pattern\PatternMDC;
+use Mougrim\Logger\Layout\Pattern\PatternMemoryUsage;
 use Mougrim\Logger\Layout\Pattern\PatternMessage;
 use Mougrim\Logger\Layout\Pattern\PatternNDC;
 use Mougrim\Logger\Layout\Pattern\PatternPid;
 use Mougrim\Logger\Logger;
 
 /**
- * Enterprise pattern layout
+ * Enterprise pattern layout.
  *
- * Available patterns
+ * Available patterns:
  * - {date} or {date:<format>} standard date() format
  * - {pid} process id
  * - {level} level name, as example INFO
@@ -93,10 +94,11 @@ class LayoutPattern implements LayoutInterface
             $formatted = strtr(
                 $formatted,
                 [
-                    $pattern => $mapper->render($logger, $level, $message, $throwable)
+                    $pattern => $mapper->render($logger, $level, $message, $throwable),
                 ]
             );
         }
-        return $formatted . PHP_EOL;
+
+        return $formatted.PHP_EOL;
     }
 }

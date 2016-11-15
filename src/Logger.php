@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 use Mougrim\Logger\Appender\AppenderAbstract;
@@ -7,58 +8,58 @@ if (!defined('PHP_INT_MIN')) {
     define('PHP_INT_MIN', PHP_INT_MAX * -1 - 1);
 }
 
-
 /**
- * Example of usage:
+ * Main class for logging.
  *
+ * Example of usage:
  * <pre>
  * use Mougrim\Logger\Appender\AppenderStream;
  * use Mougrim\Logger\Layout\LayoutPattern;
  * use Mougrim\Logger\Layout\LayoutSimple;
  * use Mougrim\Logger\Logger;
  *
- *  Logger::configure([
- *      'policy' => [
- *          'ioError' => 'trigger_error', // ignore, trigger_warn, trigger_error, exception or exit
- *          'configurationError' => 'exception'
- *      ],
- *      'renderer' => [
- *          'nullMessage' => 'null',
- *          'trueMessage' => 'true',
- *          'falseMessage' => 'false',
- *      ]
- *      'layouts' => [
- *          'simple' => [
- *              'class' => LayoutSimple::class,
- *          ],
- *          'pattern' => [
- *              'class' => LayoutPattern::class,
- *              'pattern' => '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}',
- *          ],
- *      ],
- *      'appenders' => [
- *          'stream' => [
- *              'class' => AppenderStream::class,
- *              'stream' => 'php://stdout',
- *              // pass useLock and useLockShortMessage true for enable lock
- *              'useLock' => false,
- *              'useLockShortMessage' => false,
- *              'minLevel' => Logger::TRACE,
- *              'maxLevel' => Logger::FATAL,
- *              'layout' => 'simple',
- *          ],
- *      ],
- *      'loggers' => [
- *          'logger' => [
- *              'appenders' => ['stream'],
- *              'addictive' => false,
- *              'minLevel' => Logger::DEBUG,
- *              'maxLevel' => Logger::FATAL,
- *          ],
- *      ],
- *      'root' => [
- *          'appenders' => ['stream'],
- *      ]
+ * Logger::configure([
+ *     'policy' => [
+ *         'ioError' => 'trigger_error', // ignore, trigger_warn, trigger_error, exception or exit
+ *         'configurationError' => 'exception',
+ *     ],
+ *     'renderer' => [
+ *         'nullMessage' => 'null',
+ *         'trueMessage' => 'true',
+ *         'falseMessage' => 'false',
+ *     ]
+ *     'layouts' => [
+ *         'simple' => [
+ *             'class' => LayoutSimple::class,
+ *         ],
+ *         'pattern' => [
+ *             'class' => LayoutPattern::class,
+ *             'pattern' => '{date:Y/m/d} [{level}] {logger} {location:file:line, class.function} {mdc:key} {mdc} {ndc}: {message} {ex}',
+ *         ],
+ *     ],
+ *     'appenders' => [
+ *         'stream' => [
+ *             'class' => AppenderStream::class,
+ *             'stream' => 'php://stdout',
+ *             // pass useLock and useLockShortMessage true for enable lock
+ *             'useLock' => false,
+ *             'useLockShortMessage' => false,
+ *             'minLevel' => Logger::TRACE,
+ *             'maxLevel' => Logger::FATAL,
+ *             'layout' => 'simple',
+ *         ],
+ *     ],
+ *     'loggers' => [
+ *         'logger' => [
+ *             'appenders' => ['stream'],
+ *             'addictive' => false,
+ *             'minLevel' => Logger::DEBUG,
+ *             'maxLevel' => Logger::FATAL,
+ *         ],
+ *     ],
+ *     'root' => [
+ *         'appenders' => ['stream'],
+ *     ],
  * ]);
  * Logger::getLogger('logger')->info("hello world");
  * </pre>
@@ -92,6 +93,7 @@ class Logger
      * Returns a Logger by name. If it does not exist, it will be created.
      *
      * @param string $name The logger name
+     *
      * @return Logger
      */
     public static function getLogger($name)
@@ -99,11 +101,13 @@ class Logger
         if (!self::$isConfigured) {
             static::configure();
         }
+
         return self::$hierarchy->getLogger($name);
     }
 
     /**
      * Returns the Root Logger.
+     *
      * @return Logger
      */
     public static function getRootLogger()
@@ -111,6 +115,7 @@ class Logger
         if (!self::$isConfigured) {
             static::configure();
         }
+
         return self::$hierarchy->getRootLogger();
     }
 
@@ -134,7 +139,7 @@ class Logger
     }
 
     /**
-     * Reset all loggers, appenders, etc
+     * Reset all loggers, appenders, etc.
      */
     public static function reset()
     {
@@ -160,21 +165,24 @@ class Logger
 
     /**
      * @param int $level
+     *
      * @return string
      */
     public static function getLevelName($level)
     {
-        $level = (int)$level;
+        $level = (int) $level;
         foreach (static::$levelNameToLevel as $levelName => $currentLevel) {
             if ($level >= $currentLevel) {
                 return $levelName;
             }
         }
+
         return static::$levelNameToLevel[static::ALL];
     }
 
     /**
      * @param string $level
+     *
      * @return int
      */
     public static function getLevelByName($level)
@@ -183,6 +191,7 @@ class Logger
         if (!isset(static::$levelNameToLevel[$level])) {
             return static::ALL;
         }
+
         return static::$levelNameToLevel[$level];
     }
 
@@ -201,7 +210,7 @@ class Logger
 
     public function __construct($name, Logger $parent = null)
     {
-        $this->name = (string)$name;
+        $this->name = (string) $name;
         $this->parent = $parent;
     }
 
@@ -210,7 +219,7 @@ class Logger
      */
     public function setMinLevel($minLevel)
     {
-        $this->minLevel = (int)$minLevel;
+        $this->minLevel = (int) $minLevel;
     }
 
     /**
@@ -218,7 +227,7 @@ class Logger
      */
     public function setMaxLevel($maxLevel)
     {
-        $this->maxLevel = (int)$maxLevel;
+        $this->maxLevel = (int) $maxLevel;
     }
 
     public function addAppender(AppenderAbstract $appender)
@@ -243,7 +252,7 @@ class Logger
 
     public function setAddictive($addictive)
     {
-        $this->addictive = (bool)$addictive;
+        $this->addictive = (bool) $addictive;
     }
 
     public function getAddictive()
@@ -262,12 +271,15 @@ class Logger
     }
 
     /**
-     * Simple timer, use like:
+     * Simple timer.
+     *
+     * Use like:
      * <code>
      * $timer = $logger->timer();
      * sleep(10);
      * $timer->info("sleep {time} seconds");
      * </code>
+     *
      * @return LoggerTimer
      */
     public function timer()

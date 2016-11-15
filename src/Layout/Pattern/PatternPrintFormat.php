@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 abstract class PatternPrintFormat implements PatternInterface
@@ -8,7 +9,7 @@ abstract class PatternPrintFormat implements PatternInterface
     public function __construct($printFormat)
     {
         if ($printFormat) {
-            $this->printFormat = (string)$printFormat;
+            $this->printFormat = (string) $printFormat;
         }
     }
 

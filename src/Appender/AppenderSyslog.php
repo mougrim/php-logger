@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\Logger;
@@ -19,16 +20,16 @@ class AppenderSyslog extends AppenderAbstract
 
     public function __construct($identifier, $options, $facility)
     {
-        $this->identifier = (string)$identifier;
+        $this->identifier = (string) $identifier;
         $this->option = static::parseOptions($options);
         $this->facility = static::parseOptions($facility);
-
     }
 
     public function write($priority, $message)
     {
         if (!openlog($this->identifier, $this->option, $this->facility)) {
             LoggerPolicy::processIOError('Error open syslog');
+
             return;
         }
         syslog(static::getSyslogPriority($priority), $message);
@@ -37,12 +38,13 @@ class AppenderSyslog extends AppenderAbstract
 
     public static function getSyslogPriority($level)
     {
-        $level = (int)$level;
+        $level = (int) $level;
         foreach (static::$levelToPriority as $currentLevel => $priority) {
             if ($level >= $currentLevel) {
                 return $priority;
             }
         }
+
         return LOG_DEBUG;
     }
 
@@ -59,7 +61,7 @@ class AppenderSyslog extends AppenderAbstract
                 }
                 if (!is_int($option)) {
                     LoggerPolicy::processConfigurationError(
-                        'Error parse syslog options, option: ' . var_export($option, true)
+                        'Error parse syslog options, option: '.var_export($option, true)
                     );
                     continue;
                 }
@@ -68,9 +70,11 @@ class AppenderSyslog extends AppenderAbstract
             $options = $optionInteger;
         }
         if (!is_int($options)) {
-            LoggerPolicy::processConfigurationError('Invalid syslog options: ' . var_export($options, true));
+            LoggerPolicy::processConfigurationError('Invalid syslog options: '.var_export($options, true));
+
             return 0;
         }
+
         return $options;
     }
 }

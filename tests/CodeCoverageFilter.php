@@ -1,10 +1,10 @@
 <?php
+
 namespace Mougrim\Logger;
 
 use QA\SoftMocks;
 
 /**
- * @package Mougrim\Logger
  * @author Mougrim <rinat@mougrim.ru>
  */
 class CodeCoverageFilter extends \PHP_CodeCoverage_Filter

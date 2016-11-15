@@ -1,0 +1,12 @@
+parameters:
+    git_dir: .
+    bin_dir: vendor/bin
+    hooks_dir: ~
+    hooks_preset: local
+    stop_on_failure: false
+    ignore_unstaged_changes: false
+    process_timeout: 300
+    tasks:
+        phpcsfixer:
+            config_file: .php_cs
+    extensions: []

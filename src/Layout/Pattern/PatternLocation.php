@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;
@@ -16,7 +17,7 @@ class PatternLocation implements PatternInterface
 
     public function render(Logger $logger, $level, $message, \Exception $throwable = null)
     {
-        $trace   = debug_backtrace();
+        $trace = debug_backtrace();
         $prevHop = null;
         // make a down search to identify the caller
         $hop = array_pop($trace);
@@ -37,7 +38,7 @@ class PatternLocation implements PatternInterface
                 }
             }
             $prevHop = $hop;
-            $hop     = array_pop($trace);
+            $hop = array_pop($trace);
         }
         $locationInfo['class'] = isset($prevHop['class']) ? $prevHop['class'] : 'main';
         $locationInfo['function'] = 'main';

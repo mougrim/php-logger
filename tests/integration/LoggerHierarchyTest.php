@@ -1,8 +1,9 @@
 <?php
+
 namespace Mougrim\Logger\integration;
 
-use Mougrim\Logger\BaseLoggerTestCase;
 use Mougrim\Logger\Appender\AppenderStream;
+use Mougrim\Logger\BaseLoggerTestCase;
 use Mougrim\Logger\LoggerHierarchy;
 
 class LoggerHierarchyTest extends BaseLoggerTestCase
@@ -11,8 +12,12 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
     {
         $firstLog = '/tmp/first_log';
         $secondLog = '/tmp/second_log';
-        if (is_file($firstLog)) unlink($firstLog);
-        if (is_file($secondLog)) unlink($secondLog);
+        if (is_file($firstLog)) {
+            unlink($firstLog);
+        }
+        if (is_file($secondLog)) {
+            unlink($secondLog);
+        }
         $hierarchy = new LoggerHierarchy();
         $hierarchy->setAppender('first', $firstAppender = new AppenderStream($firstLog));
         $hierarchy->setAppender('second', $secondAppender = new AppenderStream($secondLog));
@@ -22,8 +27,8 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
 
         // test simple write
         $rootLogger->info($expected = uniqid());
-        $this->assertEquals($expected, file_get_contents($firstLog));
-        $this->assertEquals($expected, file_get_contents($secondLog));
+        $this->assertSame($expected, file_get_contents($firstLog));
+        $this->assertSame($expected, file_get_contents($secondLog));
     }
 
     public function testReopen()
@@ -32,10 +37,18 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
         $firstLogTmp = '/tmp/first_log_tmp';
         $secondLog = '/tmp/second_log';
         $secondLogTmp = '/tmp/second_log_tmp';
-        if (is_file($firstLog)) unlink($firstLog);
-        if (is_file($firstLogTmp)) unlink($firstLogTmp);
-        if (is_file($secondLog)) unlink($secondLog);
-        if (is_file($secondLogTmp)) unlink($secondLogTmp);
+        if (is_file($firstLog)) {
+            unlink($firstLog);
+        }
+        if (is_file($firstLogTmp)) {
+            unlink($firstLogTmp);
+        }
+        if (is_file($secondLog)) {
+            unlink($secondLog);
+        }
+        if (is_file($secondLogTmp)) {
+            unlink($secondLogTmp);
+        }
         $hierarchy = new LoggerHierarchy();
         $hierarchy->setAppender('first', $firstAppender = new AppenderStream($firstLog));
         $hierarchy->setAppender('second', $secondAppender = new AppenderStream($secondLog));
@@ -50,7 +63,7 @@ class LoggerHierarchyTest extends BaseLoggerTestCase
 
         $rootLogger->info($expected = uniqid());
 
-        $this->assertEquals($expected, file_get_contents($firstLog));
-        $this->assertEquals($expected, file_get_contents($secondLog));
+        $this->assertSame($expected, file_get_contents($firstLog));
+        $this->assertSame($expected, file_get_contents($secondLog));
     }
 }

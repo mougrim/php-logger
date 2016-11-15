@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 use Mougrim\Logger\Appender\AppenderAbstract;
@@ -9,9 +10,9 @@ class LoggerTest extends BaseLoggerTestCase
     {
         $root = new Logger('root');
         $logger = new Logger('logger', $root);
-        $this->assertEquals('logger', $logger->getName());
+        $this->assertSame('logger', $logger->getName());
         $this->assertTrue($root === $logger->getParent());
-        $this->assertEquals([], $logger->getAppenders());
+        $this->assertSame([], $logger->getAppenders());
         $this->assertTrue($logger->getAddictive());
     }
 
@@ -23,22 +24,22 @@ class LoggerTest extends BaseLoggerTestCase
         /** @var $appenderSecond AppenderAbstract */
         $appenderSecond = clone $appender;
 
-        $this->assertEquals([], $logger->getAppenders());
+        $this->assertSame([], $logger->getAppenders());
 
         $logger->addAppender($appender);
-        $this->assertEquals([$appender], $logger->getAppenders());
+        $this->assertSame([$appender], $logger->getAppenders());
         $logger->addAppender($appender);
-        $this->assertEquals([$appender], $logger->getAppenders());
+        $this->assertSame([$appender], $logger->getAppenders());
 
         $logger->addAppender($appenderSecond);
-        $this->assertEquals([$appender, $appenderSecond], $logger->getAppenders());
+        $this->assertSame([$appender, $appenderSecond], $logger->getAppenders());
         $logger->addAppender($appenderSecond);
-        $this->assertEquals([$appender, $appenderSecond], $logger->getAppenders());
+        $this->assertSame([$appender, $appenderSecond], $logger->getAppenders());
 
         $logger->removeAppender($appenderSecond);
-        $this->assertEquals([$appender], $logger->getAppenders());
+        $this->assertSame([$appender], $logger->getAppenders());
         $logger->removeAppender($appender);
-        $this->assertEquals([], $logger->getAppenders());
+        $this->assertSame([], $logger->getAppenders());
     }
 
     public function testAddictive()
@@ -48,14 +49,14 @@ class LoggerTest extends BaseLoggerTestCase
         $root->addAppender($rootAppender);
         $logger = new Logger('logger', $root);
         $this->assertTrue($logger->getAddictive());
-        $this->assertEquals($root, $logger->getParent());
+        $this->assertSame($root, $logger->getParent());
         $logger->log(1, 'test1', $exFirst = new \Exception());
-        $this->assertEquals([[1, 'test1']], $rootAppender->logs);
+        $this->assertSame([[1, 'test1']], $rootAppender->logs);
 
         $logger->setAddictive(false);
         $this->assertFalse($logger->getAddictive());
         $logger->log(2, 'test2', $exSecond = new \Exception());
-        $this->assertEquals([[1, 'test1']], $rootAppender->logs);
+        $this->assertSame([[1, 'test1']], $rootAppender->logs);
     }
 
     public function testLogLevel()
@@ -71,7 +72,7 @@ class LoggerTest extends BaseLoggerTestCase
         $logger->error('error');
         $logger->fatal('fatal');
 
-        $this->assertEquals([
+        $this->assertSame([
             [Logger::TRACE, 'trace'],
             [Logger::DEBUG, 'debug'],
             [Logger::INFO, 'info'],
@@ -86,11 +87,12 @@ class LoggerTest extends BaseLoggerTestCase
         $cases = [];
         $reflection = new \ReflectionClass(Logger::class);
         foreach ($reflection->getConstants() as $name => $value) {
-            $cases['Level ' . strtolower($name)] = [
+            $cases['Level '.strtolower($name)] = [
                 'level' => $value,
                 'expected' => $name,
             ];
         }
+
         return $cases;
     }
 
@@ -101,7 +103,7 @@ class LoggerTest extends BaseLoggerTestCase
      */
     public function testGetLevelName($level, $expected)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             Logger::getLevelName($level)
         );
@@ -114,12 +116,12 @@ class LoggerTest extends BaseLoggerTestCase
      */
     public function testGetLevelByName($expected, $levelName)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             Logger::getLevelByName($levelName)
         );
         strtolower($levelName);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             Logger::getLevelByName($levelName)
         );
@@ -132,16 +134,16 @@ class LoggerTest extends BaseLoggerTestCase
         $logger->addAppender($appender);
 
         $logger->log(Logger::INFO, 1);
-        $this->assertEquals([
-            [Logger::INFO, 1]
+        $this->assertSame([
+            [Logger::INFO, 1],
         ], $appender->logs);
 
         $logger->setMinLevel(Logger::INFO);
         $logger->log(Logger::INFO, 2);
         $logger->log(Logger::DEBUG, 3);
-        $this->assertEquals([
+        $this->assertSame([
             [Logger::INFO, 1],
-            [Logger::INFO, 2]
+            [Logger::INFO, 2],
         ], $appender->logs);
     }
 
@@ -152,19 +154,20 @@ class LoggerTest extends BaseLoggerTestCase
         $logger->addAppender($appender);
 
         $logger->log(Logger::INFO, 1);
-        $this->assertEquals([
-            [Logger::INFO, 1]
+        $this->assertSame([
+            [Logger::INFO, 1],
         ], $appender->logs);
 
         $logger->setMaxLevel(Logger::INFO);
         $logger->log(Logger::INFO, 2);
         $logger->log(Logger::FATAL, 3);
         $logger->log(Logger::DEBUG, 4);
-        $this->assertEquals([
+        $this->assertSame([
             [Logger::INFO, 1],
             [Logger::INFO, 2],
-            [Logger::DEBUG, 4]
+            [Logger::DEBUG, 4],
         ], $appender->logs);
+
         return;
     }
 }

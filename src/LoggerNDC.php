@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 class LoggerNDC
@@ -7,7 +8,7 @@ class LoggerNDC
 
     public static function push($context)
     {
-        $context = (string)$context;
+        $context = (string) $context;
         self::$stack[] = $context;
     }
 

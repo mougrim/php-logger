@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;
@@ -10,6 +11,7 @@ class PatternException extends PatternPrintFormat
         if (!$throwable) {
             return '';
         }
+
         return (string) $throwable;
     }
 }

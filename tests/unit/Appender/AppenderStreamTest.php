@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\BaseLoggerTestCase;
@@ -12,13 +13,17 @@ class AppenderStreamTest extends BaseLoggerTestCase
 
     protected function setUp()
     {
-        if (is_file($this->logFile)) unlink($this->logFile);
+        if (is_file($this->logFile)) {
+            unlink($this->logFile);
+        }
         parent::setUp();
     }
 
     protected function tearDown()
     {
-        if (is_file($this->logFile)) unlink($this->logFile);
+        if (is_file($this->logFile)) {
+            unlink($this->logFile);
+        }
         parent::tearDown();
     }
 
@@ -33,8 +38,9 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $callsQty = 0;
         $this->mockFunction(
             'flock',
-            function() use (&$callsQty) {
-                $callsQty++;
+            function () use (&$callsQty) {
+                ++$callsQty;
+
                 return true;
             }
         );
@@ -51,8 +57,9 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $callsQty = 0;
         $this->mockFunction(
             'flock',
-            function() use (&$callsQty) {
-                $callsQty++;
+            function () use (&$callsQty) {
+                ++$callsQty;
+
                 return true;
             }
         );
@@ -71,8 +78,9 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $callsQty = 0;
         $this->mockFunction(
             'flock',
-            function() use (&$callsQty) {
-                $callsQty++;
+            function () use (&$callsQty) {
+                ++$callsQty;
+
                 return true;
             }
         );
@@ -87,7 +95,6 @@ class AppenderStreamTest extends BaseLoggerTestCase
 
     public function testFork()
     {
-
         $before = uniqid('before');
         $firstChild = uniqid('firstChild');
         $secondChild = uniqid('secondChild');
@@ -97,10 +104,9 @@ class AppenderStreamTest extends BaseLoggerTestCase
         $writer->write(1, $before);
         // first fork
         $pid = pcntl_fork();
-        if ($pid == -1) {
+        if ($pid === -1) {
             $this->markTestIncomplete('could not fork');
-        } else if ($pid) {
-
+        } elseif ($pid) {
         } else {
             $writer->write(1, $firstChild);
             die();
@@ -116,19 +122,19 @@ class AppenderStreamTest extends BaseLoggerTestCase
         pcntl_waitpid($pid, $status);
         $writer->write(1, $after);
 
-        $expected = $before . $firstChild . $secondChild . $after;
-        $this->assertEquals($expected, file_get_contents($this->logFile));
+        $expected = $before.$firstChild.$secondChild.$after;
+        $this->assertSame($expected, file_get_contents($this->logFile));
     }
 
     public function testReopen()
     {
         $appender = new AppenderStream($this->logFile);
         $appender->write(Logger::INFO, $first = uniqid('', true));
-        $this->assertEquals($first, file_get_contents($this->logFile));
+        $this->assertSame($first, file_get_contents($this->logFile));
         unlink($this->logFile);
         $appender->reopen();
         $appender->write(Logger::INFO, $second = uniqid('', true));
-        $this->assertEquals($second, file_get_contents($this->logFile));
+        $this->assertSame($second, file_get_contents($this->logFile));
     }
 
     public function testReopenForkClose()
@@ -145,6 +151,6 @@ class AppenderStreamTest extends BaseLoggerTestCase
 
         $appender->write(Logger::INFO, $second = uniqid('', true));
         $appender->close();
-        $this->assertEquals($second, file_get_contents($this->logFile));
+        $this->assertSame($second, file_get_contents($this->logFile));
     }
 }

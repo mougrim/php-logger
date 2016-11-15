@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 class LoggerTimer
@@ -9,7 +10,7 @@ class LoggerTimer
 
     public function __construct(Logger $logger, $start)
     {
-        $this->start = (float)$start;
+        $this->start = (float) $start;
         $this->logger = $logger;
     }
 
@@ -66,4 +67,4 @@ class LoggerTimer
             '{time}' => $end - $this->start,
         ]);
     }
-} 
+}

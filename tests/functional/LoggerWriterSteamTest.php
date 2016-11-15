@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\functional;
 
 use Mougrim\Logger\Appender\AppenderStream;
@@ -7,18 +8,20 @@ class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
 {
     public function testWrite()
     {
-        $path = "/tmp/tmp.log";
+        $path = '/tmp/tmp.log';
         $count = 100;
         $workers = 10;
         if (is_file($path)) {
             unlink($path);
         }
         $message = '';
-        for ($i = 0; $i < 1000; $i++) $message .= uniqid();
+        for ($i = 0; $i < 1000; ++$i) {
+            $message .= uniqid();
+        }
         $message .= PHP_EOL;
 
         $pids = [];
-        for ($w = 0; $w < $workers; $w++) {
+        for ($w = 0; $w < $workers; ++$w) {
             $pid = pcntl_fork();
             if (function_exists('pcntl_get_last_error')) {
                 $error_number = pcntl_get_last_error();
@@ -26,14 +29,16 @@ class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
             } else {
                 $error = var_export(error_get_last(), true);
             }
-            $this->assertNotSame(-1, $pid, "Can't fork: " . $error);
+            $this->assertNotSame(-1, $pid, "Can't fork: ".$error);
             if ($pid) {
                 $pids[] = $pid;
             } else {
                 $writer = new AppenderStream($path);
                 $writer->setUseLock(true);
                 $writer->setUseLockShortMessage(true);
-                for ($i = 0; $i < $count; $i++) $writer->write(1, $message);
+                for ($i = 0; $i < $count; ++$i) {
+                    $writer->write(1, $message);
+                }
                 die();
             }
         }
@@ -42,7 +47,7 @@ class LoggerWriterSteamTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertSame(13001, strlen($message));
         $c = str_pad('', $count * $workers * strlen($message), $message);
-        $this->assertEquals($c, file_get_contents($path));
+        $this->assertSame($c, file_get_contents($path));
         if (is_file($path)) {
             unlink($path);
         }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\Logger;
@@ -52,6 +53,6 @@ class AppenderStreamBuffer extends AppenderStream
 
     public function setThreshold($threshold)
     {
-        $this->threshold = (int)$threshold;
+        $this->threshold = (int) $threshold;
     }
 }

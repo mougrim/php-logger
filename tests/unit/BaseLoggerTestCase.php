@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 use QA\SoftMocks;
@@ -12,7 +13,6 @@ class BaseLoggerTestCase extends \PHPUnit_Framework_TestCase
         $this->mockFunctions = [];
         parent::setUp();
     }
-
 
     protected function tearDown()
     {

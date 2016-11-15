@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;
@@ -43,14 +44,14 @@ class PatternMemoryUsage implements PatternInterface
      */
     public function render(Logger $logger, $level, $message, \Exception $throwable = null)
     {
-        $bytes  = memory_get_usage(true);
-        $base   = log($bytes) / log(1024);
+        $bytes = memory_get_usage(true);
+        $base = log($bytes) / log(1024);
         $roundTo = $this->roundTo;
         if ($roundTo === null) {
             // auto
             $roundTo = min((int) floor($base), count($this->units) - 1);
         }
 
-        return round(pow(1024, $base - $roundTo), $this->precision) . $this->units[$roundTo];
+        return round(pow(1024, $base - $roundTo), $this->precision).$this->units[$roundTo];
     }
 }

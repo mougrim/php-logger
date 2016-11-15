@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\LoggerConfigurationException;
@@ -21,6 +22,7 @@ class AppenderStd extends AppenderAbstract
 
     /**
      * @param string $streamName
+     *
      * @throws LoggerConfigurationException
      */
     public function setStream($streamName)
@@ -28,12 +30,15 @@ class AppenderStd extends AppenderAbstract
         switch ($streamName) {
             case 'STDOUT':
                 $this->stream = self::STDOUT;
+
                 return;
             case 'STDERR':
                 $this->stream = self::STDERR;
+
                 return;
             default:
                 LoggerPolicy::processConfigurationError("Stream must be STDOUT or STDERR, got '{$streamName}'");
+
                 return;
         }
     }

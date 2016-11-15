@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 use Mougrim\Logger\Appender\AppenderAbstract;
@@ -15,7 +16,7 @@ class LoggerHierarchy
     private $layoutMap = [];
 
     /**
-     * Reopen appenders, what has support reopen log stream
+     * Reopen appenders, what has support reopen log stream.
      */
     public function reopen()
     {
@@ -37,6 +38,7 @@ class LoggerHierarchy
         if ($this->rootLogger === null) {
             return $this->rootLogger = new Logger('root');
         }
+
         return $this->rootLogger;
     }
 
@@ -45,6 +47,7 @@ class LoggerHierarchy
         if (!isset($this->loggerMap[$name])) {
             return $this->loggerMap[$name] = $this->createLogger($name);
         }
+
         return $this->loggerMap[$name];
     }
 
@@ -62,14 +65,17 @@ class LoggerHierarchy
      * @param $name
      *
      * @return AppenderAbstract
+     *
      * @throws LoggerConfigurationException
      */
     public function getAppender($name)
     {
         if (!isset($this->appenderMap[$name])) {
             LoggerPolicy::processConfigurationError("Appender {$name} not found");
+
             return new AppenderNull();
         }
+
         return $this->appenderMap[$name];
     }
 
@@ -82,8 +88,10 @@ class LoggerHierarchy
     {
         if (!isset($this->layoutMap[$name])) {
             LoggerPolicy::processConfigurationError("Layout {$name} not found");
+
             return new LayoutSimple();
         }
+
         return $this->layoutMap[$name];
     }
 

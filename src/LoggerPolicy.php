@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 class LoggerPolicy
@@ -20,7 +21,6 @@ class LoggerPolicy
     private static $ioErrorPolicy = self::POLICY_EXCEPTION;
     private static $configurationErrorPolicy = self::POLICY_EXCEPTION;
 
-
     public static function reset()
     {
         self::$ioErrorPolicy = self::POLICY_EXCEPTION;
@@ -29,6 +29,7 @@ class LoggerPolicy
 
     /**
      * @param string $policy
+     *
      * @throws LoggerConfigurationException
      */
     public static function setConfigurationErrorPolicy($policy)
@@ -54,9 +55,11 @@ class LoggerPolicy
                 return;
             case self::POLICY_TRIGGER_WARN:
                 trigger_error($message, E_USER_WARNING);
+
                 return;
             case self::POLICY_TRIGGER_ERROR:
                 trigger_error($message, E_USER_ERROR);
+
                 return;
             case self::POLICY_EXIT:
                 exit($message);
@@ -68,6 +71,7 @@ class LoggerPolicy
 
     /**
      * @param string $policy
+     *
      * @throws LoggerConfigurationException
      */
     public static function setIoErrorPolicy($policy)
@@ -93,9 +97,11 @@ class LoggerPolicy
                 return;
             case self::POLICY_TRIGGER_WARN:
                 trigger_error($message, E_USER_WARNING);
+
                 return;
             case self::POLICY_TRIGGER_ERROR:
                 trigger_error($message, E_USER_ERROR);
+
                 return;
             case self::POLICY_EXIT:
                 exit($message);

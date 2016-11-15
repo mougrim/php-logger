@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 class LoggerRender
@@ -22,15 +23,16 @@ class LoggerRender
     {
         if (is_null($message)) {
             $rendered = static::$nullMessage;
-        } else if (is_bool($message)) {
+        } elseif (is_bool($message)) {
             $rendered = $message ? static::$trueMessage : static::$falseMessage;
-        } else if (is_scalar($message)) {
-            $rendered = (string)$message;
-        } else if (is_object($message) && method_exists($message, '__toString')) {
+        } elseif (is_scalar($message)) {
+            $rendered = (string) $message;
+        } elseif (is_object($message) && method_exists($message, '__toString')) {
             $rendered = $message;
         } else {
             $rendered = print_r($message, 1);
         }
+
         return $rendered;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 use Mougrim\Logger\Appender\AppenderAbstract;
@@ -23,13 +24,13 @@ class LoggerConfigurator
         }
         if (isset($config[static::LOGGER_RENDERER])) {
             if (isset($config[static::LOGGER_RENDERER]['nullMessage'])) {
-                LoggerRender::$nullMessage = (string)$config[static::LOGGER_RENDERER]['nullMessage'];
+                LoggerRender::$nullMessage = (string) $config[static::LOGGER_RENDERER]['nullMessage'];
             }
             if (isset($config[static::LOGGER_RENDERER]['trueMessage'])) {
-                LoggerRender::$trueMessage = (string)$config[static::LOGGER_RENDERER]['trueMessage'];
+                LoggerRender::$trueMessage = (string) $config[static::LOGGER_RENDERER]['trueMessage'];
             }
             if (isset($config[static::LOGGER_RENDERER]['falseMessage'])) {
-                LoggerRender::$falseMessage = (string)$config[static::LOGGER_RENDERER]['falseMessage'];
+                LoggerRender::$falseMessage = (string) $config[static::LOGGER_RENDERER]['falseMessage'];
             }
         }
         if (isset($config[static::LOGGER_LAYOUTS])) {
@@ -60,7 +61,7 @@ class LoggerConfigurator
             foreach ($config['appenders'] as $appenderConfig) {
                 if (is_string($appenderConfig)) {
                     $appender = $hierarchy->getAppender($appenderConfig);
-                } else if (is_array($appenderConfig)) {
+                } elseif (is_array($appenderConfig)) {
                     $appender = $this->createAppender($hierarchy, $appenderConfig);
                 } else {
                     LoggerPolicy::processConfigurationError('Appender invalid config');
@@ -85,6 +86,7 @@ class LoggerConfigurator
      * @param $config
      *
      * @return AppenderAbstract
+     *
      * @throws LoggerException
      */
     private function createAppender(LoggerHierarchy $hierarchy, $config)
@@ -148,11 +150,12 @@ class LoggerConfigurator
             $object = $reflection->newInstance();
         }
         foreach ($config as $name => $value) {
-            $method = 'set' . $name;
+            $method = 'set'.$name;
             if (method_exists($object, $method)) {
                 $object->{$method}($value);
             }
         }
+
         return $object;
     }
 }

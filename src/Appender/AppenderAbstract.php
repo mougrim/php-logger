@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\Layout\LayoutInterface;
@@ -29,12 +30,12 @@ abstract class AppenderAbstract
 
     public function setMaxLevel($maxLevel)
     {
-        $this->maxLevel = (int)$maxLevel;
+        $this->maxLevel = (int) $maxLevel;
     }
 
     public function setMinLevel($minLevel)
     {
-        $this->minLevel = (int)$minLevel;
+        $this->minLevel = (int) $minLevel;
     }
 
     public function setLayout(LayoutInterface $layout)

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger;
 
 class LoggerTimerTest extends BaseLoggerTestCase
@@ -19,7 +20,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->start = (float)(string)microtime(1);
+        $this->start = (float) (string) microtime(1);
         $this->end = $this->start + 10;
         $this->time = $this->end - $this->start;
         $this->root = new Logger('root');
@@ -29,28 +30,30 @@ class LoggerTimerTest extends BaseLoggerTestCase
 
     public function testRenderNone()
     {
-        $this->assertEquals("hello", $this->timer->render("hello", $this->end));
+        $this->assertSame('hello', $this->timer->render('hello', $this->end));
     }
 
     public function testRenderStart()
     {
-        $this->assertEquals("hello {$this->start}", $this->timer->render("hello {start}", $this->end));
+        $this->assertSame("hello {$this->start}", $this->timer->render('hello {start}', $this->end));
     }
 
     public function testRenderEnd()
     {
-        $this->assertEquals("hello {$this->end}", $this->timer->render("hello {end}", $this->end));
+        $this->assertSame("hello {$this->end}", $this->timer->render('hello {end}', $this->end));
     }
 
     public function testRenderTime()
     {
-        $this->assertEquals("hello {$this->time}", $this->timer->render("hello {time}", $this->end));
+        $this->assertSame("hello {$this->time}", $this->timer->render('hello {time}', $this->end));
     }
 
     public function testTrace()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use($end) {return $end;});
+        $this->mockFunction('microtime', function () use ($end) {
+            return $end;
+        });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -60,13 +63,15 @@ class LoggerTimerTest extends BaseLoggerTestCase
             ->method('log')
             ->with($this->equalTo(Logger::TRACE), $this->equalTo("hello {$this->start} {$this->end} {$this->time}"));
         $timer = new LoggerTimer($mock, $this->start);
-        $timer->trace("hello {start} {end} {time}");
+        $timer->trace('hello {start} {end} {time}');
     }
 
     public function testDebug()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use($end) {return $end;});
+        $this->mockFunction('microtime', function () use ($end) {
+            return $end;
+        });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -76,13 +81,15 @@ class LoggerTimerTest extends BaseLoggerTestCase
             ->method('log')
             ->with($this->equalTo(Logger::DEBUG), $this->equalTo("hello {$this->start} {$this->end} {$this->time}"));
         $timer = new LoggerTimer($mock, $this->start);
-        $timer->debug("hello {start} {end} {time}");
+        $timer->debug('hello {start} {end} {time}');
     }
 
     public function testInfo()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use($end) {return $end;});
+        $this->mockFunction('microtime', function () use ($end) {
+            return $end;
+        });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -92,13 +99,15 @@ class LoggerTimerTest extends BaseLoggerTestCase
             ->method('log')
             ->with($this->equalTo(Logger::INFO), $this->equalTo("hello {$this->start} {$this->end} {$this->time}"));
         $timer = new LoggerTimer($mock, $this->start);
-        $timer->info("hello {start} {end} {time}");
+        $timer->info('hello {start} {end} {time}');
     }
 
     public function testWarn()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use($end) {return $end;});
+        $this->mockFunction('microtime', function () use ($end) {
+            return $end;
+        });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -108,13 +117,15 @@ class LoggerTimerTest extends BaseLoggerTestCase
             ->method('log')
             ->with($this->equalTo(Logger::WARN), $this->equalTo("hello {$this->start} {$this->end} {$this->time}"));
         $timer = new LoggerTimer($mock, $this->start);
-        $timer->warn("hello {start} {end} {time}");
+        $timer->warn('hello {start} {end} {time}');
     }
 
     public function testError()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use($end) {return $end;});
+        $this->mockFunction('microtime', function () use ($end) {
+            return $end;
+        });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -124,13 +135,15 @@ class LoggerTimerTest extends BaseLoggerTestCase
             ->method('log')
             ->with($this->equalTo(Logger::ERROR), $this->equalTo("hello {$this->start} {$this->end} {$this->time}"));
         $timer = new LoggerTimer($mock, $this->start);
-        $timer->error("hello {start} {end} {time}");
+        $timer->error('hello {start} {end} {time}');
     }
 
     public function testFatal()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use($end) {return $end;});
+        $this->mockFunction('microtime', function () use ($end) {
+            return $end;
+        });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -140,13 +153,15 @@ class LoggerTimerTest extends BaseLoggerTestCase
             ->method('log')
             ->with($this->equalTo(Logger::FATAL), $this->equalTo("hello {$this->start} {$this->end} {$this->time}"));
         $timer = new LoggerTimer($mock, $this->start);
-        $timer->fatal("hello {start} {end} {time}");
+        $timer->fatal('hello {start} {end} {time}');
     }
 
     public function testLog()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use($end) {return $end;});
+        $this->mockFunction('microtime', function () use ($end) {
+            return $end;
+        });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
         $mock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs(['logger'])
@@ -156,6 +171,6 @@ class LoggerTimerTest extends BaseLoggerTestCase
             ->method('log')
             ->with($this->equalTo(Logger::ALL), $this->equalTo("hello {$this->start} {$this->end} {$this->time}"));
         $timer = new LoggerTimer($mock, $this->start);
-        $timer->log(Logger::ALL, "hello {start} {end} {time}");
+        $timer->log(Logger::ALL, 'hello {start} {end} {time}');
     }
 }

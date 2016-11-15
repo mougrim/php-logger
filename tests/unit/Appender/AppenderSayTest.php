@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\BaseLoggerTestCase;
@@ -17,12 +18,13 @@ class AppenderSayTest extends BaseLoggerTestCase
             'system',
             function ($command) use (&$commands) {
                 $commands[] = $command;
+
                 return '';
             }
         );
         $appender = new AppenderSay();
         $return = $appender->write(1, 'fuck, web site is down!');
         $this->assertNotFalse($return);
-        $this->assertEquals(["say 'fuck, web site is down!'"], $commands);
+        $this->assertSame(["say 'fuck, web site is down!'"], $commands);
     }
 }

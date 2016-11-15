@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\BaseLoggerTestCase;
@@ -14,20 +15,23 @@ class AppenderSyslogTest extends BaseLoggerTestCase
         $openLogCalls = [];
         $this->mockFunction(
             'openlog',
-            function() use (&$openLogCalls) {
+            function () use (&$openLogCalls) {
                 $openLogCalls[] = func_get_args();
+
                 return true;
             }
         );
         $sysLogCalls = [];
         $this->mockFunction(
             'syslog',
-            function($priority, $message) use (&$sysLogCalls) {
+            function ($priority, $message) use (&$sysLogCalls) {
                 $sysLogCalls[] = func_get_args();
             }
         );
         $closeLogCalls = [];
-        $this->mockFunction('closelog', function() use (&$closeLogCalls) {$closeLogCalls[] = func_get_args();});
+        $this->mockFunction('closelog', function () use (&$closeLogCalls) {
+            $closeLogCalls[] = func_get_args();
+        });
         $appender = new AppenderSyslog('id', LOG_PID, 0);
         $appender->write(Logger::INFO, 'test syslog');
         $this->assertSame([['id', LOG_PID, 0]], $openLogCalls);
@@ -38,7 +42,9 @@ class AppenderSyslogTest extends BaseLoggerTestCase
     public function testErrorOpenSyslog()
     {
         $this->setExpectedException(LoggerException::class);
-        $this->mockFunction('openlog', function () {return false;});
+        $this->mockFunction('openlog', function () {
+            return false;
+        });
 
         $appender = new AppenderSyslog('id', LOG_PID, 0);
         $appender->write(Logger::INFO, 'test syslog');
@@ -81,7 +87,7 @@ class AppenderSyslogTest extends BaseLoggerTestCase
      */
     public function testParseOptions($expected, $options)
     {
-        $this->assertEquals($expected,
+        $this->assertSame($expected,
             AppenderSyslog::parseOptions($options)
         );
     }
@@ -201,7 +207,7 @@ class AppenderSyslogTest extends BaseLoggerTestCase
      */
     public function testSyslogPriority($expected, $level)
     {
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             AppenderSyslog::getSyslogPriority($level)
         );

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Layout\Pattern;
 
 use Mougrim\Logger\Logger;
@@ -11,7 +12,7 @@ class PatternDate implements PatternInterface
     {
         $this->dateFormat = 'Y:m:d';
         if ($dateFormat) {
-            $this->dateFormat = (string)$dateFormat;
+            $this->dateFormat = (string) $dateFormat;
         }
     }
 

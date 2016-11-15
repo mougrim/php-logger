@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\LoggerPolicy;
@@ -11,12 +12,12 @@ class AppenderSocket extends AppenderAbstract
 
     public function __construct($host, $port, $timeout = null)
     {
-        $this->host = (string)$host;
-        $this->port = (int)$port;
+        $this->host = (string) $host;
+        $this->port = (int) $port;
         if ($timeout) {
-            $this->timeout = (int)$timeout;
+            $this->timeout = (int) $timeout;
         } else {
-            $this->timeout = (int)ini_get("default_socket_timeout");
+            $this->timeout = (int) ini_get('default_socket_timeout');
         }
     }
 
@@ -27,12 +28,14 @@ class AppenderSocket extends AppenderAbstract
             LoggerPolicy::processIOError(
                 "Could not open socket to {$this->host}:{$this->port} – {$errorCode} {$errorMessage}. Closing appender."
             );
+
             return;
         }
         $write = fwrite($socket, $message);
         fclose($socket);
         if ($write === false) {
             LoggerPolicy::processIOError("Error writing to socket to {$this->host}:{$this->port}");
+
             return;
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\LoggerIOException;
@@ -18,10 +19,11 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
     /** @var bool */
     private $useLock = true;
     /**
-     * https://github.com/mougrim/php-logger/issues/4
+     * @see https://github.com/mougrim/php-logger/issues/4
      * @deprecated should remove in next major version
+     *
      * @var bool <strike>if message less than 4096, do not use locks</strike><br>
-     * don't use lock
+     *           don't use lock
      */
     private $useLockShortMessage = false;
 
@@ -59,11 +61,13 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
         // useLockShortMessage should remove in next major version
         if (!$this->useLock || !$this->useLockShortMessage) {
             fwrite($steam, $message);
+
             return;
         }
         if (!flock($steam, LOCK_EX)) {
             LoggerPolicy::processIOError('Error get lock');
             fwrite($steam, $message);
+
             return;
         }
         fwrite($steam, $message);
@@ -71,24 +75,26 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
     }
 
     /**
-     * @param boolean $useLock
+     * @param bool $useLock
      */
     public function setUseLock($useLock)
     {
-        $this->useLock = (bool)$useLock;
+        $this->useLock = (bool) $useLock;
     }
 
     /**
      * @deprecated should remove in next major version
-     * @param boolean $useLockShortMessage pass true for use lock
+     *
+     * @param bool $useLockShortMessage pass true for use lock
      */
     public function setUseLockShortMessage($useLockShortMessage)
     {
-        $this->useLockShortMessage = (bool)$useLockShortMessage;
+        $this->useLockShortMessage = (bool) $useLockShortMessage;
     }
 
     /**
      * @return resource
+     *
      * @throws LoggerIOException
      */
     private function getStream()
@@ -104,6 +110,7 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
                 $this->stream = null;
             }
         }
+
         return $this->stream;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Mougrim\Logger\Appender;
 
 use Mougrim\Logger\BaseLoggerTestCase;
@@ -11,13 +12,17 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
 
     protected function setUp()
     {
-        if (is_file($this->logFile)) unlink($this->logFile);
+        if (is_file($this->logFile)) {
+            unlink($this->logFile);
+        }
         parent::setUp();
     }
 
     protected function tearDown()
     {
-        if (is_file($this->logFile)) unlink($this->logFile);
+        if (is_file($this->logFile)) {
+            unlink($this->logFile);
+        }
         parent::tearDown();
     }
 
@@ -27,8 +32,9 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
         /** @noinspection PhpUnusedParameterInspection */
         $this->mockFunction(
             'fwrite',
-            function($handle, $string) use (&$messages) {
+            function ($handle, $string) use (&$messages) {
                 $messages[] = $string;
+
                 return true;
             }
         );
@@ -102,8 +108,9 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
         /** @noinspection PhpUnusedParameterInspection */
         $this->mockFunction(
             'fwrite',
-            function($handle, $string) use (&$messages) {
+            function ($handle, $string) use (&$messages) {
                 $messages[] = $string;
+
                 return true;
             }
         );
@@ -172,8 +179,9 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
         /** @noinspection PhpUnusedParameterInspection */
         $this->mockFunction(
             'fwrite',
-            function($handle, $string) use (&$messages) {
+            function ($handle, $string) use (&$messages) {
                 $messages[] = $string;
+
                 return true;
             }
         );
@@ -207,7 +215,7 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
                 'DEBUG',
                 'INFO',
                 'WARN',
-                'ERROR'
+                'ERROR',
             ],
             $messages
         );
