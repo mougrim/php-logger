@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__).'/vendor/badoo/soft-mocks/src/bootstrap.php';
+\QA\SoftMocks::setRewriteInternal(true);
 \QA\SoftMocks::setPhpunitPath('/vendor/phpunit/');
 
 require_once \QA\SoftMocks::rewrite(dirname(__DIR__).'/vendor/autoload.php');
