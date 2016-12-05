@@ -1,5 +1,4 @@
-<phpunit bootstrap="bootstrap.php"
-         backupGlobals="false"
+<phpunit backupGlobals="false"
          backupStaticAttributes="false"
          cacheTokens="false"
          verbose="true"
