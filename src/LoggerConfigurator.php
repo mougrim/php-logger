@@ -85,9 +85,9 @@ class LoggerConfigurator
      * @param LoggerHierarchy $hierarchy
      * @param $config
      *
-     * @return AppenderAbstract
-     *
      * @throws LoggerException
+     *
+     * @return AppenderAbstract
      */
     private function createAppender(LoggerHierarchy $hierarchy, $config)
     {

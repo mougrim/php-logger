@@ -17,8 +17,8 @@ abstract class PatternPrintFormat implements PatternInterface
     {
         if ($this->printFormat) {
             return sprintf($this->printFormat, $message);
-        } else {
-            return $message;
         }
+
+        return $message;
     }
 }

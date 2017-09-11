@@ -232,14 +232,14 @@ class Logger
 
     public function addAppender(AppenderAbstract $appender)
     {
-        if (!in_array($appender, $this->appenders)) {
+        if (!in_array($appender, $this->appenders, false)) {
             $this->appenders[] = $appender;
         }
     }
 
     public function removeAppender(AppenderAbstract $appender)
     {
-        $key = array_search($appender, $this->appenders);
+        $key = array_search($appender, $this->appenders, false);
         if ($key !== false) {
             unset($this->appenders[$key]);
         }

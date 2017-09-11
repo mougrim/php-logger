@@ -7,6 +7,7 @@ parameters:
     ignore_unstaged_changes: false
     process_timeout: 300
     tasks:
-        phpcsfixer:
-            config_file: .php_cs
+        phpcsfixer2:
+            allow_risky: true
+            config: .php_cs
     extensions: []

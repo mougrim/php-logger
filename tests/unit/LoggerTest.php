@@ -167,8 +167,6 @@ class LoggerTest extends BaseLoggerTestCase
             [Logger::INFO, 2],
             [Logger::DEBUG, 4],
         ], $appender->logs);
-
-        return;
     }
 }
 

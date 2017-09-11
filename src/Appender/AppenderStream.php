@@ -93,9 +93,9 @@ class AppenderStream extends AppenderAbstract implements AppenderReopen
     }
 
     /**
-     * @return resource
-     *
      * @throws LoggerIOException
+     *
+     * @return resource
      */
     private function getStream()
     {
