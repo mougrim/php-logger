@@ -51,7 +51,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     public function testTrace()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use ($end) {
+        $this->redefineFunction('microtime', function () use ($end) {
             return $end;
         });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
@@ -69,7 +69,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     public function testDebug()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use ($end) {
+        $this->redefineFunction('microtime', function () use ($end) {
             return $end;
         });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
@@ -87,7 +87,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     public function testInfo()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use ($end) {
+        $this->redefineFunction('microtime', function () use ($end) {
             return $end;
         });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
@@ -105,7 +105,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     public function testWarn()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use ($end) {
+        $this->redefineFunction('microtime', function () use ($end) {
             return $end;
         });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
@@ -123,7 +123,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     public function testError()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use ($end) {
+        $this->redefineFunction('microtime', function () use ($end) {
             return $end;
         });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
@@ -141,7 +141,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     public function testFatal()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use ($end) {
+        $this->redefineFunction('microtime', function () use ($end) {
             return $end;
         });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */
@@ -159,7 +159,7 @@ class LoggerTimerTest extends BaseLoggerTestCase
     public function testLog()
     {
         $end = $this->end;
-        $this->mockFunction('microtime', function () use ($end) {
+        $this->redefineFunction('microtime', function () use ($end) {
             return $end;
         });
         /** @var \PHPUnit_Framework_MockObject_MockObject|Logger $mock */

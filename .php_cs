@@ -25,6 +25,7 @@ return Config::create()
         'phpdoc_to_comment' => false,
         'phpdoc_var_without_name' => false,
         'phpdoc_align' => false,
+        'yoda_style' => false,
     ])
     ->setFinder(
         Finder::create()

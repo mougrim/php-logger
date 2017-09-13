@@ -14,7 +14,7 @@ class AppenderSayTest extends BaseLoggerTestCase
     public function testWrite()
     {
         $commands = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'system',
             function ($command) use (&$commands) {
                 $commands[] = $command;

@@ -220,7 +220,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testBacktraceMain()
     {
-        $this->mockFunction('debug_backtrace', function () {
+        $this->redefineFunction('debug_backtrace', function () {
             return [];
         });
         $layout = new LayoutPattern('{location:function}');
@@ -229,7 +229,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryBytes()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1000;
         });
         $layout = new LayoutPattern('{memory}');
@@ -238,7 +238,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryKBytes()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024;
         });
         $layout = new LayoutPattern('{memory}');
@@ -247,7 +247,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryMBytes()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 * 1024;
         });
         $layout = new LayoutPattern('{memory}');
@@ -256,7 +256,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryGBytes()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 * 1024 * 1024;
         });
         $layout = new LayoutPattern('{memory}');
@@ -265,7 +265,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryTBytes()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 * 1024 * 1024 * 1024;
         });
         $layout = new LayoutPattern('{memory}');
@@ -274,7 +274,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryExtraBig()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 * 1024 * 1024 * 1024 * 1024;
         });
         $layout = new LayoutPattern('{memory}');
@@ -283,7 +283,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryPrecisionDefault()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 + 128;
         });
         $layout = new LayoutPattern('{memory}');
@@ -292,7 +292,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryPrecisionNone()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 + 128;
         });
         $layout = new LayoutPattern('{memory:0}');
@@ -301,7 +301,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryPrecisionTree()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 + 128;
         });
         $layout = new LayoutPattern('{memory:3}');
@@ -310,7 +310,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemoryPrecisionLabel()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 1024 * 1024 * 1024 * 1024 * 1024 + 12 * 1024;
         });
 
@@ -323,19 +323,19 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemorySuffix()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 12 * 1024;
         });
         $layout = new LayoutPattern('{memory:0,2}');
         $this->assertSame('0MB'.PHP_EOL, $layout->formatMessage(new Logger('root'), Logger::INFO, ''));
 
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 12 * 1024 * 1024;
         });
         $layout = new LayoutPattern('{memory:0,2}');
         $this->assertSame('12MB'.PHP_EOL, $layout->formatMessage(new Logger('root'), Logger::INFO, ''));
 
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 12 * 1024 * 1024 * 1024;
         });
         $layout = new LayoutPattern('{memory:0,2}');
@@ -344,7 +344,7 @@ class LayoutPatternTest extends BaseLoggerTestCase
 
     public function testMemorySuffixLabel()
     {
-        $this->mockFunction('memory_get_usage', function () {
+        $this->redefineFunction('memory_get_usage', function () {
             return 12 * 1024 * 1024;
         });
         $layout = new LayoutPattern('{memory:0,2,mbytes}');

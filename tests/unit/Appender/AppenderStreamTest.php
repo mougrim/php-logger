@@ -36,7 +36,7 @@ class AppenderStreamTest extends BaseLoggerTestCase
     public function testNotUseLock()
     {
         $callsQty = 0;
-        $this->mockFunction(
+        $this->redefineFunction(
             'flock',
             function () use (&$callsQty) {
                 ++$callsQty;
@@ -55,7 +55,7 @@ class AppenderStreamTest extends BaseLoggerTestCase
     public function testNotUseLockShortMessage()
     {
         $callsQty = 0;
-        $this->mockFunction(
+        $this->redefineFunction(
             'flock',
             function () use (&$callsQty) {
                 ++$callsQty;
@@ -76,7 +76,7 @@ class AppenderStreamTest extends BaseLoggerTestCase
     public function testUseLockShortMessage()
     {
         $callsQty = 0;
-        $this->mockFunction(
+        $this->redefineFunction(
             'flock',
             function () use (&$callsQty) {
                 ++$callsQty;

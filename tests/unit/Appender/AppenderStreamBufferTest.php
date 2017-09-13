@@ -30,7 +30,7 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
     {
         $messages = [];
         /** @noinspection PhpUnusedParameterInspection */
-        $this->mockFunction(
+        $this->redefineFunction(
             'fwrite',
             function ($handle, $string) use (&$messages) {
                 $messages[] = $string;
@@ -106,7 +106,7 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
     {
         $messages = [];
         /** @noinspection PhpUnusedParameterInspection */
-        $this->mockFunction(
+        $this->redefineFunction(
             'fwrite',
             function ($handle, $string) use (&$messages) {
                 $messages[] = $string;
@@ -177,7 +177,7 @@ class AppenderStreamBufferTest extends BaseLoggerTestCase
     {
         $messages = [];
         /** @noinspection PhpUnusedParameterInspection */
-        $this->mockFunction(
+        $this->redefineFunction(
             'fwrite',
             function ($handle, $string) use (&$messages) {
                 $messages[] = $string;

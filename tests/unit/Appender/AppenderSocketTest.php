@@ -13,7 +13,7 @@ class AppenderSocketTest extends BaseLoggerTestCase
     public function testCouldNotOpenSocket()
     {
         $this->setExpectedException(LoggerIOException::class);
-        $this->mockFunction('fsockopen', function ($host, $port, &$errorCode, &$errorMessage, $delay) {
+        $this->redefineFunction('fsockopen', function ($host, $port, &$errorCode, &$errorMessage, $delay) {
             return false;
         });
         $appender = new AppenderSocket('8.8.8.8', 80);
@@ -23,13 +23,13 @@ class AppenderSocketTest extends BaseLoggerTestCase
     public function testErrorWrite()
     {
         $this->setExpectedException(LoggerIOException::class);
-        $this->mockFunction('fsockopen', function ($host, $port, &$errorCode, &$errorMessage, $delay) {
+        $this->redefineFunction('fsockopen', function ($host, $port, &$errorCode, &$errorMessage, $delay) {
             return true;
         });
-        $this->mockFunction('fwrite', function () {
+        $this->redefineFunction('fwrite', function () {
             return false;
         });
-        $this->mockFunction('fclose', function () {
+        $this->redefineFunction('fclose', function () {
             return false;
         });
         $appender = new AppenderSocket('8.8.8.8', 80, 10);
@@ -39,7 +39,7 @@ class AppenderSocketTest extends BaseLoggerTestCase
     public function testWrite()
     {
         $sockOpenCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'fsockopen',
             function ($host, $port, &$errorCode, &$errorMessage, $delay) use (&$sockOpenCalls) {
                 $sockOpenCalls[] = func_get_args();
@@ -48,7 +48,7 @@ class AppenderSocketTest extends BaseLoggerTestCase
             }
         );
         $writeCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'fwrite',
             function () use (&$writeCalls) {
                 $writeCalls[] = func_get_args();
@@ -57,7 +57,7 @@ class AppenderSocketTest extends BaseLoggerTestCase
             }
         );
         $closeCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'fclose',
             function () use (&$closeCalls) {
                 $closeCalls[] = func_get_args();

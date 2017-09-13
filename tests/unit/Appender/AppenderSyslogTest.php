@@ -13,7 +13,7 @@ class AppenderSyslogTest extends BaseLoggerTestCase
     public function testWriteSyslog()
     {
         $openLogCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'openlog',
             function () use (&$openLogCalls) {
                 $openLogCalls[] = func_get_args();
@@ -22,14 +22,14 @@ class AppenderSyslogTest extends BaseLoggerTestCase
             }
         );
         $sysLogCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'syslog',
             function ($priority, $message) use (&$sysLogCalls) {
                 $sysLogCalls[] = func_get_args();
             }
         );
         $closeLogCalls = [];
-        $this->mockFunction('closelog', function () use (&$closeLogCalls) {
+        $this->redefineFunction('closelog', function () use (&$closeLogCalls) {
             $closeLogCalls[] = func_get_args();
         });
         $appender = new AppenderSyslog('id', LOG_PID, 0);
@@ -42,7 +42,7 @@ class AppenderSyslogTest extends BaseLoggerTestCase
     public function testErrorOpenSyslog()
     {
         $this->setExpectedException(LoggerException::class);
-        $this->mockFunction('openlog', function () {
+        $this->redefineFunction('openlog', function () {
             return false;
         });
 

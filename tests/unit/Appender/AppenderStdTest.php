@@ -13,7 +13,7 @@ class AppenderStdTest extends BaseLoggerTestCase
     public function testWriteDefault()
     {
         $writeCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'fwrite',
             function ($handle, $string, $length = null) use (&$writeCalls) {
                 $writeCalls[] = func_get_args();
@@ -30,7 +30,7 @@ class AppenderStdTest extends BaseLoggerTestCase
     public function testWriteStdout()
     {
         $writeCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'fwrite',
             function ($handle, $string, $length = null) use (&$writeCalls) {
                 $writeCalls[] = func_get_args();
@@ -48,7 +48,7 @@ class AppenderStdTest extends BaseLoggerTestCase
     public function testWriteStderr()
     {
         $writeCalls = [];
-        $this->mockFunction(
+        $this->redefineFunction(
             'fwrite',
             function ($handle, $string, $length = null) use (&$writeCalls) {
                 $writeCalls[] = func_get_args();

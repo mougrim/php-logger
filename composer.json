@@ -13,14 +13,18 @@
             "email": "rinat@mougrim.ru"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "source"
+    },
     "require": {
         "php": ">=5.5.0"
     },
     "require-dev": {
         "ext-pcntl": "*",
-        "phpunit/phpunit": "4.8.27-a+soft-mocks",
-        "phpunit/php-code-coverage": "2.2.4-a+soft-mocks",
-        "badoo/soft-mocks": "dev-forLogger",
+        "phpunit/phpunit": "^5",
+        "mougrim/phpunit-soft-mocks": "1.0.0-beta1",
         "johnkary/phpunit-speedtrap": "^1.0",
         "codeclimate/php-test-reporter": "0.*",
         "phpro/grumphp": "^0",
@@ -31,18 +35,7 @@
             "Mougrim\\Logger\\": "src"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/mougrim/soft-mocks.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/mougrim/phpunit.git"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/mougrim/php-code-coverage.git"
-        }
-    ]
+    "extra": {
+        "enable-patching": true
+    }
 }
