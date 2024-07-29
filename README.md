@@ -1,3 +1,8 @@
+# Repository is archived
+If you want to maintain it, you can make a fork.
+
+# php-logger
+
 This is a fork of Apache log4php logging library.
 
 Main theme - light and fast library, with simple configuring.
